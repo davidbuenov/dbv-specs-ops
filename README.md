@@ -15,6 +15,7 @@
 **🇬🇧 English**
 - [Origin & Inspiration](#en-origin)
 - [Visual Workflow](#en-workflow)
+- [The 6 Development Phases](#en-phases)
 - [File Structure](#en-structure)
 - [Platform Activation](#en-platforms)
 - [Quick Start](#en-quickstart)
@@ -25,6 +26,7 @@
 
 **🇪🇸 Español**
 - [Origen e Inspiración](#es-origin)
+- [Las 6 Fases de Desarrollo](#es-phases)
 - [Estructura de Archivos](#es-structure)
 - [Activación por Plataforma](#es-platforms)
 - [Cómo usar (Quick Start)](#es-quickstart)
@@ -69,6 +71,24 @@ flowchart TD
     Simplify --> Ship["Ship<br/>(walkthrough.md, README.md)"]
     Ship -- "Context persists" --> Plan
 ```
+
+---
+
+<a name="en-phases"></a>
+### ⚩️ The 6 Development Phases
+
+Each phase has a **trigger command** you can type in the chat at any time. The AI will always respect this order — never skipping a phase without your approval.
+
+| # | Phase | Command | What the AI does | What you do | Output |
+|---|---|---|---|---|---|
+| 1 | **Spec** | `/spec` | Reviews if the requirement is defined in `SPECIFICATIONS.md`. If not, asks clarifying questions before acting. | Describe the feature or change you need. | Updated `SPECIFICATIONS.md` |
+| 2 | **Plan** | `/plan` | Breaks the work into atomic steps (max 50 lines each). For complex tasks, creates `implementation_plan.md` and waits for your explicit approval before building. | Review and approve the plan. | `task.md` + `implementation_plan.md` |
+| 3 | **Build** | `/build` | Implements logic incrementally. Adds file headers, sets up `venv` for Python, generates startup scripts, updates `CHANGELOG.md [Unreleased]`. | Sit back. Review the code if you wish. | Source code + `CHANGELOG.md` updated |
+| 4 | **Test** | `/test` | Creates and runs unit or integration tests. A task is **not marked as done** without a passing test. Fixes found bugs and logs them in `CHANGELOG.md`. | Run the tests if you want to confirm locally. | Test files + `CHANGELOG.md` updated |
+| 5 | **Simplify** | `/code-simplify` | Refactors for clarity and reduces complexity. No new features — only polish. "Clarity over cleverness." | Optional: review and validate the refactor. | Cleaner, simpler code |
+| 6 | **Ship** | `/ship` | Updates `README.md`, completes `walkthrough.md`, asks for version type (Patch / Minor / Major), publishes `CHANGELOG.md`, proposes git commit + tag. | Choose the version type and confirm. | Versioned release 🚀 |
+
+> **Tip:** You can jump to any phase by command. For example, type `/ship` when you're ready to deliver and the AI will handle versioning, changelog and git automatically.
 
 ---
 
@@ -282,7 +302,24 @@ Este flujo de trabajo es una versión unificada y simplificada de dos pilares de
 
 ---
 
-<a name="es-platforms"></a>
+<a name="es-phases"></a>
+### ⚩️ Las 6 Fases de Desarrollo
+
+Cada fase tiene un **comando de activación** que puedes escribir en el chat en cualquier momento. La IA siempre respetará este orden sin saltarse ninguna fase sin tu aprobación.
+
+| # | Fase | Comando | Qué hace la IA | Qué haces tú | Resultado |
+|---|---|---|---|---|---|
+| 1 | **Spec** | `/spec` | Revisa si el requisito está definido en `SPECIFICATIONS.md`. Si no, pregunta antes de actuar. | Describe la funcionalidad o cambio que necesitas. | `SPECIFICATIONS.md` actualizado |
+| 2 | **Plan** | `/plan` | Desglosa el trabajo en pasos atómicos (máx. 50 líneas cada uno). Para tareas complejas, crea `implementation_plan.md` y espera tu aprobación antes de construir. | Revisa y aprueba el plan. | `task.md` + `implementation_plan.md` |
+| 3 | **Build** | `/build` | Implementa la lógica de forma incremental. Añade cabeceras a los ficheros, crea `venv` para Python, genera scripts de arranque, actualiza `CHANGELOG.md [Sin publicar]`. | Relájate. Revisa el código si lo deseas. | Código fuente + `CHANGELOG.md` actualizado |
+| 4 | **Test** | `/test` | Crea y ejecuta tests unitarios o de integración. Una tarea **no está hecha** sin un test que pase. Corrige los bugs encontrados y los registra en `CHANGELOG.md`. | Ejecuta los tests localmente si quieres confirmar. | Ficheros de test + `CHANGELOG.md` actualizado |
+| 5 | **Simplify** | `/code-simplify` | Refactoriza para mayor claridad y reduce la complejidad. Sin nuevas funcionalidades — solo pulido. "Clarity over cleverness." | Opcional: revisa y valida el refactor. | Código más limpio y simple |
+| 6 | **Ship** | `/ship` | Actualiza `README.md`, completa `walkthrough.md`, pregunta el tipo de versión (Patch / Minor / Major), publica `CHANGELOG.md`, propone commit git + tag. | Elige el tipo de versión y confirma. | Release versionado 🚀 |
+
+> **Consejo:** Puedes saltar a cualquier fase por comando. Por ejemplo, escribe `/ship` cuando estés listo para entregar y la IA gestionará automáticamente el versionado, el changelog y git.
+
+---
+
 ### 🤖 Activación por Plataforma
 
 | Plataforma | Archivo de activación | Carga |
@@ -374,7 +411,7 @@ Usa `docs/ADOPTION_PROMPT.md` en su lugar. Ver la sección [Incorporar a un Proy
 <a name="status"></a>
 ## 🛠 Estado / Status
 
-* **Versión / Version:** 1.1.0
+* **Versión / Version:** 1.2.0
 * **Metodología / Methodology:** Spec-Driven Development (SDD)
 * **Objetivo / Goal:** Universal AI-assisted development template for any platform and assistant.
 
