@@ -18,9 +18,13 @@ Antes de iniciar la Entrevista de Ingeniería, comprueba si `project.config.md` 
   3. *¿Qué licencia prefieres? MIT · Apache 2.0 · GPL · Propietaria · Ninguna* — **MIT por defecto**
   4. *¿Quieres usar control de versiones con Git?* — **⭐ MUY RECOMENDADO: te protege contra pérdidas, facilita colaboración y permite publicar en GitHub.** [S/n] — **Sí por defecto**
      - Si Sí y no existe `.git`: ejecuta `git init`, genera `.gitignore` adaptado al stack del proyecto y hace el primer commit (`chore: project initialized with dbv-specs-ops`).
-     - Si No: continuar sin git.
-  Tras obtener las respuestas, rellena `project.config.md` con los valores reales y genera el fichero `LICENSE` correspondiente.
-- **Si ya está relleno** → Úsalo directamente como fuente de verdad para cabeceras y licencia.
+  5. *¿En qué idioma quieres la documentación (README, specs, etc.)?* ES (Español) · EN (Inglés) · Bilingüe — **ES por defecto**
+  Tras obtener las respuestas:
+  - Rellena `project.config.md` con los valores reales.
+  - Genera el fichero `LICENSE` correspondiente.
+  - Genera el `README.md` del proyecto usando `README.template.md` como base, personalizándolo con los datos del proyecto y en el idioma elegido.
+  - Borra `README.template.md` una vez generado el `README.md` final.
+- **Si ya está relleno** → Úsalo directamente como fuente de verdad para cabeceras, licencia y README.
 
 ## 🛠 Workflow de Ejecución (El Ciclo de Vida Obligatorio)
 Para cualquier requerimiento, debes seguir este orden inspirado en "Agent Skills":

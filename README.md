@@ -5,7 +5,7 @@
 
 <p align="right"><a href="#español">🇪🇸 Español</a> · <a href="#english">🇬🇧 English</a></p>
 
-![Version](https://img.shields.io/badge/version-1.2.0-blue)
+![Version](https://img.shields.io/badge/version-1.2.1-blue)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 
 ---
@@ -411,7 +411,7 @@ Usa `docs/ADOPTION_PROMPT.md` en su lugar. Ver la sección [Incorporar a un Proy
 <a name="status"></a>
 ## 🛠 Estado / Status
 
-* **Versión / Version:** 1.2.0
+* **Versión / Version:** 1.2.1
 * **Metodología / Methodology:** Spec-Driven Development (SDD)
 * **Objetivo / Goal:** Universal AI-assisted development template for any platform and assistant.
 

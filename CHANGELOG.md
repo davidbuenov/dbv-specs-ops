@@ -11,6 +11,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.2.1] — 2026-04-30
+
+### Added
+- **`README.template.md`** — base skeleton for user projects.
+- **Bootstrap Language question** — a 5th question added to the initial interview to choose the project's documentation language (ES, EN, or Bilingual).
+- **Project README auto-generation** — the AI now generates a customized `README.md` for the user project using the template and then deletes the `.template` file.
+- **Reference Section for Phases** — detailed table in the main README explaining the 6 development phases (/spec, /plan, /build, /test, /code-simplify, /ship) and their trigger commands.
+
+---
+
 ## [1.2.0] — 2026-04-30
 
 ### Added
@@ -84,7 +94,8 @@ Initial public release of the **dbv-specs-ops** SDD framework.
 
 ---
 
-[Sin publicar]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.2.0...HEAD
+[Sin publicar]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.2.1...HEAD
+[1.2.1]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/davidbuenov/dbv-specs-ops/releases/tag/v1.0.0

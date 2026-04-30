@@ -15,11 +15,13 @@ The full workflow and development rules are in `docs/MASTER_PROMPT.md`.
 
 When opening the workspace, run **two checks in order**:
 
-**1. Bootstrap check** — Read `project.config.md`. If it contains placeholders (e.g. `[Project Name]`), ask the user these 3 questions one by one before anything else:
+**1. Bootstrap check** — Read `project.config.md`. If it contains placeholders (e.g. `[Project Name]`), ask the user these 5 questions one by one before anything else:
   1. *What is the project name?*
   2. *Your name or company name? (optional URL)*
   3. *Which license? MIT · Apache 2.0 · GPL · Proprietary · None* — **MIT by default**
-  Then fill `project.config.md` with the real values and generate the `LICENSE` file.
+  4. *Git version control?* — **⭐ HIGHLY RECOMMENDED**
+  5. *Documentation language?* ES · EN · Bilingual — **ES by default**
+  Then fill `project.config.md`, generate `LICENSE`, and create project `README.md` from `README.template.md`.
 
 **2. Specs check** — Check if `docs/SPECIFICATIONS.md` has real content (not just placeholders):
 - **If empty or placeholders only** → The project has no specs yet. Inform the user and follow the flow defined in `docs/ADOPTION_PROMPT.md` to reconstruct context.
