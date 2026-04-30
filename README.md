@@ -5,7 +5,7 @@
 
 <p align="right"><a href="#español">🇪🇸 Español</a> · <a href="#english">🇬🇧 English</a></p>
 
-![Version](https://img.shields.io/badge/version-1.1.0-blue)
+![Version](https://img.shields.io/badge/version-1.2.0-blue)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 
 ---
@@ -85,6 +85,8 @@ flowchart TD
 #### Root:
 | File | Purpose |
 |---|---|
+| [`project.config.md`](./project.config.md) | Project identity: name, author, license and file header template. Filled by the AI during the bootstrap interview. |
+| [`CHANGELOG.md`](./CHANGELOG.md) | Version history. The AI updates the `[Unreleased]` section during `/build` and `/test`, and publishes it on each `/ship`. |
 | [`task.md`](./task.md) | The logbook. Backlog, in-progress tasks and **Context Snapshots** to ensure the AI never loses the thread between sessions. |
 | [`implementation_plan.md`](./implementation_plan.md) | Created at the `/plan` phase. Detailed technical plan for the AI to fill in and get approved before building. |
 | [`walkthrough.md`](./walkthrough.md) | Created at the `/ship` phase. Summary of what was built, tested and delivered. |
@@ -113,17 +115,60 @@ Each AI assistant loads context differently. Use the corresponding file:
 
 This system requires no software installation — only **context installation**.
 
-1. **Copy the full template:** Clone this repo or use it as a GitHub Template and copy **all files** to the root of your new project. Having all platform files lets you switch AI assistants at any time without reconfiguring anything.
+#### Step 1 — Get the template files
 
-2. **Activate the Master:**
-   - **With auto-loading** (Claude Code, Copilot, Gemini CLI, Windsurf): the AI has already read the context, you can start directly.
-   - **Antigravity**: context is loaded automatically from `GEMINI.md` (same mechanism as Gemini CLI). Read `ANTIGRAVITY.md` for Antigravity-specific features like Planning Mode artifacts and Knowledge Items.
-   - **Without auto-loading** (ChatGPT, Gemini Web…): attach or paste the content of `docs/MASTER_PROMPT.md` in the first message.
-   > *Suggested message:* "Act as my Senior Engineer following the rules of `./docs/MASTER_PROMPT.md`. Review `task.md` to start Phase 0."
+Choose the option that best fits your workflow. **Do not clone this repo directly** — your project should be independent, with no connection to the original repository.
 
-3. **Engineering Interview:** The AI will read that we are in "Phase 0" and start asking questions to fill in `docs/SPECIFICATIONS.md`.
+**Option A — GitHub Template (recommended):**
+Click the **"Use this template"** button at the top of this repo on GitHub.
+GitHub will create a brand-new repository under your account, with all the files and no history from the original. 100% yours.
 
-4. **Execution:** Once the plan is approved, just say: "Proceed with the next task in the `/plan`."
+**Option B — Download ZIP (simplest):**
+Click the green **"Code"** button → **"Download ZIP"**. Extract the files and copy them to the root of your project folder.
+No git knowledge required. Works for any project, new or existing.
+
+Either way, make sure **all files are at the root** of your project so your AI assistant can find them automatically.
+
+#### Step 2 — Open your AI assistant and kick off the session
+
+Depending on your platform, the context loads differently:
+
+| Platform | Context loading | First message to type |
+|---|---|---|
+| **Claude Code** | ✅ Automatic | `/plan` |
+| **GitHub Copilot** | ✅ Automatic | `/plan` |
+| **Antigravity** | ✅ Automatic (via `GEMINI.md`) | `/plan` |
+| **Gemini CLI** | ✅ Automatic (via `GEMINI.md`) | `/plan` |
+| **Windsurf** | ✅ Automatic | `/plan` |
+| **Cursor** | ✅ Automatic (via `CLAUDE.md`) | `/plan` |
+| **ChatGPT / Gemini Web** | ⚠️ Manual | See below |
+
+> **Auto-loading platforms (Claude, Copilot, Antigravity, Gemini CLI, Windsurf, Cursor):**
+> The AI has already read the full context. Just type:
+> ```
+> /plan
+> ```
+> The AI will start the Engineering Interview: it will ask you questions one by one to fill in `docs/SPECIFICATIONS.md` and define the project plan.
+
+> **Manual platforms (ChatGPT, Gemini Web):**
+> Paste the content of `docs/MASTER_PROMPT.md` in the first message, then add:
+> ```
+> Review task.md and start the Engineering Interview for a new project.
+> ```
+
+#### Step 3 — Answer the Engineering Interview
+
+The AI will ask you what you want to build, who it's for, and what the key requirements are.
+It fills `docs/SPECIFICATIONS.md` based on your answers — no manual editing needed.
+
+#### Step 4 — Approve the plan and build
+
+Once specs are confirmed, the AI generates `implementation_plan.md` and asks for your approval.
+After approval, it builds incrementally. You can always check progress in `task.md`.
+
+#### 🔄 Already have an existing project?
+
+Use `docs/ADOPTION_PROMPT.md` instead. See the [Adopting an Existing Project](#en-adoption) section.
 
 ---
 
@@ -229,6 +274,8 @@ Este flujo de trabajo es una versión unificada y simplificada de dos pilares de
 #### Raíz del proyecto:
 | Archivo | Propósito |
 |---|---|
+| [`project.config.md`](./project.config.md) | Identidad del proyecto: nombre, autor, licencia y plantilla de cabeceras. Lo rellena la IA durante la entrevista de bootstrap. |
+| [`CHANGELOG.md`](./CHANGELOG.md) | Historial de versiones. La IA actualiza la sección `[Sin publicar]` durante `/build` y `/test`, y la publica en cada `/ship`. |
 | [`task.md`](./task.md) | El diario de a bordo. Backlog, tareas en curso y **Snapshots de Contexto**. |
 | [`implementation_plan.md`](./implementation_plan.md) | Se crea en la fase `/plan`. Plan técnico detallado que la IA rellena y el usuario aprueba antes de construir. |
 | [`walkthrough.md`](./walkthrough.md) | Se crea en la fase `/ship`. Resumen de lo construido, probado y entregado. |
@@ -255,17 +302,60 @@ Este flujo de trabajo es una versión unificada y simplificada de dos pilares de
 
 Este sistema no requiere instalación de software, sino **instalación de contexto**.
 
-1. **Copia la plantilla completa:** Clona este repo o úsalo como GitHub Template. Tener todos los archivos te permite cambiar de asistente de IA en cualquier momento.
+#### Paso 1 — Obtén los archivos de la plantilla
 
-2. **Activa el Maestro:**
-   - **Con auto-carga** (Claude Code, Copilot, Gemini CLI, Windsurf): la IA ya ha leído el contexto.
-   - **Antigravity**: el contexto se carga automáticamente desde `GEMINI.md` (mismo mecanismo que Gemini CLI). Lee `ANTIGRAVITY.md` para funciones específicas de Antigravity como los artefactos de Planning Mode y los Knowledge Items.
-   - **Sin auto-carga** (ChatGPT, Gemini Web…): adjunta o pega `docs/MASTER_PROMPT.md` en el primer mensaje.
-   > *Mensaje sugerido:* "Actúa como mi Ingeniero Senior siguiendo las reglas de `./docs/MASTER_PROMPT.md`. Revisa `task.md` para iniciar la Fase 0."
+Elige la opción que mejor se adapte a tu flujo. **No clones este repo directamente** — tu proyecto debe ser independiente, sin ninguna conexión con el repositorio original.
 
-3. **Entrevista de Ingeniería:** La IA leerá que estamos en "Fase 0" y empezará a preguntarte detalles para rellenar `docs/SPECIFICATIONS.md`.
+**Opción A — GitHub Template (recomendada):**
+Haz clic en el botón **"Use this template"** en la página principal de este repo en GitHub.
+GitHub creará un repositorio nuevo bajo tu cuenta, con todos los archivos y sin el historial del original. 100% tuyo.
 
-4. **Ejecución:** Una vez definido el plan, di: "Procede con la siguiente tarea del `/plan`."
+**Opción B — Descargar ZIP (la más sencilla):**
+Haz clic en el botón verde **"Code"** → **"Download ZIP"**. Extrae los archivos y cópialos a la raíz de tu proyecto.
+No se necesita ningún conocimiento de git. Funciona para cualquier proyecto, nuevo o existente.
+
+En ambos casos, asegúrate de que **todos los archivos estén en la raíz** de tu proyecto para que el asistente de IA los encuentre automáticamente.
+
+#### Paso 2 — Abre tu asistente de IA y arranca la sesión
+
+Según la plataforma, el contexto se carga de forma diferente:
+
+| Plataforma | Carga de contexto | Primer mensaje a escribir |
+|---|---|---|
+| **Claude Code** | ✅ Automática | `/plan` |
+| **GitHub Copilot** | ✅ Automática | `/plan` |
+| **Antigravity** | ✅ Automática (vía `GEMINI.md`) | `/plan` |
+| **Gemini CLI** | ✅ Automática (vía `GEMINI.md`) | `/plan` |
+| **Windsurf** | ✅ Automática | `/plan` |
+| **Cursor** | ✅ Automática (vía `CLAUDE.md`) | `/plan` |
+| **ChatGPT / Gemini Web** | ⚠️ Manual | Ver abajo |
+
+> **Plataformas con auto-carga (Claude, Copilot, Antigravity, Gemini CLI, Windsurf, Cursor):**
+> La IA ya ha leído todo el contexto. Simplemente escribe:
+> ```
+> /plan
+> ```
+> La IA iniciará la Entrevista de Ingeniería: te hará preguntas una a una para rellenar `docs/SPECIFICATIONS.md` y definir el plan del proyecto.
+
+> **Plataformas manuales (ChatGPT, Gemini Web):**
+> Pega el contenido de `docs/MASTER_PROMPT.md` en el primer mensaje y añade:
+> ```
+> Revisa task.md e inicia la Entrevista de Ingeniería para un proyecto nuevo.
+> ```
+
+#### Paso 3 — Responde la Entrevista de Ingeniería
+
+La IA te preguntará qué quieres construir, para quién y cuáles son los requisitos clave.
+Rellena `docs/SPECIFICATIONS.md` basándose en tus respuestas — sin edición manual.
+
+#### Paso 4 — Aprueba el plan y construye
+
+Una vez confirmadas las specs, la IA genera `implementation_plan.md` y te pide aprobación.
+Tras aprobar, construye de forma incremental. Puedes seguir el progreso en `task.md`.
+
+#### 🔄 ¿Ya tienes un proyecto existente?
+
+Usa `docs/ADOPTION_PROMPT.md` en su lugar. Ver la sección [Incorporar a un Proyecto Existente](#es-adoption).
 
 ---
 

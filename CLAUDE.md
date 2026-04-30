@@ -4,6 +4,7 @@ Este proyecto sigue la metodología **Spec-Driven Development (SDD)**. Lee estos
 
 | Archivo | Propósito |
 | --- | --- |
+| `project.config.md` | Identidad del proyecto: nombre, autor, licencia y plantilla de cabeceras |
 | `docs/MASTER_PROMPT.md` | Workflow obligatorio, normas y límites |
 | `docs/SPECIFICATIONS.md` | Requisitos del proyecto actual |
 | `docs/ARCHITECTURE.md` | Stack y decisiones técnicas |
@@ -11,8 +12,15 @@ Este proyecto sigue la metodología **Spec-Driven Development (SDD)**. Lee estos
 
 ## Detección automática del estado del proyecto
 
-Al iniciar sesión, comprueba si `docs/SPECIFICATIONS.md` tiene contenido real (no solo placeholders):
+Al iniciar sesión, ejecuta **dos comprobaciones en orden**:
 
+**1. Bootstrap** — Lee `project.config.md`. Si contiene placeholders (p.ej. `[Project Name]`), haz estas 3 preguntas al usuario una a una antes de continuar:
+  1. *¿Cuál es el nombre del proyecto?*
+  2. *¿Tu nombre o el de tu empresa? (URL opcional)*
+  3. *¿Qué licencia? MIT · Apache 2.0 · GPL · Propietaria · Ninguna* — **MIT por defecto**
+  Luego rellena `project.config.md` y genera el fichero `LICENSE`.
+
+**2. Specs** — Comprueba si `docs/SPECIFICATIONS.md` tiene contenido real (no solo placeholders):
 - **Si está vacío o solo tiene placeholders** → el proyecto aún no tiene specs. Informa al usuario y sigue el flujo definido en `docs/ADOPTION_PROMPT.md` para reconstruir el contexto.
 - **Si está relleno** → el proyecto ya usa SDD. Consulta `task.md` para retomar desde el Snapshot de Contexto.
 

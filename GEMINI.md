@@ -4,6 +4,7 @@ This project follows **Spec-Driven Development (SDD)**. Read these files at the 
 
 | File | Purpose |
 | --- | --- |
+| `project.config.md` | Project identity: name, author, license and file header template |
 | `docs/MASTER_PROMPT.md` | Mandatory workflow, rules and boundaries |
 | `docs/SPECIFICATIONS.md` | Current project requirements |
 | `docs/ARCHITECTURE.md` | Stack and technical decisions |
@@ -13,8 +14,15 @@ This project follows **Spec-Driven Development (SDD)**. Read these files at the 
 
 ## Automatic Project State Detection
 
-At session start, check if `docs/SPECIFICATIONS.md` has real content (not just placeholders):
+At session start, run **two checks in order**:
 
+**1. Bootstrap check** — Read `project.config.md`. If it contains placeholders (e.g. `[Project Name]`), ask the user these 3 questions one by one before anything else:
+  1. *What is the project name?*
+  2. *Your name or company name? (optional URL)*
+  3. *Which license? MIT · Apache 2.0 · GPL · Proprietary · None* — **MIT by default**
+  Then fill `project.config.md` with the real values and generate the `LICENSE` file.
+
+**2. Specs check** — Check if `docs/SPECIFICATIONS.md` has real content (not just placeholders):
 - **If empty or placeholders only** → The project has no specs yet. Inform the user and follow the flow defined in `docs/ADOPTION_PROMPT.md` to reconstruct context.
 - **If filled** → The project already uses SDD. Check `task.md` to resume from the Context Snapshot.
 

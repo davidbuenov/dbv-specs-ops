@@ -4,16 +4,24 @@ This project uses **Spec-Driven Development (SDD)**. Apply these rules in all in
 
 ## Before proposing any code
 
-1. Read `docs/SPECIFICATIONS.md` to understand the current requirements
-2. Read `docs/ARCHITECTURE.md` to respect the stack and technical decisions
-3. Read `task.md` to know the current project state
+1. Read `project.config.md` to get the project name, author, license and file header template
+2. Read `docs/SPECIFICATIONS.md` to understand the current requirements
+3. Read `docs/ARCHITECTURE.md` to respect the stack and technical decisions
+4. Read `task.md` to know the current project state
 
 The full workflow and development rules are in `docs/MASTER_PROMPT.md`.
 
 ## Automatic project state detection
 
-When opening the workspace, check if `docs/SPECIFICATIONS.md` has real content (not just placeholders):
+When opening the workspace, run **two checks in order**:
 
+**1. Bootstrap check** — Read `project.config.md`. If it contains placeholders (e.g. `[Project Name]`), ask the user these 3 questions one by one before anything else:
+  1. *What is the project name?*
+  2. *Your name or company name? (optional URL)*
+  3. *Which license? MIT · Apache 2.0 · GPL · Proprietary · None* — **MIT by default**
+  Then fill `project.config.md` with the real values and generate the `LICENSE` file.
+
+**2. Specs check** — Check if `docs/SPECIFICATIONS.md` has real content (not just placeholders):
 - **If empty or placeholders only** → The project has no specs yet. Inform the user and follow the flow defined in `docs/ADOPTION_PROMPT.md` to reconstruct context.
 - **If filled** → The project already uses SDD. Check `task.md` to resume from the Context Snapshot.
 
