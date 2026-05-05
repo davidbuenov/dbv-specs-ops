@@ -20,6 +20,7 @@
 - [Platform Activation](#en-platforms)
 - [Quick Start](#en-quickstart)
 - [Adopting an Existing Project](#en-adoption)
+- [Upgrading an Existing Project](#en-upgrade)
 - [Example Usage](#en-example)
 - [FAQ](#en-faq)
 - [Contributing](#en-contributing)
@@ -31,6 +32,7 @@
 - [Activación por Plataforma](#es-platforms)
 - [Cómo usar (Quick Start)](#es-quickstart)
 - [Incorporar a un Proyecto Existente](#es-adoption)
+- [Actualizar el Framework](#es-upgrade)
 
 **General**
 - [Estado / Status](#status)
@@ -56,6 +58,7 @@ This workflow is a unified, simplified version of two industry pillars, adapted 
 1. **[Agent Skills (Google/Addy Osmani)](https://github.com/addyosmani/agent-skills):** The **process and technical workflow** (Cycle: Spec → Plan → Build → Test → Simplify → Ship).
 2. **[GitHub Spec-Kit](https://github.com/github/spec-kit):** The **quality of specification**, focusing on understanding the problem, risks, and open questions before coding.
 3. **[AI Coding Best Practices](https://github.com/davidbuenov/ai-coding-best-practices):** The final layer of **style and excellence** that dictates how the final code should be written.
+4. **[design.md (Google Labs)](https://github.com/google-labs-code/design.md):** The **visual design system standard** — a format for describing a visual identity to coding agents, now integrated as `docs/DESIGN.md`.
 
 ---
 
@@ -101,6 +104,7 @@ Each phase has a **trigger command** you can type in the chat at any time. The A
 | [`MASTER_PROMPT.md`](./docs/MASTER_PROMPT.md) | The brain of the system. Rules, workflow and constraints the AI must follow. |
 | [`SPECIFICATIONS.md`](./docs/SPECIFICATIONS.md) | The "What" and "Why". Problem, objectives and acceptance criteria. |
 | [`ARCHITECTURE.md`](./docs/ARCHITECTURE.md) | The "How". Tech stack, design decisions and system structure. |
+| [`DESIGN.md`](./docs/DESIGN.md) | The "Look". Visual design system: color tokens, typography, spacing and UI components. *(Optional for projects without UI)* |
 
 #### Root:
 | File | Purpose |
@@ -202,11 +206,49 @@ Already have code but no specs or methodology? This flow lets you adopt SDD with
    > *Suggested message:* "Follow the instructions in `docs/ADOPTION_PROMPT.md` to analyze this project and incorporate it into SDD methodology."
 3. The AI will autonomously analyze your project (stack, tests, git history, existing docs) and present a summary before asking questions.
 4. Answer the interview (6 questions, one at a time) to confirm the context.
-5. The AI will generate `docs/SPECIFICATIONS.md`, `docs/ARCHITECTURE.md` and `task.md` with the real project state.
+5. The AI will generate `docs/SPECIFICATIONS.md`, `docs/ARCHITECTURE.md`, `docs/DESIGN.md` (if UI project) and `task.md` with the real project state.
 
 ---
 
-<a name="en-example"></a>
+<a name="en-upgrade"></a>
+### ⬆️ Upgrading an Existing Project
+
+Already using dbv-specs-ops and want to get the latest features? You only need **one file**.
+
+#### Step 1 — Download `UPGRADE_PROMPT.md`
+
+> **[⬇️ Download UPGRADE_PROMPT.md](https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/main/docs/UPGRADE_PROMPT.md)**
+>
+> Right-click → Save As → save it as `docs/UPGRADE_PROMPT.md` inside your project.
+
+#### Step 2 — Tell your AI
+
+```
+Read docs/UPGRADE_PROMPT.md and upgrade my project.
+```
+
+That's it. The AI detects your current version, calculates what needs updating, and applies only the framework files.
+
+#### What the AI will do
+- ✅ Detect your current framework version (reads `project.config.md` or asks you)
+- ✅ Download and update only the framework files that changed since your version
+- ✅ Add new optional files if missing (e.g. `docs/DESIGN.md` for UI projects)
+- ✅ Show you a full summary of every change applied
+
+#### What the AI will NEVER touch
+
+| File | Why it's protected |
+|---|---|
+| `docs/SPECIFICATIONS.md` | Your project requirements |
+| `docs/ARCHITECTURE.md` | Your technical decisions |
+| `task.md` | Your backlog and project state |
+| `CHANGELOG.md` | Your version history |
+| `README.md` | Your project documentation |
+| All source code | Your application |
+
+---
+
+
 ### 🧑‍💻 Example Usage
 
 **1. Phase 0: Specification**
@@ -278,6 +320,7 @@ Este flujo de trabajo es una versión unificada y simplificada de dos pilares de
 1. **[Agent Skills (Google/Addy Osmani)](https://github.com/addyosmani/agent-skills):** El **proceso y el flujo de trabajo** técnico (Ciclo: Spec → Plan → Build → Test → Simplify → Ship).
 2. **[GitHub Spec-Kit](https://github.com/github/spec-kit):** La **calidad de la especificación**, enfocándonos en entender el problema antes de codificar.
 3. **[AI Coding Best Practices](https://github.com/davidbuenov/ai-coding-best-practices):** La capa de **estilo y excelencia** que dicta cómo debe escribirse el código final.
+4. **[design.md (Google Labs)](https://github.com/google-labs-code/design.md):** El **estándar de sistema de diseño visual** — un formato para describir identidades visuales a agentes de codificación, ahora integrado como `docs/DESIGN.md`.
 
 ---
 
@@ -290,6 +333,7 @@ Este flujo de trabajo es una versión unificada y simplificada de dos pilares de
 | [`MASTER_PROMPT.md`](./docs/MASTER_PROMPT.md) | El cerebro del sistema. Reglas, workflow y restricciones que la IA debe obedecer. |
 | [`SPECIFICATIONS.md`](./docs/SPECIFICATIONS.md) | El "Qué" y el "Por qué". Problema, objetivos y criterios de aceptación. |
 | [`ARCHITECTURE.md`](./docs/ARCHITECTURE.md) | El "Cómo". Stack tecnológico, decisiones de diseño y estructura del sistema. |
+| [`DESIGN.md`](./docs/DESIGN.md) | El "Aspecto". Sistema de diseño visual: tokens de color, tipografía, espaciado y componentes. *(Opcional para proyectos sin UI)* |
 
 #### Raíz del proyecto:
 | Archivo | Propósito |
@@ -404,14 +448,52 @@ Usa `docs/ADOPTION_PROMPT.md` en su lugar. Ver la sección [Incorporar a un Proy
    > *Mensaje sugerido:* "Sigue las instrucciones de `docs/ADOPTION_PROMPT.md` para analizar este proyecto e incorporarlo a la metodología SDD."
 3. La IA analizará tu proyecto de forma autónoma y te presentará un resumen.
 4. Responde la entrevista (6 preguntas, una a una).
-5. La IA generará `docs/SPECIFICATIONS.md`, `docs/ARCHITECTURE.md` y `task.md` con el estado real.
+5. La IA generará `docs/SPECIFICATIONS.md`, `docs/ARCHITECTURE.md`, `docs/DESIGN.md` (si tiene interfaz) y `task.md` con el estado real.
+
+---
+
+<a name="es-upgrade"></a>
+### ⬆️ Actualizar el Framework
+
+¿Ya usas dbv-specs-ops y quieres acceder a las últimas mejoras? Solo necesitas **un fichero**.
+
+#### Paso 1 — Descarga `UPGRADE_PROMPT.md`
+
+> **[⬇️ Descargar UPGRADE_PROMPT.md](https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/main/docs/UPGRADE_PROMPT.md)**
+>
+> Clic derecho → Guardar como → guárdalo como `docs/UPGRADE_PROMPT.md` dentro de tu proyecto.
+
+#### Paso 2 — Dile a tu IA
+
+```
+Lee docs/UPGRADE_PROMPT.md y actualiza mi proyecto.
+```
+
+Listo. La IA detecta tu versión actual, calcula qué hay que actualizar y aplica solo los ficheros de framework.
+
+#### Qué hará la IA
+- ✅ Detectar tu versión actual del framework (lee `project.config.md` o te pregunta)
+- ✅ Descargar y actualizar solo los ficheros de framework que cambiaron desde tu versión
+- ✅ Añadir ficheros nuevos opcionales si faltan (ej: `docs/DESIGN.md` para proyectos con UI)
+- ✅ Mostrarte un resumen completo de todo lo que se aplicó
+
+#### Qué NO tocará nunca
+
+| Fichero | Por qué está protegido |
+|---|---|
+| `docs/SPECIFICATIONS.md` | Tus requisitos del proyecto |
+| `docs/ARCHITECTURE.md` | Tus decisiones técnicas |
+| `task.md` | Tu backlog y estado del proyecto |
+| `CHANGELOG.md` | Tu historial de versiones |
+| `README.md` | Tu documentación del proyecto |
+| Todo el código fuente | Tu aplicación |
 
 ---
 
 <a name="status"></a>
 ## 🛠 Estado / Status
 
-* **Versión / Version:** 1.2.1
+* **Versión / Version:** 1.3.0
 * **Metodología / Methodology:** Spec-Driven Development (SDD)
 * **Objetivo / Goal:** Universal AI-assisted development template for any platform and assistant.
 
@@ -452,3 +534,4 @@ Usa `docs/ADOPTION_PROMPT.md` en su lugar. Ver la sección [Incorporar a un Proy
 * **[Agent Skills](https://github.com/addyosmani/agent-skills)** — Addy Osmani (Google)
 * **[GitHub Spec-Kit](https://github.com/github/spec-kit)** — GitHub
 * **[AI Coding Best Practices](https://github.com/davidbuenov/ai-coding-best-practices)** — David Bueno Vallejo
+* **[design.md](https://github.com/google-labs-code/design.md)** — Google Labs

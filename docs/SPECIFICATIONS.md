@@ -31,6 +31,7 @@
 
 - **Enfoque:** [Breve descripción de la solución técnica elegida].
 - **Dependencias Críticas:** [Ej: API externa, Servidor MCP específico].
+- **Sistema de Diseño:** Si el proyecto tiene interfaz de usuario, ver `docs/DESIGN.md` para tokens de color, tipografía y componentes.
 
 ## 🚫 5. Fuera de Alcance (Out of Scope)
 *Vital para evitar el "scope creep" (crecimiento descontrolado del proyecto).*

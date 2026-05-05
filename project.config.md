@@ -12,6 +12,8 @@
 - **Author / Company:** [Your Name or Company · https://yourwebsite.com]
 - **License:** [MIT]
 - **Languages:** [e.g. Python, JavaScript, HTML, CSS]
+- **Framework Version:** 1.3.0
+
 
 ---
 

@@ -29,7 +29,7 @@ Antes de iniciar la Entrevista de Ingeniería, comprueba si `project.config.md` 
 ## 🛠 Workflow de Ejecución (El Ciclo de Vida Obligatorio)
 Para cualquier requerimiento, debes seguir este orden inspirado en "Agent Skills":
 
-1.  **ESPECIFICAR (`/spec`)**: Revisa si el cambio afecta a `SPECIFICATIONS.md` o `ARCHITECTURE.md`. "Spec before code". Si el "qué" no está claro, pregunta antes de actuar.
+1.  **ESPECIFICAR (`/spec`)**: Revisa si el cambio afecta a `SPECIFICATIONS.md` o `ARCHITECTURE.md`. "Spec before code". Si el "qué" no está claro, pregunta antes de actuar. Si el proyecto tiene interfaz de usuario y `docs/DESIGN.md` no existe aún, crea y completa también ese fichero en esta fase.
 2.  **PLANIFICAR (`/plan`)**: Desglosa el trabajo en `task.md` en pasos atómicos (máximo 50 líneas de código por paso). Para planes complejos, crea `implementation_plan.md` y pide aprobación explícita antes de ejecutar.
 3.  **CONSTRUIR (`/build`)**: Implementa la lógica de forma incremental siguiendo los estándares. "One slice at a time".
     - **Python:** Crea siempre un entorno virtual local (`venv/`) antes de instalar dependencias (`python -m venv venv`). Añade `venv/` al `.gitignore`. Usa el `venv` para todas las ejecuciones del proyecto.

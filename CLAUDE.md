@@ -8,6 +8,7 @@ Este proyecto sigue la metodología **Spec-Driven Development (SDD)**. Lee estos
 | `docs/MASTER_PROMPT.md` | Workflow obligatorio, normas y límites |
 | `docs/SPECIFICATIONS.md` | Requisitos del proyecto actual |
 | `docs/ARCHITECTURE.md` | Stack y decisiones técnicas |
+| `docs/DESIGN.md` | Sistema de diseño visual: tokens de color, tipografía, componentes y filosofía *(si existe)* |
 | `task.md` | Estado actual + Snapshot de Contexto |
 
 ## Detección automática del estado del proyecto
@@ -39,8 +40,9 @@ Al iniciar sesión, ejecuta **dos comprobaciones en orden**:
 
 1. Rellena `docs/SPECIFICATIONS.md` con el contexto del nuevo proyecto
 2. Rellena `docs/ARCHITECTURE.md` con el stack tecnológico elegido
-3. Actualiza el Snapshot en `task.md`
-4. Actualiza `README.md` con el nombre y estado del nuevo proyecto
+3. Si el proyecto tiene interfaz de usuario, rellena `docs/DESIGN.md` con el sistema de diseño
+4. Actualiza el Snapshot en `task.md`
+5. Actualiza `README.md` con el nombre y estado del nuevo proyecto
 
 ---
 

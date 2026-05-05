@@ -8,6 +8,7 @@ This project follows **Spec-Driven Development (SDD)**. Read these files at the 
 | `docs/MASTER_PROMPT.md` | Mandatory workflow, rules and boundaries |
 | `docs/SPECIFICATIONS.md` | Current project requirements |
 | `docs/ARCHITECTURE.md` | Stack and technical decisions |
+| `docs/DESIGN.md` | Visual design system: color tokens, typography, components and philosophy *(if it exists)* |
 | `task.md` | Current state + Context Snapshot |
 
 > **Note:** This file is auto-loaded by both **Gemini CLI** (`gemini` in terminal) and **Antigravity** (VS Code · Google DeepMind). For Antigravity-specific setup instructions (Planning Mode, Knowledge Items), see `ANTIGRAVITY.md`.
@@ -49,8 +50,9 @@ At session start, run **two checks in order**:
 
 1. Fill `docs/SPECIFICATIONS.md` with the new project context
 2. Fill `docs/ARCHITECTURE.md` with the chosen tech stack
-3. Update the Snapshot in `task.md`
-4. Update `README.md` with the new project name and status
+3. If the project has a user interface, fill `docs/DESIGN.md` with the visual design system
+4. Update the Snapshot in `task.md`
+5. Update `README.md` with the new project name and status
 
 ---
 

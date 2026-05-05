@@ -11,6 +11,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.3.0] — 2026-05-05
+
+### Added
+- **`docs/DESIGN.md`** — plantilla de sistema de diseño visual (design tokens YAML + prosa) siguiendo el estándar [design.md de Google Labs](https://github.com/google-labs-code/design.md). Incluye soporte nativo de **Dark Mode** como aportación propia al estándar.
+- **`docs/UPGRADE_PROMPT.md`** — agente de actualización del framework: detecta la versión actual del proyecto, calcula el delta de cambios, descarga los ficheros de framework desde GitHub (con fallback manual si no hay red) y nunca toca los ficheros de proyecto.
+- **`framework_version`** en `project.config.md` — nuevo campo para rastrear con qué versión del framework fue inicializado o actualizado el proyecto por última vez.
+
+### Changed
+- **`GEMINI.md`, `CLAUDE.md`, `ANTIGRAVITY.md`, `.windsurfrules`, `.github/copilot-instructions.md`** — todos actualizados para leer `docs/DESIGN.md` al inicio de sesión (si existe) y mencionar el sistema de diseño en la sección de adaptación.
+- **`docs/MASTER_PROMPT.md`** — fase `/spec` actualizada: si el proyecto tiene UI y `docs/DESIGN.md` no existe, crearlo en esta fase.
+- **`docs/SPECIFICATIONS.md`** — sección 4 enlaza a `docs/DESIGN.md` cuando el proyecto tiene interfaz de usuario.
+- **`README.md`** — nuevas secciones "Upgrading an Existing Project" (EN) y "Actualizar el Framework" (ES) con flujo de descarga única de `UPGRADE_PROMPT.md`. Secciones de estructura de ficheros, origen e inspiración, adopción y referencias actualizadas en ambos idiomas.
+- **`docs/README.md`** — `DESIGN.md` y `UPGRADE_PROMPT.md` añadidos al índice y al diagrama de flujo de documentos.
+
 ## [1.2.1] — 2026-04-30
 
 ### Added
@@ -94,7 +108,8 @@ Initial public release of the **dbv-specs-ops** SDD framework.
 
 ---
 
-[Sin publicar]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.2.1...HEAD
+[Sin publicar]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.2.1...v1.3.0
 [1.2.1]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.0.0...v1.1.0

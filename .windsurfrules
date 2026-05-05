@@ -7,7 +7,8 @@ This project uses **Spec-Driven Development (SDD)**. Apply these rules in all in
 1. Read `project.config.md` to get the project name, author, license and file header template
 2. Read `docs/SPECIFICATIONS.md` to understand the current requirements
 3. Read `docs/ARCHITECTURE.md` to respect the stack and technical decisions
-4. Read `task.md` to know the current project state
+4. Read `docs/DESIGN.md` to respect the visual design system — colors, typography and components *(if it exists)*
+5. Read `task.md` to know the current project state
 
 The full workflow and development rules are in `docs/MASTER_PROMPT.md`.
 
