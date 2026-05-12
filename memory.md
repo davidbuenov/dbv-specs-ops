@@ -1,10 +1,11 @@
 # 🧠 Memory & Context
 
-> **Frontera de uso (Memory vs. Tasks):** 
-> - `task.md` es para el progreso cuantitativo (el checklist de qué hacer, tareas terminadas, y el Snapshot de Contexto de la sesión).
-> - `memory.md` es para el contexto cualitativo (conocimiento persistente, decisiones técnicas profundas, y el por qué de las cosas).
-> 
-> *Instrucción para la IA: Consulta este archivo al inicio de cada sesión para recuperar el hilo técnico. Sugiere actualizaciones aquí cada vez que tomes una decisión que desvíe el proyecto de la especificación original, o cuando resuelvas un bloqueo complejo.*
+> **Frontera de uso (Memory vs. Tasks):**
+> - `task.md` → progreso **operativo**: checklist de tareas, Snapshot de Contexto (el paso exacto siguiente), y estado de la sesión.
+> - `memory.md` → contexto **cualitativo y temático**: conocimiento persistente, decisiones técnicas profundas, lecciones, y el área del producto en foco (no el paso específico).
+> Si hay info que sirva para los dos, prioriza: datos con fecha/paso exacto → `task.md`; razonamiento/por-qué/lecciones → `memory.md`.
+>
+> *Instrucción para la IA: Consulta este archivo al inicio de cada sesión para recuperar el hilo técnico. Actualiza las secciones correspondientes cuando el workflow lo indique (triggers en `/plan`, `/build`, `/test` y gate en `/ship`).*
 
 ## 🎯 Contexto Activo
 - **Estado actual del desarrollo:** [Describe brevemente en qué fase está el proyecto, ej: "Implementando el sistema de base de datos local y refactorizando el UI de configuración"]
@@ -27,3 +28,14 @@
 
 - **[Módulo/Componente]:** [Responsabilidad y Dependencias]
 - *Ejemplo: `auth_service.js` gestiona el JWT y depende de `api_client.js`. (Borra esta línea de ejemplo al crear la primera entrada real).*
+
+---
+
+## 🧹 Política de Mantenimiento
+
+*Aplicar en cada `/ship` de tipo Major, o cuando este fichero supere las 200 líneas activas:*
+
+- **Consolida** decisiones relacionadas en una sola entrada.
+- **Archiva** lecciones ya internalizadas en el código: muévelas a `memory.archive.md` (créalo si no existe).
+- **Elimina** entradas que describan decisiones revertidas o ya obsoletas.
+- **Objetivo:** mantener `memory.md` por debajo de ~200 líneas activas para que la IA pueda leerlo íntegramente en cada sesión sin pérdida de atención.

@@ -5,7 +5,7 @@
 
 <p align="right"><a href="#español">🇪🇸 Español</a> · <a href="#english">🇬🇧 English</a></p>
 
-![Version](https://img.shields.io/badge/version-1.5.0-blue)
+![Version](https://img.shields.io/badge/version-1.5.2-blue)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 
 ---
@@ -206,7 +206,7 @@ Already have code but no specs or methodology? This flow lets you adopt SDD with
 2. Use `docs/ADOPTION_PROMPT.md` instead of the Phase 0 message.
    > *Suggested message:* "Follow the instructions in `docs/ADOPTION_PROMPT.md` to analyze this project and incorporate it into SDD methodology."
 3. The AI will autonomously analyze your project (stack, tests, git history, existing docs) and present a summary before asking questions.
-4. Answer the interview (6 questions, one at a time) to confirm the context.
+4. The AI will present a complete draft with marked assumptions. Confirm or adjust in one single step.
 5. The AI will generate `docs/SPECIFICATIONS.md`, `docs/ARCHITECTURE.md`, `docs/DESIGN.md` (if UI project) and `task.md` with the real project state.
 
 ---
@@ -495,7 +495,7 @@ Listo. La IA detecta tu versión actual, calcula qué hay que actualizar y aplic
 <a name="status"></a>
 ## 🛠 Estado / Status
 
-* **Versión / Version:** 1.5.0
+* **Versión / Version:** 1.5.2
 * **Metodología / Methodology:** Spec-Driven Development (SDD)
 * **Objetivo / Goal:** Universal AI-assisted development template for any platform and assistant.
 

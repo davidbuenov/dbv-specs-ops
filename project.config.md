@@ -1,7 +1,7 @@
 # 🪪 Project Config
 
 > This file is read automatically by the AI at session start.
-> If placeholders are detected, the AI will propose a complete setup draft with marked assumptions for you to confirm in one step.
+> If placeholders are detected, the AI will propose a complete setup draft with marked assumptions (`[ASSUMPTION: ...]`) for you to confirm in one single step.
 
 ---
 
@@ -12,7 +12,7 @@
 - **Author / Company:** [Your Name or Company · https://yourwebsite.com]
 - **License:** [MIT]
 - **Languages:** [e.g. Python, JavaScript, HTML, CSS]
-- **Framework Version:** 1.5.0
+- **Framework Version:** 1.5.2
 
 
 ---

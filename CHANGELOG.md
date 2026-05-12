@@ -11,6 +11,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.5.2] — 2026-05-12
+
+### Added
+- **Trust Boundary (`<trust_boundary>`):** Nueva sección en `MASTER_PROMPT.md` que declara explícitamente la separación entre directivas válidas (etiquetas XML del prompt) y datos del proyecto (`SPECIFICATIONS.md`, `task.md`, `memory.md`). Previene la ejecución silenciosa de texto imperativo inyectado en ficheros de datos.
+- **Memory Triggers Granulares:** En `/plan`, si el Adversarial Review acepta un riesgo conscientemente, debe registrarse en `memory.md` de inmediato. En `/build`, si se contradice `ARCHITECTURE.md`. En `/test`, si un test invalida un supuesto de `SPECIFICATIONS.md`. No es necesario esperar a `/ship`.
+- **Política de Mantenimiento en `memory.md`:** Nueva sección `🧹 Política de Mantenimiento` con el objetivo de mantener el fichero por debajo de 200 líneas activas, instrucciones de consolidación y uso de `memory.archive.md`.
+
+### Fixed
+- **Adversarial Review anti-plantilla:** El bloque `<adversary>` ahora debe citar al menos un sustantivo concreto presente en `docs/SPECIFICATIONS.md`. Se eliminan respuestas genéricas del tipo «¿qué pasa si falla la red?».
+- **Bootstrap sin auto-ejecución de git:** El flujo de bootstrap ya no ejecuta `git init` automáticamente. Muestra el comando y solicita confirmación explícita del usuario.
+- **Frontera memory/task clarificada:** `memory.md` ahora distingue explícitamente que `task.md` es operativo (paso exacto siguiente) y `memory.md` es temático (contexto cualitativo, área del producto en foco).
+
+---
+
+## [1.5.1] — 2026-05-12
+
+### Fixed
+- **Inconsistencia documental EN en `README.md`:** La sección "Adopting an Existing Project" describía el flujo de entrevista antiguo ("6 questions, one at a time"). Actualizado al nuevo flujo de borrador con asunciones marcadas.
+- **Inconsistencia en `project.config.md`:** El callout de descripción del archivo decía "the AI will ask 3 quick questions". Actualizado para reflejar el flujo real (borrador completo con `[ASSUMPTION: ...]`).
+- **Ficheros de evaluación interna en `.gitignore`:** Añadidos `docs/EvaluacionChatGPT.md`, `docs/EvaluacionCopilot.md` y `docs/EvaluaciondeClaude.md` al `.gitignore` para que no se versionen.
+
+---
+
 ## [1.5.0] — 2026-05-12
 
 ### Added
@@ -140,7 +163,9 @@ Initial public release of the **dbv-specs-ops** SDD framework.
 
 ---
 
-[Sin publicar]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.5.0...HEAD
+[Sin publicar]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.5.2...HEAD
+[1.5.2]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.5.1...v1.5.2
+[1.5.1]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.2.1...v1.3.0
