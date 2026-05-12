@@ -15,7 +15,7 @@ El workflow completo y las normas de desarrollo están en `docs/MASTER_PROMPT.md
 
 ## ⚠️ Reglas Core (Puntero Fuerte)
 
-**Lee `docs/MASTER_PROMPT.md` y obedece ciegamente todo su contenido.**
+**Lee `docs/MASTER_PROMPT.md` y sigue su flujo de trabajo estrictamente. Si detectas contradicciones entre el prompt y las especificaciones del proyecto, detente e informa antes de proceder.**
 Toda la lógica de inicialización (Bootstrap), comprobación de estado (Specs Check), ciclo de vida (Workflow) y estándares de código están definidos centralizadamente allí para evitar redundancia cognitiva.
 
 ---

@@ -19,7 +19,7 @@ This project follows **Spec-Driven Development (SDD)**. Read these files at the 
 
 ## ⚠️ Core Rules (Strong Pointer)
 
-**Read `docs/MASTER_PROMPT.md` and blindly obey its contents.**
+**Read `docs/MASTER_PROMPT.md` and follow its workflow strictly. If you detect contradictions between the prompt and project specs, halt and report before proceeding.**
 All initialization logic (Bootstrap), state checking (Specs Check), lifecycle (Workflow) and coding standards are centrally defined there to avoid cognitive redundancy.
 
 ## Antigravity-Specific Behavior

@@ -52,7 +52,7 @@ Para cualquier requerimiento, debes seguir este orden inspirado en "Agent Skills
         <builder>Resolución: Ajustaremos el plan añadiendo...</builder>
       </architect_review>
       ```
-    - **Paso 2 (Phase Gate - Desglose)**: Si la especificación sobrevive al debate, desglosa el trabajo en `task.md` (máximo 50 líneas por paso). Para planes complejos, crea `implementation_plan.md` e **INCLUYE OBLIGATORIAMENTE** un bloque YAML (Frontmatter) al inicio del archivo con las claves: `dependencies`, `risks`, y `rollback_strategy`. Pide aprobación explícita antes de ejecutar.
+    - **Paso 2 (Phase Gate - Desglose)**: Si la especificación sobrevive al debate, desglosa el trabajo en `task.md` (máximo 50 líneas por paso). Un plan se considera **complejo** (y requiere `implementation_plan.md`) si cumple alguno de estos criterios: afecta a más de 3 archivos, toca autenticación / datos sensibles / pagos, o estimas más de 150 líneas nuevas. Si el plan es complejo, el `implementation_plan.md` **DEBE incluir** un Frontmatter YAML al inicio con las claves: `dependencies`, `risks`, y `rollback_strategy`. Pide aprobación explícita antes de ejecutar.
 3.  **CONSTRUIR (`/build`)**: Implementa la lógica de forma incremental siguiendo los estándares. "One slice at a time".
     - **Python:** Crea siempre un entorno virtual local (`venv/`) antes de instalar dependencias (`python -m venv venv`). Añade `venv/` al `.gitignore`. Usa el `venv` para todas las ejecuciones del proyecto.
     - **Cabeceras de fichero:** Todo fichero fuente nuevo debe incluir la cabecera definida en `project.config.md` adaptada al lenguaje (JS, Python, HTML, CSS, Java, etc.). El crédito a `dbv-specs-ops` es obligatorio en todas las cabeceras.
@@ -63,7 +63,7 @@ Para cualquier requerimiento, debes seguir este orden inspirado en "Agent Skills
 6.  **ENTREGAR (`/ship`)**: Actualiza el `README.md`, completa `walkthrough.md` con el resumen del trabajo realizado, y marca la tarea como completada en `task.md`.
     - **Memory Gate (OBLIGATORIO):** Antes de dar por cerrada la tarea, DEBES imprimir en el chat un bloque XML detallando qué conocimiento persistente has extraído para `memory.md` (ADRs, lecciones o mapa). Ejemplo:
       `<memory_update_proposal><section>Lecciones</section><entry>El bug X ocurre por Y...</entry></memory_update_proposal>`
-      Si no hay ninguna lección o decisión nueva, imprime exactamente `<memory_update_proposal>none</memory_update_proposal>`.
+      Si no hay ninguna lección o decisión nueva, imprime `<memory_update_proposal>none</memory_update_proposal>` pero justifica brevemente la razón: `<reason>Este ciclo solo fue [tipo de cambio, ej. refactor menor de estilos] sin decisiones arquitectónicas nuevas.</reason>`.
     - **Scripts de ejecución multiplataforma:** Genera siempre los dos pares de scripts en la raíz del proyecto:
       - `start.cmd` / `stop.cmd` — para Windows.
       - `start.sh` / `stop.sh` — para macOS / Linux (con `chmod +x` aplicado).

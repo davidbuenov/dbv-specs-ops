@@ -173,7 +173,7 @@ Depending on your platform, the context loads differently:
 > ```
 > /plan
 > ```
-> The AI will start the Engineering Interview: it will ask you questions one by one to fill in `docs/SPECIFICATIONS.md` and define the project plan.
+> The AI will start the Engineering Interview: it will analyze your project silently and propose a complete draft with marked assumptions. You confirm or adjust everything in one single step.
 
 > **Manual platforms (ChatGPT, Gemini Web):**
 > Paste the content of `docs/MASTER_PROMPT.md` in the first message, then add:
@@ -418,7 +418,7 @@ Según la plataforma, el contexto se carga de forma diferente:
 > ```
 > /plan
 > ```
-> La IA iniciará la Entrevista de Ingeniería: te hará preguntas una a una para rellenar `docs/SPECIFICATIONS.md` y definir el plan del proyecto.
+> La IA iniciará la Entrevista de Ingeniería: analizará tu proyecto en silencio y propondrá un borrador completo con asunciones marcadas. Tú confirmas o corriges todo en un solo paso.
 
 > **Plataformas manuales (ChatGPT, Gemini Web):**
 > Pega el contenido de `docs/MASTER_PROMPT.md` en el primer mensaje y añade:
@@ -449,7 +449,7 @@ Usa `docs/ADOPTION_PROMPT.md` en su lugar. Ver la sección [Incorporar a un Proy
 2. Usa `docs/ADOPTION_PROMPT.md` en lugar del mensaje de la Fase 0.
    > *Mensaje sugerido:* "Sigue las instrucciones de `docs/ADOPTION_PROMPT.md` para analizar este proyecto e incorporarlo a la metodología SDD."
 3. La IA analizará tu proyecto de forma autónoma y te presentará un resumen.
-4. Responde la entrevista (6 preguntas, una a una).
+4. La IA analizará el proyecto en silencio y te presentará un borrador completo. Confirma o corrige en un solo paso.
 5. La IA generará `docs/SPECIFICATIONS.md`, `docs/ARCHITECTURE.md`, `docs/DESIGN.md` (si tiene interfaz) y `task.md` con el estado real.
 
 ---

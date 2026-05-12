@@ -1,7 +1,7 @@
 # 🪪 Project Config
 
 > This file is read automatically by the AI at session start.
-> If placeholders are detected, the AI will ask 3 quick questions before starting the Engineering Interview.
+> If placeholders are detected, the AI will propose a complete setup draft with marked assumptions for you to confirm in one step.
 
 ---
 
