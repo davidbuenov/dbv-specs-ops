@@ -5,7 +5,7 @@
 
 <p align="right"><a href="#español">🇪🇸 Español</a> · <a href="#english">🇬🇧 English</a></p>
 
-![Version](https://img.shields.io/badge/version-1.2.1-blue)
+![Version](https://img.shields.io/badge/version-1.4.0-blue)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 
 ---
@@ -85,7 +85,7 @@ Each phase has a **trigger command** you can type in the chat at any time. The A
 | # | Phase | Command | What the AI does | What you do | Output |
 |---|---|---|---|---|---|
 | 1 | **Spec** | `/spec` | Reviews if the requirement is defined in `SPECIFICATIONS.md`. If not, asks clarifying questions before acting. | Describe the feature or change you need. | Updated `SPECIFICATIONS.md` |
-| 2 | **Plan** | `/plan` | Breaks the work into atomic steps (max 50 lines each). For complex tasks, creates `implementation_plan.md` and waits for your explicit approval before building. | Review and approve the plan. | `task.md` + `implementation_plan.md` |
+| 2 | **Plan** | `/plan` | **Architect Review:** Validates specs for edge cases first. If valid, breaks the work into atomic steps. For complex tasks, creates `implementation_plan.md` and waits for explicit approval. | Review and approve the plan. | `task.md` + `implementation_plan.md` |
 | 3 | **Build** | `/build` | Implements logic incrementally. Adds file headers, sets up `venv` for Python, generates startup scripts, updates `CHANGELOG.md [Unreleased]`. | Sit back. Review the code if you wish. | Source code + `CHANGELOG.md` updated |
 | 4 | **Test** | `/test` | Creates and runs unit or integration tests. A task is **not marked as done** without a passing test. Fixes found bugs and logs them in `CHANGELOG.md`. | Run the tests if you want to confirm locally. | Test files + `CHANGELOG.md` updated |
 | 5 | **Simplify** | `/code-simplify` | Refactors for clarity and reduces complexity. No new features — only polish. "Clarity over cleverness." | Optional: review and validate the refactor. | Cleaner, simpler code |
@@ -111,7 +111,8 @@ Each phase has a **trigger command** you can type in the chat at any time. The A
 |---|---|
 | [`project.config.md`](./project.config.md) | Project identity: name, author, license and file header template. Filled by the AI during the bootstrap interview. |
 | [`CHANGELOG.md`](./CHANGELOG.md) | Version history. The AI updates the `[Unreleased]` section during `/build` and `/test`, and publishes it on each `/ship`. |
-| [`task.md`](./task.md) | The logbook. Backlog, in-progress tasks and **Context Snapshots** to ensure the AI never loses the thread between sessions. |
+| [`task.md`](./task.md) | The logbook. Quantitative progress (checklist), backlog, and **Context Snapshots**. |
+| [`memory.md`](./memory.md) | **Context and Decisions.** Qualitative knowledge: active context, technical decisions (ADRs), lessons learned, and relations map. AI must consult it at session start. |
 | [`implementation_plan.md`](./implementation_plan.md) | Created at the `/plan` phase. Detailed technical plan for the AI to fill in and get approved before building. |
 | [`walkthrough.md`](./walkthrough.md) | Created at the `/ship` phase. Summary of what was built, tested and delivered. |
 
@@ -340,7 +341,8 @@ Este flujo de trabajo es una versión unificada y simplificada de dos pilares de
 |---|---|
 | [`project.config.md`](./project.config.md) | Identidad del proyecto: nombre, autor, licencia y plantilla de cabeceras. Lo rellena la IA durante la entrevista de bootstrap. |
 | [`CHANGELOG.md`](./CHANGELOG.md) | Historial de versiones. La IA actualiza la sección `[Sin publicar]` durante `/build` y `/test`, y la publica en cada `/ship`. |
-| [`task.md`](./task.md) | El diario de a bordo. Backlog, tareas en curso y **Snapshots de Contexto**. |
+| [`task.md`](./task.md) | El diario de a bordo. Progreso cuantitativo (checklist), backlog, y **Snapshots de Contexto**. |
+| [`memory.md`](./memory.md) | **Contexto y Decisiones.** Base de conocimiento cualitativo: contexto activo, decisiones técnicas (ADR), lecciones aprendidas y mapa de relaciones. La IA debe consultarlo al iniciar la sesión. |
 | [`implementation_plan.md`](./implementation_plan.md) | Se crea en la fase `/plan`. Plan técnico detallado que la IA rellena y el usuario aprueba antes de construir. |
 | [`walkthrough.md`](./walkthrough.md) | Se crea en la fase `/ship`. Resumen de lo construido, probado y entregado. |
 
@@ -354,7 +356,7 @@ Cada fase tiene un **comando de activación** que puedes escribir en el chat en 
 | # | Fase | Comando | Qué hace la IA | Qué haces tú | Resultado |
 |---|---|---|---|---|---|
 | 1 | **Spec** | `/spec` | Revisa si el requisito está definido en `SPECIFICATIONS.md`. Si no, pregunta antes de actuar. | Describe la funcionalidad o cambio que necesitas. | `SPECIFICATIONS.md` actualizado |
-| 2 | **Plan** | `/plan` | Desglosa el trabajo en pasos atómicos (máx. 50 líneas cada uno). Para tareas complejas, crea `implementation_plan.md` y espera tu aprobación antes de construir. | Revisa y aprueba el plan. | `task.md` + `implementation_plan.md` |
+| 2 | **Plan** | `/plan` | **Architect Review:** Valida primero las specs buscando edge cases. Si son válidas, desglosa el trabajo en pasos atómicos. Para tareas complejas, crea `implementation_plan.md` y espera tu aprobación. | Revisa y aprueba el plan. | `task.md` + `implementation_plan.md` |
 | 3 | **Build** | `/build` | Implementa la lógica de forma incremental. Añade cabeceras a los ficheros, crea `venv` para Python, genera scripts de arranque, actualiza `CHANGELOG.md [Sin publicar]`. | Relájate. Revisa el código si lo deseas. | Código fuente + `CHANGELOG.md` actualizado |
 | 4 | **Test** | `/test` | Crea y ejecuta tests unitarios o de integración. Una tarea **no está hecha** sin un test que pase. Corrige los bugs encontrados y los registra en `CHANGELOG.md`. | Ejecuta los tests localmente si quieres confirmar. | Ficheros de test + `CHANGELOG.md` actualizado |
 | 5 | **Simplify** | `/code-simplify` | Refactoriza para mayor claridad y reduce la complejidad. Sin nuevas funcionalidades — solo pulido. "Clarity over cleverness." | Opcional: revisa y valida el refactor. | Código más limpio y simple |
@@ -493,7 +495,7 @@ Listo. La IA detecta tu versión actual, calcula qué hay que actualizar y aplic
 <a name="status"></a>
 ## 🛠 Estado / Status
 
-* **Versión / Version:** 1.3.0
+* **Versión / Version:** 1.4.0
 * **Metodología / Methodology:** Spec-Driven Development (SDD)
 * **Objetivo / Goal:** Universal AI-assisted development template for any platform and assistant.
 

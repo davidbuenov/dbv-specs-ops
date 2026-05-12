@@ -11,6 +11,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.4.0] — 2026-05-12
+
+### Added
+- **`memory.md`** — nuevo archivo estándar para separar el contexto cualitativo (decisiones técnicas, lecciones aprendidas, mapa de relaciones) del progreso cuantitativo (`task.md`), previniendo la deriva arquitectónica y pérdida de contexto en la IA.
+- **Architect Review en fase `/plan`** — al invocar `/plan`, la IA ahora hace una validación previa asumiendo el rol de Software Architect para detectar *edge cases* y vulnerabilidades lógicas antes de desglosar tareas.
+
+### Changed
+- **XML Prompts** — `docs/MASTER_PROMPT.md`, `docs/ADOPTION_PROMPT.md` y `docs/UPGRADE_PROMPT.md` han sido completamente reescritos utilizando etiquetas XML semánticas (`<workflow>`, `<boundaries>`, etc.) para mejorar la obediencia en modelos como Claude 3.5, Gemini 1.5 y GPT-4o.
+- **`README.md`** — actualizado para incluir `memory.md` en la estructura de archivos e incluir el *Architect Review* en la definición de la fase `/plan`.
+- **`GEMINI.md`** — actualizado para incluir la lectura de `memory.md` al inicio de la sesión.
+- **`.gitignore`** — actualiza para incluir la ignorancia de `implementation_plan.md` y `walkthrough.md`.
+
+---
+
 ## [1.3.0] — 2026-05-05
 
 ### Added
@@ -108,7 +122,8 @@ Initial public release of the **dbv-specs-ops** SDD framework.
 
 ---
 
-[Sin publicar]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.3.0...HEAD
+[Sin publicar]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.4.0...HEAD
+[1.4.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.2.1...v1.3.0
 [1.2.1]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.1.0...v1.2.0

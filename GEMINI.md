@@ -9,6 +9,7 @@ This project follows **Spec-Driven Development (SDD)**. Read these files at the 
 | `docs/SPECIFICATIONS.md` | Current project requirements |
 | `docs/ARCHITECTURE.md` | Stack and technical decisions |
 | `docs/DESIGN.md` | Visual design system: color tokens, typography, components and philosophy *(if it exists)* |
+| `memory.md` | **Context and Decisions:** Qualitative knowledge (ADRs, lessons learned, active context) |
 | `task.md` | Current state + Context Snapshot |
 
 > **Note:** This file is auto-loaded by both **Gemini CLI** (`gemini` in terminal) and **Antigravity** (VS Code · Google DeepMind). For Antigravity-specific setup instructions (Planning Mode, Knowledge Items), see `ANTIGRAVITY.md`.

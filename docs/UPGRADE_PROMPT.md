@@ -10,6 +10,7 @@
 
 ---
 
+<upgrade_rules>
 ## 🚨 REGLA CRÍTICA — Ficheros que NUNCA debes modificar
 
 Estos ficheros pertenecen al proyecto del usuario. **No los toques bajo ninguna circunstancia:**
@@ -26,9 +27,11 @@ Estos ficheros pertenecen al proyecto del usuario. **No los toques bajo ninguna 
 | Todo el código fuente | La aplicación del usuario |
 
 Solo puedes modificar o añadir los **ficheros de framework** listados en este documento.
+</upgrade_rules>
 
 ---
 
+<version_detection_phase>
 ## Fase 1 — Detección de versión actual
 
 Lee el fichero `project.config.md`:
@@ -37,12 +40,14 @@ Lee el fichero `project.config.md`:
 - Si **no existe** ese campo → pregunta al usuario:
   > *"¿Qué versión de dbv-specs-ops estás usando? Puedes encontrarla buscando en tu `CHANGELOG.md` el primer commit del proyecto, o mirando qué ficheros de plataforma tienes (`.windsurfrules` fue añadido en v1.1.0, `project.config.md` en v1.2.0)."*
 
-La versión más reciente del framework es: **1.3.0**
+La versión más reciente del framework es: **1.4.0**
 
-Si el usuario ya tiene la **v1.3.0**, informa de que el proyecto está al día. No hay nada que hacer.
+Si el usuario ya tiene la **v1.4.0**, informa de que el proyecto está al día. No hay nada que hacer.
+</version_detection_phase>
 
 ---
 
+<upgrade_manifest_phase>
 ## Fase 2 — Manifest de cambios por versión
 
 Usa esta tabla para calcular qué hay que actualizar según la versión actual detectada.
@@ -91,8 +96,21 @@ Usa esta tabla para calcular qué hay que actualizar según la versión actual d
 | CAMPO AÑADIDO | `project.config.md` | ⚠️ Solo añadir la línea `Framework Version`. No sobreescribir. |
 | LÍNEA AÑADIDA | `docs/SPECIFICATIONS.md` | ⚠️ Solo añadir la referencia a DESIGN.md en sección 4. No sobreescribir. |
 
+### v1.4.0 (cambios desde v1.3.0)
+| Acción | Fichero | Nota |
+|---|---|---|
+| NUEVO | `memory.md` | Base de conocimiento cualitativo. |
+| MODIFICADO | `README.md` | Tabla actualizada con el nuevo Architect Review. |
+| MODIFICADO | `GEMINI.md` | Para leer memory.md |
+| MODIFICADO | `docs/MASTER_PROMPT.md` | Estructurado en XML y con Architect Review. |
+| MODIFICADO | `docs/ADOPTION_PROMPT.md` | Estructurado en XML. |
+| MODIFICADO | `docs/UPGRADE_PROMPT.md` | Estructurado en XML y actualizado a 1.4.0. |
+| LÍNEA AÑADIDA | `.gitignore` | Añadir `implementation_plan.md` y `walkthrough.md`. |
+</upgrade_manifest_phase>
+
 ---
 
+<apply_changes_phase>
 ## Fase 3 — Aplicación de cambios
 
 ### Opción A: Descarga automática (si tienes acceso a red)
@@ -126,9 +144,11 @@ Si no puedes descargar ficheros automáticamente, muestra al usuario este mensaj
 > Ficheros que necesitas actualizar: [lista los ficheros calculados en la Fase 2]
 >
 > Para cada uno: haz clic → botón 'Raw' → Guardar como → pégalo en la ruta indicada de tu proyecto."*
+</apply_changes_phase>
 
 ---
 
+<surgical_changes_phase>
 ## Fase 4 — Cambios quirúrgicos (sin sobreescribir ficheros de proyecto)
 
 Algunos ficheros requieren cambios puntuales, no sobreescritura completa:
@@ -138,7 +158,7 @@ Algunos ficheros requieren cambios puntuales, no sobreescritura completa:
 En la sección `## Project Identity`, añade esta línea al final de la lista de campos, si no existe ya:
 
 ```markdown
-- **Framework Version:** 1.3.0
+- **Framework Version:** 1.4.0
 ```
 
 ### `docs/SPECIFICATIONS.md` — Añadir referencia a DESIGN.md
@@ -156,18 +176,20 @@ Si el proyecto tiene interfaz de usuario (web, móvil, desktop) y `docs/DESIGN.m
 - Infórmale al usuario: *"He creado `docs/DESIGN.md` como plantilla. Rellénalo con los tokens de color y tipografía de tu proyecto."*
 
 Si el proyecto no tiene UI → omite este paso.
+</surgical_changes_phase>
 
 ---
 
+<closing_phase>
 ## Fase 5 — Cierre
 
 Cuando todos los cambios estén aplicados:
 
-1. Confirma que `project.config.md` tiene el campo `Framework Version: 1.3.0`.
+1. Confirma que `project.config.md` tiene el campo `Framework Version: 1.4.0`.
 2. Muestra al usuario un resumen claro:
 
 ```
-✅ Framework actualizado de vX.X.X → v1.3.0
+✅ Framework actualizado de vX.X.X → v1.4.0
 
 Ficheros actualizados:
   • [lista de ficheros modificados/añadidos]
@@ -183,6 +205,7 @@ Próximos pasos:
   [Si se creó DESIGN.md] → Rellena docs/DESIGN.md con los tokens de diseño de tu proyecto.
   → Continúa con tu proyecto normalmente. El framework ya está al día.
 ```
+</closing_phase>
 
 ---
 
