@@ -54,14 +54,14 @@ Antes de hacer ninguna pregunta, muestra al usuario este mensaje de bienvenida e
 
 ---
 
-A continuación, hazme estas preguntas **de una en una**. Espera mi respuesta antes de continuar con la siguiente.
+A continuación, NO me hagas preguntas de una en una. Redacta un borrador inicial respondiendo a estas 6 áreas críticas basándote en tu análisis silencioso, marcando tus inferencias con `[ASSUMPTION: ...]`, y pídeme que corrija o valide el borrador completo en un solo mensaje:
 
-1. ¿Cuál es el objetivo principal de este proyecto? ¿Qué problema resuelve para quién?
-2. ¿Qué partes funcionan ya y cuáles están incompletas o rotas?
-3. ¿Cuál es la próxima tarea o entrega más urgente?
-4. ¿Hay decisiones técnicas tomadas que no se pueden cambiar? (base de datos, framework, APIs externas, infraestructura…)
-5. ¿Hay deuda técnica conocida o problemas recurrentes que deba tener en cuenta?
-6. ¿Trabaja alguien más en este proyecto, o eres el único?
+1. Objetivo principal del proyecto y qué problema resuelve.
+2. Partes que funcionan ya y cuáles están incompletas o rotas.
+3. Próxima tarea o entrega más urgente.
+4. Decisiones técnicas tomadas inamovibles (base de datos, framework, APIs externas, infraestructura…).
+5. Deuda técnica conocida o problemas recurrentes detectados.
+6. Número de contribuyentes al proyecto (solo yo vs equipo).
 </interview_phase>
 
 ---

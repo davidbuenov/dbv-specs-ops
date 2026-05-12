@@ -14,16 +14,16 @@
 *Registro de por qué se tomaron ciertas rutas (ej. cambios en librerías, arquitectura o patrones).*
 
 - **[Fecha] - [Decisión]:** [Razón/Contexto]
-- *Ejemplo: 2026-05-12 - Se cambió SQLite por IndexedDB: Necesitábamos soporte offline completo en el navegador sin backend.*
+- *Ejemplo: 2026-05-12 - Se cambió SQLite por IndexedDB: Necesitábamos soporte offline. (Borra esta línea de ejemplo al crear la primera entrada real).*
 
 ## ⚠️ Lecciones Aprendidas / Errores Evitados
 *Notas sobre bugs específicos, configuraciones que fallaron o refactors intentados para no repetirlos.*
 
 - **[Fallo/Bug]:** [Solución/Evitación]
-- *Ejemplo: El watcher de Vite entra en bucle infinito si la carpeta `/dist` no está en exclude.*
+- *Ejemplo: El watcher de Vite entra en bucle si `/dist` no está en exclude. (Borra esta línea de ejemplo al crear la primera entrada real).*
 
 ## 🗺️ Mapa de Relaciones
 *Breve descripción de cómo interactúan los módulos actuales para ayudar a la IA a navegar el código.*
 
 - **[Módulo/Componente]:** [Responsabilidad y Dependencias]
-- *Ejemplo: `auth_service.js` gestiona el JWT y depende de `api_client.js`. Ningún componente de UI debe llamar a la API directamente sin pasar por este servicio.*
+- *Ejemplo: `auth_service.js` gestiona el JWT y depende de `api_client.js`. (Borra esta línea de ejemplo al crear la primera entrada real).*

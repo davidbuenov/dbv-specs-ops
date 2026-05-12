@@ -18,13 +18,13 @@ This project follows **Spec-Driven Development (SDD)**. Read these files at the 
 
 At session start, run **two checks in order**:
 
-**1. Bootstrap check** — Read `project.config.md`. If it contains placeholders (e.g. `[Project Name]`), ask the user these 5 questions one by one before anything else:
-  1. *What is the project name?*
-  2. *Your name or company name? (optional URL)*
-  3. *Which license? MIT · Apache 2.0 · GPL · Proprietary · None* — **MIT by default**
-  4. *Git version control?* — **⭐ HIGHLY RECOMMENDED**
-  5. *Documentation language?* ES · EN · Bilingual — **ES by default**
-  Then fill `project.config.md`, generate `LICENSE`, and create project `README.md` from `README.template.md`.
+**1. Bootstrap check** — Read `project.config.md`. If it contains placeholders (e.g. `[Project Name]`), do not ask questions one by one. Propose a complete initial draft with marked assumptions and ask for confirmation:
+  1. *Project name:* [ASSUMPTION: Inferred from directory, confirm]
+  2. *Author / Company:* [ASSUMPTION: Your name, confirm]
+  3. *License:* [ASSUMPTION: MIT by default, confirm]
+  4. *Git version control:* [ASSUMPTION: Yes, highly recommended, confirm]
+  5. *Documentation language:* [ASSUMPTION: ES by default, confirm]
+  After the user confirms in a single step, fill `project.config.md`, generate `LICENSE`, and create project `README.md` from `README.template.md`.
 
 **2. Specs check** — Check if `docs/SPECIFICATIONS.md` has real content (not just placeholders):
 - **If empty or placeholders only** → The project has no specs yet. Inform the user and follow the flow defined in `docs/ADOPTION_PROMPT.md` to reconstruct context.

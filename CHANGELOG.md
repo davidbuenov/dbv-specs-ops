@@ -11,6 +11,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [1.4.1] — 2026-05-12
+
+### Fixed
+- **Fricción en Entrevista Inicial:** El proceso de `bootstrap` y adopción (`MASTER_PROMPT.md`, `ADOPTION_PROMPT.md`, `CLAUDE.md`, `GEMINI.md`, etc.) ya no hace preguntas una a una de forma tediosa. Ahora la IA propone un borrador completo con asunciones marcadas (`[ASSUMPTION: ...]`) que el usuario valida o corrige en un solo paso.
+- **Limpieza de template:** `task.md` restaurado a un estado limpio de plantilla (antes arrastraba meta-historia del framework).
+- **Consistencia:** Añadido `memory.md` a las tablas de lectura inicial de `CLAUDE.md`, `.windsurfrules`, `.github/copilot-instructions.md` y `ANTIGRAVITY.md`.
+- **Prevención de ruido:** Añadidas instrucciones explícitas en `memory.md` para que la IA borre los ejemplos al crear contenido real.
+- Corrección del encabezado de `MASTER_PROMPT.md` para reflejar la versión actual.
+
+---
+
 ## [1.4.0] — 2026-05-12
 
 ### Added
@@ -122,7 +133,8 @@ Initial public release of the **dbv-specs-ops** SDD framework.
 
 ---
 
-[Sin publicar]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.4.0...HEAD
+[Sin publicar]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.4.1...HEAD
+[1.4.1]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.4.0...v1.4.1
 [1.4.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.2.1...v1.3.0
 [1.2.1]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.2.0...v1.2.1
