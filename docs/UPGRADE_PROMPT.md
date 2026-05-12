@@ -40,9 +40,9 @@ Lee el fichero `project.config.md`:
 - Si **no existe** ese campo → pregunta al usuario:
   > *"¿Qué versión de dbv-specs-ops estás usando? Puedes encontrarla buscando en tu `CHANGELOG.md` el primer commit del proyecto, o mirando qué ficheros de plataforma tienes (`.windsurfrules` fue añadido en v1.1.0, `project.config.md` en v1.2.0)."*
 
-La versión más reciente del framework es: **1.4.0**
+La versión más reciente del framework es: **1.5.0**
 
-Si el usuario ya tiene la **v1.4.0**, informa de que el proyecto está al día. No hay nada que hacer.
+Si el usuario ya tiene la **v1.5.0**, informa de que el proyecto está al día. No hay nada que hacer.
 </version_detection_phase>
 
 ---
@@ -106,6 +106,20 @@ Usa esta tabla para calcular qué hay que actualizar según la versión actual d
 | MODIFICADO | `docs/ADOPTION_PROMPT.md` | Estructurado en XML. |
 | MODIFICADO | `docs/UPGRADE_PROMPT.md` | Estructurado en XML y actualizado a 1.4.0. |
 | LÍNEA AÑADIDA | `.gitignore` | Añadir `implementation_plan.md` y `walkthrough.md`. |
+
+### v1.5.0 (cambios desde v1.4.0)
+| Acción | Fichero | Nota |
+|---|---|---|
+| MODIFICADO | `docs/MASTER_PROMPT.md` | Capa de Enforcement (XML, Memory Gate). |
+| MODIFICADO | `docs/ADOPTION_PROMPT.md` | |
+| MODIFICADO | `docs/UPGRADE_PROMPT.md` | |
+| MODIFICADO | `GEMINI.md` | Refactorización DRY extrema |
+| MODIFICADO | `CLAUDE.md` | Refactorización DRY extrema |
+| MODIFICADO | `ANTIGRAVITY.md` | Refactorización DRY extrema |
+| MODIFICADO | `.windsurfrules` | Refactorización DRY extrema |
+| MODIFICADO | `.github/copilot-instructions.md` | Refactorización DRY extrema |
+| MODIFICADO | `memory.md` | Aviso sobre borrado de ejemplos |
+| MODIFICADO | `task.md` | Reseteado a template limpio |
 </upgrade_manifest_phase>
 
 ---
@@ -185,11 +199,11 @@ Si el proyecto no tiene UI → omite este paso.
 
 Cuando todos los cambios estén aplicados:
 
-1. Confirma que `project.config.md` tiene el campo `Framework Version: 1.4.0`.
+1. Actualiza el campo `Framework Version` en `project.config.md` a `1.5.0`.
 2. Muestra al usuario un resumen claro:
 
 ```
-✅ Framework actualizado de vX.X.X → v1.4.0
+✅ Framework actualizado de vX.X.X → v1.5.0
 
 Ficheros actualizados:
   • [lista de ficheros modificados/añadidos]

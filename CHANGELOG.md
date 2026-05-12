@@ -11,12 +11,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
-## [1.4.1] — 2026-05-12
+## [1.5.0] — 2026-05-12
+
+### Added
+- **Enforcement Layer (Hard-Law):** Transición de metodologías sugeridas a contratos estrictos.
+- **Phase Gates en`/plan`**: `implementation_plan.md` ahora exige OBLIGATORIAMENTE un Frontmatter YAML definiendo dependencias, riesgos y estrategia de rollback.
+- **Memory Gate en `/ship`**: Añadido paso obligatorio de impresión de `<memory_update_proposal>` XML antes de cerrar tareas, forzando la persistencia de contexto cualitativo en `memory.md`.
+- **Adversarial Review (`/plan`)**: Implementado un debate interno forzado (`<builder>` vs `<adversary>`) en formato XML para evaluar casos límite antes de que la IA desglose tareas.
 
 ### Fixed
-- **Fricción en Entrevista Inicial:** El proceso de `bootstrap` y adopción (`MASTER_PROMPT.md`, `ADOPTION_PROMPT.md`, `CLAUDE.md`, `GEMINI.md`, etc.) ya no hace preguntas una a una de forma tediosa. Ahora la IA propone un borrador completo con asunciones marcadas (`[ASSUMPTION: ...]`) que el usuario valida o corrige en un solo paso.
+- **Redundancia Cognitiva:** Refactorización DRY extrema en los adaptadores (`CLAUDE.md`, `GEMINI.md`, `.windsurfrules`, `.github/copilot-instructions.md`, `ANTIGRAVITY.md`). Se han eliminado las reglas duplicadas sobre estado del proyecto, ciclo de vida y bootstrap. Ahora actúan como punteros ligeros hacia `docs/MASTER_PROMPT.md` para reducir carga cognitiva en el LLM.
+- **Fricción en Entrevista Inicial:** El proceso de `bootstrap` y adopción (`MASTER_PROMPT.md`, `ADOPTION_PROMPT.md`) ya no hace preguntas una a una de forma tediosa. Ahora la IA propone un borrador completo con asunciones marcadas (`[ASSUMPTION: ...]`) que el usuario valida o corrige en un solo paso.
 - **Limpieza de template:** `task.md` restaurado a un estado limpio de plantilla (antes arrastraba meta-historia del framework).
-- **Consistencia:** Añadido `memory.md` a las tablas de lectura inicial de `CLAUDE.md`, `.windsurfrules`, `.github/copilot-instructions.md` y `ANTIGRAVITY.md`.
+- **Consistencia:** Añadido `memory.md` a las tablas de lectura inicial de todos los adaptadores.
 - **Prevención de ruido:** Añadidas instrucciones explícitas en `memory.md` para que la IA borre los ejemplos al crear contenido real.
 - Corrección del encabezado de `MASTER_PROMPT.md` para reflejar la versión actual.
 
@@ -133,8 +140,8 @@ Initial public release of the **dbv-specs-ops** SDD framework.
 
 ---
 
-[Sin publicar]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.4.1...HEAD
-[1.4.1]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.4.0...v1.4.1
+[Sin publicar]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.5.0...HEAD
+[1.5.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.2.1...v1.3.0
 [1.2.1]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.2.0...v1.2.1

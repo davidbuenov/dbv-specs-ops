@@ -5,7 +5,7 @@
 
 <p align="right"><a href="#español">🇪🇸 Español</a> · <a href="#english">🇬🇧 English</a></p>
 
-![Version](https://img.shields.io/badge/version-1.4.1-blue)
+![Version](https://img.shields.io/badge/version-1.5.0-blue)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 
 ---
@@ -495,7 +495,7 @@ Listo. La IA detecta tu versión actual, calcula qué hay que actualizar y aplic
 <a name="status"></a>
 ## 🛠 Estado / Status
 
-* **Versión / Version:** 1.4.1
+* **Versión / Version:** 1.5.0
 * **Metodología / Methodology:** Spec-Driven Development (SDD)
 * **Objetivo / Goal:** Universal AI-assisted development template for any platform and assistant.
 

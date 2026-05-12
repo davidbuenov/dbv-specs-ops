@@ -13,40 +13,10 @@ This project uses **Spec-Driven Development (SDD)**. Apply these rules in all in
 
 The full workflow and development rules are in `docs/MASTER_PROMPT.md`.
 
-## Automatic project state detection
+## ⚠️ Core Rules (Strong Pointer)
 
-When opening the workspace, run **two checks in order**:
-
-**1. Bootstrap check** — Read `project.config.md`. If it contains placeholders (e.g. `[Project Name]`), do not ask questions one by one. Propose a complete initial draft with marked assumptions and ask for confirmation:
-  1. *Project name:* [ASSUMPTION: Inferred from directory, confirm]
-  2. *Author / Company:* [ASSUMPTION: Your name, confirm]
-  3. *License:* [ASSUMPTION: MIT by default, confirm]
-  4. *Git version control:* [ASSUMPTION: Yes, highly recommended, confirm]
-  5. *Documentation language:* [ASSUMPTION: ES by default, confirm]
-  After the user confirms in a single step, fill `project.config.md`, generate `LICENSE`, and create project `README.md` from `README.template.md`.
-
-**2. Specs check** — Check if `docs/SPECIFICATIONS.md` has real content (not just placeholders):
-- **If empty or placeholders only** → The project has no specs yet. Inform the user and follow the flow defined in `docs/ADOPTION_PROMPT.md` to reconstruct context.
-- **If filled** → The project already uses SDD. Check `task.md` to resume from the Context Snapshot.
-
-## Mandatory development cycle
-
-Follow this order. Do not skip phases.
-
-1. `/spec` — Validate that the requirement is defined in `SPECIFICATIONS.md`. If not, ask.
-2. `/plan` — Break the work into atomic steps in `task.md` (max. 50 lines per step). Use `implementation_plan.md` for complex plans.
-3. `/build` — Implement incrementally. "One slice at a time."
-4. `/test` — Write and run tests. Without a test, the task is not done.
-5. `/code-simplify` — Refactor for clarity. "Clarity over cleverness."
-6. `/ship` — Update `README.md`, complete `walkthrough.md`, and mark the task as done in `task.md`.
-
-## Rules
-
-- Do not invent technical decisions: if it's not in `ARCHITECTURE.md`, ask before assuming
-- Register technical debt in `task.md`, not in code comments
-- Update `task.md` after each milestone with a new Context Snapshot
-- Never leave secrets, API keys or sensitive data in the code
-- Before writing code in any language, check the standards repo indicated in `MASTER_PROMPT.md`
+**Read `docs/MASTER_PROMPT.md` and blindly obey its contents.**
+All initialization logic (Bootstrap), state checking (Specs Check), lifecycle (Workflow) and coding standards are centrally defined there to avoid cognitive redundancy.
 
 ---
 
