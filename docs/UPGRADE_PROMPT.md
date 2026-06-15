@@ -40,9 +40,9 @@ Lee el fichero `project.config.md`:
 - Si **no existe** ese campo → pregunta al usuario:
   > *"¿Qué versión de dbv-specs-ops estás usando? Puedes encontrarla buscando en tu `CHANGELOG.md` el primer commit del proyecto, o mirando qué ficheros de plataforma tienes (`.windsurfrules` fue añadido en v1.1.0, `project.config.md` en v1.2.0)."*
 
-La versión más reciente del framework es: **1.5.0**
+La versión más reciente del framework es: **2.0.0**
 
-Si el usuario ya tiene la **v1.5.0**, informa de que el proyecto está al día. No hay nada que hacer.
+Si el usuario ya tiene la **v2.0.0**, informa de que el proyecto está al día. No hay nada que hacer.
 </version_detection_phase>
 
 ---
@@ -120,6 +120,30 @@ Usa esta tabla para calcular qué hay que actualizar según la versión actual d
 | MODIFICADO | `.github/copilot-instructions.md` | Refactorización DRY extrema |
 | MODIFICADO | `memory.md` | Aviso sobre borrado de ejemplos |
 | MODIFICADO | `task.md` | Reseteado a template limpio |
+
+### v1.5.1 (cambios desde v1.5.0)
+| Acción | Fichero | Nota |
+|---|---|---|
+| MODIFICADO | `README.md` | Documentación en inglés corregida. |
+
+### v1.5.2 (cambios desde v1.5.1)
+| Acción | Fichero | Nota |
+|---|---|---|
+| MODIFICADO | `docs/MASTER_PROMPT.md` | Añadido <trust_boundary>. |
+| MODIFICADO | `memory.md` | Añadida sección de mantenimiento de memoria. |
+| MODIFICADO | `task.md` | Template de task.md actualizado. |
+
+### v2.0.0 (cambios desde v1.5.2)
+| Acción | Fichero | Nota |
+|---|---|---|
+| NUEVO | `docs/AGENTIC_ENGINEERING.md` | Nueva guía técnica de Agentic Engineering. |
+| MODIFICADO | `docs/MASTER_PROMPT.md` | Modos Conductor/Orquestador, Evals en `/test`, Security Review en `/code-simplify`, MCP/Skills en `/spec` y `/plan`. |
+| MODIFICADO | `docs/SPECIFICATIONS.md` | Secciones de Evals, Skills/MCP y Seguridad añadidas. |
+| MODIFICADO | `docs/ARCHITECTURE.md` | Transición a `Agent Harness` en la plantilla de arquitectura. |
+| MODIFICADO | `project.config.md` | Añadida sección de Model Routing Guidelines. |
+| MODIFICADO | `README.md` | Soporte y documentación de instalación aislada en subcarpeta. |
+| MODIFICADO | `docs/ADOPTION_PROMPT.md` | Soporte para rutas en subcarpeta añadida al prompt de adopción. |
+| MODIFICADO | `docs/UPGRADE_PROMPT.md` | Este archivo actualizado a la versión v2.0.0. |
 </upgrade_manifest_phase>
 
 ---
@@ -144,6 +168,7 @@ Para cada fichero marcado como NUEVO o MODIFICADO, descarga el contenido desde e
 | `docs/UPGRADE_PROMPT.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/main/docs/UPGRADE_PROMPT.md` |
 | `docs/README.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/main/docs/README.md` |
 | `docs/DESIGN.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/main/docs/DESIGN.md` *(solo si no existe)* |
+| `docs/AGENTIC_ENGINEERING.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/main/docs/AGENTIC_ENGINEERING.md` *(NUEVO)* |
 
 > **Nota:** Si alguna descarga falla, muestra el link al usuario para que lo descargue manualmente.
 
@@ -199,11 +224,11 @@ Si el proyecto no tiene UI → omite este paso.
 
 Cuando todos los cambios estén aplicados:
 
-1. Actualiza el campo `Framework Version` en `project.config.md` a `1.5.0`.
+1. Actualiza el campo `Framework Version` en `project.config.md` a `2.0.0`.
 2. Muestra al usuario un resumen claro:
 
 ```
-✅ Framework actualizado de vX.X.X → v1.5.0
+✅ Framework actualizado de vX.X.X → v2.0.0
 
 Ficheros actualizados:
   • [lista de ficheros modificados/añadidos]
@@ -217,6 +242,7 @@ Ficheros de proyecto no modificados (protegidos):
 
 Próximos pasos:
   [Si se creó DESIGN.md] → Rellena docs/DESIGN.md con los tokens de diseño de tu proyecto.
+  [Si se creó AGENTIC_ENGINEERING.md] → Lee docs/AGENTIC_ENGINEERING.md para entender la metodología v2.0.0.
   → Continúa con tu proyecto normalmente. El framework ya está al día.
 ```
 </closing_phase>

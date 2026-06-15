@@ -8,20 +8,20 @@
 > *Instrucción para la IA: Consulta este archivo al inicio de cada sesión para recuperar el hilo técnico. Actualiza las secciones correspondientes cuando el workflow lo indique (triggers en `/plan`, `/build`, `/test` y gate en `/ship`).*
 
 ## 🎯 Contexto Activo
-- **Estado actual del desarrollo:** [Describe brevemente en qué fase está el proyecto, ej: "Implementando el sistema de base de datos local y refactorizando el UI de configuración"]
-- **Foco inmediato:** [El problema principal que se está intentando resolver hoy]
+- **Estado actual del desarrollo:** Release de la versión v2.0.0 finalizada con éxito. El framework ha sido actualizado por completo para soportar la metodología de ingeniería agéntica y optimización del arnés.
+- **Foco inmediato:** Distribución y documentación de la v2.0.0 para desarrolladores de equipo.
 
 ## 🏗️ Log de Decisiones Técnicas (ADR Ligero)
 *Registro de por qué se tomaron ciertas rutas (ej. cambios en librerías, arquitectura o patrones).*
 
-- **[Fecha] - [Decisión]:** [Razón/Contexto]
-- *Ejemplo: 2026-05-12 - Se cambió SQLite por IndexedDB: Necesitábamos soporte offline. (Borra esta línea de ejemplo al crear la primera entrada real).*
+- **2026-06-15 - Transición a dbv-specs-ops v2.0.0 (Agentic Engineering):** Implementación de los principios del libro blanco de Google. Se unificaron los Evals no deterministas de IA en la fase `/test` para simplificar el flujo, y se añadió la auditoría de seguridad en `/code-simplify` para evitar la fuga de credenciales o de paquetes alucinados (*slopsquatting*). Se transicionó la sección MCP en la arquitectura a una definición explícita de Arnés (Harness) del Agente.
 
 ## ⚠️ Lecciones Aprendidas / Errores Evitados
 *Notas sobre bugs específicos, configuraciones que fallaron o refactors intentados para no repetirlos.*
 
-- **[Fallo/Bug]:** [Solución/Evitación]
-- *Ejemplo: El watcher de Vite entra en bucle si `/dist` no está en exclude. (Borra esta línea de ejemplo al crear la primera entrada real).*
+- **[Feedback de Usabilidad]**: Es mejor integrar los conceptos nuevos (como Evals) en las fases existentes (`/test`) y delegar los modos de ejecución (Conductor/Orquestador) de forma implícita, en lugar de sobrecargar al desarrollador final con configuraciones complejas o preguntas confusas.
+- **[Estructura de Onboarding]**: En proyectos existentes con archivos raíz consolidados (como `README.md` y `CHANGELOG.md`), es preferible descargar el framework completo en una subcarpeta dedicada (`dbv-specs-ops/`) e indicar al agente su ubicación a través de un archivo de activación ligero (`CLAUDE.md`, `GEMINI.md`). Esto evita colisiones de archivos y mantiene limpio el código de producción.
+
 
 ## 🗺️ Mapa de Relaciones
 *Breve descripción de cómo interactúan los módulos actuales para ayudar a la IA a navegar el código.*

@@ -12,8 +12,23 @@
 - **Author / Company:** [Your Name or Company · https://yourwebsite.com]
 - **License:** [MIT]
 - **Languages:** [e.g. Python, JavaScript, HTML, CSS]
-- **Framework Version:** 1.5.2
+- **Framework Version:** 2.0.0
 
+
+---
+
+## Model Routing Guidelines (V2.0.0)
+
+To optimize OpEx (Token Burn) and latency, refer to this routing strategy when executing project development tasks:
+
+| Development Phase | Required Reasoning Complexity | Recommended Model Class | Example Models |
+| --- | --- | --- | --- |
+| `/spec` (Specifications) | Very High | Advanced Reasoning / Frontier Models | Gemini 1.5 Pro, Claude 3.5 Sonnet, GPT-4o |
+| `/plan` (Planning / Architecture) | Very High | Advanced Reasoning / Frontier Models | Gemini 1.5 Pro, Claude 3.5 Sonnet, GPT-4o |
+| `/build` (Code Implementation) | Medium | Fast, high-accuracy coding models | Gemini 1.5 Flash, Claude 3.5 Sonnet, GPT-4o |
+| `/test` (Conventional Tests / Evals) | Medium-Low | Fast & cheap models | Gemini 1.5 Flash, Claude 3 Haiku, GPT-4o-mini |
+| `/code-simplify` (Security & Refactor) | High | Security-conscious reasoning models | Gemini 1.5 Pro, Claude 3.5 Sonnet |
+| `/ship` (Documentation, Changelog) | Low | Fast, text-optimized models | Gemini 1.5 Flash, Claude 3 Haiku, GPT-4o-mini |
 
 ---
 

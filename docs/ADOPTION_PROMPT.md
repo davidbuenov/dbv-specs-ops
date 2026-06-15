@@ -70,6 +70,7 @@ A continuación, NO me hagas preguntas de una en una. Redacta un borrador inicia
 ## Fase C — Generación de Documentos SDD
 
 Con el análisis y mis respuestas, crea o actualiza estos tres archivos:
+*(Nota: Si has instalado el framework en una subcarpeta como `dbv-specs-ops/` para evitar mezclar archivos en la raíz, genera/actualiza estos documentos dentro de dicha subcarpeta, por ejemplo: `dbv-specs-ops/docs/SPECIFICATIONS.md`).*
 
 ### `docs/SPECIFICATIONS.md`
 Rellénalo con lo que has entendido del proyecto. Usa estas marcas para ser transparente:

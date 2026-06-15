@@ -49,9 +49,12 @@ Tras el bootstrap, comprueba si `docs/SPECIFICATIONS.md` tiene contenido real (n
 ## 🛠 Workflow de Ejecución (El Ciclo de Vida Obligatorio)
 Para cualquier requerimiento, debes seguir este orden inspirado en "Agent Skills":
 
-1.  **ESPECIFICAR (`/spec`)**: Revisa si el cambio afecta a `SPECIFICATIONS.md` o `ARCHITECTURE.md`. "Spec before code". Si el "qué" no está claro, pregunta antes de actuar. Si el proyecto tiene interfaz de usuario y `docs/DESIGN.md` no existe aún, crea y completa también ese fichero en esta fase.
+1.  **ESPECIFICAR (`/spec`)**: Revisa si el cambio afecta a `SPECIFICATIONS.md` o `ARCHITECTURE.md`. "Spec before code". Si el "qué" no está claro, pregunta antes de actuar. Si el proyecto tiene interfaz de usuario y `docs/DESIGN.md` no existe aún, crea y completa también ese fichero en esta fase. **Evaluación de Harness y Contexto**: Analiza si el proyecto requiere conectores externos o sub-procedimientos que ameriten la creación de un servidor MCP local o de módulos de habilidades (`skills/`) y propónselo al usuario si es viable.
 2.  **VALIDAR Y PLANIFICAR (`/plan`)**: 
-    - **Paso 1 (Adversarial Architect Review)**: Antes de desglosar tareas, DEBES imprimir obligatoriamente un debate interno en formato XML para forzar el análisis de edge cases o fallos de seguridad. **El bloque `<adversary>` DEBE citar al menos un sustantivo concreto presente en `docs/SPECIFICATIONS.md`** (no genéricos como "red", "input" o "usuario" sin contexto específico del proyecto):
+    - **Paso 1 (Clasificación de Modo de Trabajo)**: Determina de forma implícita el modo de trabajo óptimo según el impacto de la tarea:
+        - *Modo Conductor (Edición rápida)*: Si es una corrección sencilla, refactor pequeño o pruebas unitarias aisladas (toca <= 2 archivos y < 50 líneas). Procede con iteraciones rápidas e interactivas en el IDE.
+        - *Modo Orquestador (Delegación asíncrona)*: Si es una nueva funcionalidad, migración o cambios que afectan a > 2 archivos. Planifica detalladamente y, si el entorno lo permite (ej. comandos como `/goal`), sugiere su uso al usuario para ejecutar la tarea de forma autónoma.
+    - **Paso 2 (Adversarial Architect Review)**: Antes de desglosar tareas, DEBES imprimir obligatoriamente un debate interno en formato XML para forzar el análisis de edge cases o fallos de seguridad. **El bloque `<adversary>` DEBE citar al menos un sustantivo concreto presente en `docs/SPECIFICATIONS.md`** (no genéricos como "red", "input" o "usuario" sin contexto específico del proyecto):
       ```xml
       <architect_review>
         <builder>Propongo este plan para cumplir la especificación...</builder>
@@ -60,16 +63,21 @@ Para cualquier requerimiento, debes seguir este orden inspirado en "Agent Skills
       </architect_review>
       ```
       Si el Adversarial Review identifica un riesgo que se acepta conscientemente, regístralo en `memory.md` en ese momento bajo `## 🏗️ Log de Decisiones Técnicas` antes de continuar.
-    - **Paso 2 (Phase Gate - Desglose)**: Si la especificación sobrevive al debate, desglosa el trabajo en `task.md` (máximo 50 líneas por paso). Un plan se considera **complejo** (y requiere `implementation_plan.md`) si cumple alguno de estos criterios: afecta a más de 3 archivos, toca autenticación / datos sensibles / pagos, o estimas más de 150 líneas nuevas. Si el plan es complejo, el `implementation_plan.md` **DEBE incluir** un Frontmatter YAML al inicio con las claves: `dependencies`, `risks`, y `rollback_strategy`. Pide aprobación explícita antes de ejecutar.
+    - **Paso 3 (Phase Gate - Desglose)**: Si la especificación sobrevive al debate, desglosa el trabajo en `task.md` (máximo 50 líneas por paso). Un plan se considera **complejo** (y requiere `implementation_plan.md`) si cumple alguno de estos criterios: afecta a más de 3 archivos, toca autenticación / datos sensibles / pagos, o estimas más de 150 líneas nuevas. Si el plan es complejo, el `implementation_plan.md` **DEBE incluir** un Frontmatter YAML al inicio con las claves: `dependencies`, `risks`, y `rollback_strategy`. Pide aprobación explícitamente antes de ejecutar.
 3.  **CONSTRUIR (`/build`)**: Implementa la lógica de forma incremental siguiendo los estándares. "One slice at a time".
     - **Memory Trigger:** Si durante `/build` modificas o contradices una decisión documentada en `docs/ARCHITECTURE.md`, regístralo inmediatamente en `memory.md` bajo `## 🏗️ Log de Decisiones Técnicas`. No esperes a `/ship`.
     - **Python:** Crea siempre un entorno virtual local (`venv/`) antes de instalar dependencias (`python -m venv venv`). Añade `venv/` al `.gitignore`. Usa el `venv` para todas las ejecuciones del proyecto.
     - **Cabeceras de fichero:** Todo fichero fuente nuevo debe incluir la cabecera definida en `project.config.md` adaptada al lenguaje (JS, Python, HTML, CSS, Java, etc.). El crédito a `dbv-specs-ops` es obligatorio en todas las cabeceras.
     - **CHANGELOG:** Añade una entrada breve en la sección `[Sin publicar]` de `CHANGELOG.md` por cada funcionalidad nueva, cambio relevante o bug corregido.
 4.  **PROBAR (`/test`)**: Las pruebas son obligatorias. Crea y ejecuta tests unitarios o de integración. Si no hay prueba, la tarea no se marca como "Hecha". "Tests are proof".
+    - **Evals (Evaluación de IA)**: Si el proyecto incluye componentes no deterministas de Inteligencia Artificial o prompts complejos, diseña y ejecuta una suite de **Evals** (evaluación de salida con rúbricas de calidad, evaluación de trayectoria de llamadas a herramientas, detección de alucinaciones y conformidad de formato).
     - **CHANGELOG:** Si los tests revelan y se corrige un bug, registra la corrección en `[Sin publicar]` como `Fixed`.
     - **Memory Trigger:** Si un test revela que un supuesto documentado en `docs/SPECIFICATIONS.md` era incorrecto, regístralo en `memory.md` bajo `## ⚠️ Lecciones Aprendidas` inmediatamente.
 5.  **REVISAR Y SIMPLIFICAR (`/code-simplify`)**: Una vez que el código funcione, refactoriza para reducir la complejidad y mejorar la legibilidad. "Clarity over cleverness".
+    - **Security Review (Auditoría de Seguridad)**: En esta fase, realiza obligatoriamente una verificación del código desarrollado para:
+      1.  Prevenir filtración de secretos (ej. que no queden claves API, contraseñas o tokens en el código).
+      2.  Validar dependencias (verificar que todos los paquetes importados sean reales, evitando ataques de *dependency confusion* o *slopsquatting*).
+      3.  Asegurar la sanitización y validación de entradas críticas en endpoints o interfaces generadas.
 6.  **ENTREGAR (`/ship`)**: Actualiza el `README.md`, completa `walkthrough.md` con el resumen del trabajo realizado, y marca la tarea como completada en `task.md`.
     - **Memory Gate (OBLIGATORIO):** Antes de dar por cerrada la tarea, DEBES imprimir en el chat un bloque XML detallando qué conocimiento persistente has extraído para `memory.md` (ADRs, lecciones o mapa). Ejemplo:
       `<memory_update_proposal><section>Lecciones</section><entry>El bug X ocurre por Y...</entry></memory_update_proposal>`

@@ -5,7 +5,7 @@
 
 <p align="right"><a href="#español">🇪🇸 Español</a> · <a href="#english">🇬🇧 English</a></p>
 
-![Version](https://img.shields.io/badge/version-1.5.2-blue)
+![Version](https://img.shields.io/badge/version-2.0.0-blue)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 
 ---
@@ -27,12 +27,16 @@
 
 **🇪🇸 Español**
 - [Origen e Inspiración](#es-origin)
+- [Flujo de Trabajo Visual](#es-workflow)
 - [Las 6 Fases de Desarrollo](#es-phases)
 - [Estructura de Archivos](#es-structure)
 - [Activación por Plataforma](#es-platforms)
 - [Cómo usar (Quick Start)](#es-quickstart)
 - [Incorporar a un Proyecto Existente](#es-adoption)
 - [Actualizar el Framework](#es-upgrade)
+- [Ejemplo de Uso](#es-example)
+- [FAQ / Preguntas Frecuentes](#es-faq)
+- [Contribuir](#es-contributing)
 
 **General**
 - [Estado / Status](#status)
@@ -53,12 +57,13 @@ This repository acts as a **master blueprint** that transforms your AI assistant
 <a name="en-origin"></a>
 ### 📑 Origin & Inspiration
 
-This workflow is a unified, simplified version of two industry pillars, adapted to be lightweight and highly effective:
+This workflow is a unified, simplified version of industry pillars, adapted to be lightweight and highly effective:
 
 1. **[Agent Skills (Google/Addy Osmani)](https://github.com/addyosmani/agent-skills):** The **process and technical workflow** (Cycle: Spec → Plan → Build → Test → Simplify → Ship).
 2. **[GitHub Spec-Kit](https://github.com/github/spec-kit):** The **quality of specification**, focusing on understanding the problem, risks, and open questions before coding.
 3. **[AI Coding Best Practices](https://github.com/davidbuenov/ai-coding-best-practices):** The final layer of **style and excellence** that dictates how the final code should be written.
 4. **[design.md (Google Labs)](https://github.com/google-labs-code/design.md):** The **visual design system standard** — a format for describing a visual identity to coding agents, now integrated as `docs/DESIGN.md`.
+5. **[The New SDLC With Vibe Coding (Google/Addy Osmani et al.)](https://www.kaggle.com/whitepaper-the-new-SDLC-with-vibe-coding):** The theoretical foundation for **Agentic Engineering** (transitioning from prompting to a controlled codebase factory model, Evals, and Harness engineering).
 
 ---
 
@@ -67,12 +72,12 @@ This workflow is a unified, simplified version of two industry pillars, adapted 
 
 ```mermaid
 flowchart TD
-    Spec["Spec<br/>(docs/SPECIFICATIONS.md)"] --> Plan["Plan<br/>(task.md, implementation_plan.md)"]
-    Plan --> Build["Build"]
-    Build --> Test["Test"]
-    Test --> Simplify["Code Simplify"]
-    Simplify --> Ship["Ship<br/>(walkthrough.md, README.md)"]
-    Ship -- "Context persists" --> Plan
+    Spec["Spec<br/>(docs/SPECIFICATIONS.md)<br/>+ MCP/Skills viability"] --> Plan["Plan<br/>(task.md, implementation_plan.md)<br/>+ Mode: Conductor/Orchestrator"]
+    Plan --> Build["Build<br/>(incremental)"]
+    Build --> Test["Test<br/>+ deterministic tests<br/>+ non-deterministic Evals"]
+    Test --> Simplify["Code Simplify<br/>+ Security Review<br/>(secrets & dependencies check)"]
+    Simplify --> Ship["Ship<br/>(walkthrough.md, README.md)<br/>+ versioning & release tag"]
+    Ship -- "Context persists (memory.md)" --> Plan
 ```
 
 ---
@@ -202,12 +207,21 @@ Use `docs/ADOPTION_PROMPT.md` instead. See the [Adopting an Existing Project](#e
 
 Already have code but no specs or methodology? This flow lets you adopt SDD without starting from scratch.
 
+**Option A — Root Adoption (Standard):**
 1. Copy these template files to the root of your existing project.
 2. Use `docs/ADOPTION_PROMPT.md` instead of the Phase 0 message.
    > *Suggested message:* "Follow the instructions in `docs/ADOPTION_PROMPT.md` to analyze this project and incorporate it into SDD methodology."
-3. The AI will autonomously analyze your project (stack, tests, git history, existing docs) and present a summary before asking questions.
-4. The AI will present a complete draft with marked assumptions. Confirm or adjust in one single step.
-5. The AI will generate `docs/SPECIFICATIONS.md`, `docs/ARCHITECTURE.md`, `docs/DESIGN.md` (if UI project) and `task.md` with the real project state.
+3. The AI will autonomously analyze your project, present a summary, and prompt you to confirm or adjust its draft in one single step.
+4. The AI will generate `docs/SPECIFICATIONS.md`, `docs/ARCHITECTURE.md`, `docs/DESIGN.md` (if UI project) and `task.md` at the root.
+
+**Option B — Subfolder Isolation (Recommended for existing repositories):**
+If you want to keep your project root pristine and avoid overwriting existing files (like `README.md` or `CHANGELOG.md`):
+1. Copy the entire `dbv-specs-ops` folder into the root of your existing project.
+2. Place a small activation file (`CLAUDE.md`, `GEMINI.md` or `.windsurfrules`) at your project's root directing the AI to the folder.
+   > *Example root CLAUDE.md:* `Please read and follow the master instructions in dbv-specs-ops/docs/MASTER_PROMPT.md. All specs, tasks, and memory logs are located inside the dbv-specs-ops/ folder.`
+3. Tell your AI assistant:
+   > *Suggested message:* "Adapt this project to the SDD methodology using the framework configuration inside the `dbv-specs-ops` folder. Refer to `dbv-specs-ops/docs/ADOPTION_PROMPT.md` for instructions."
+4. The AI will analyze your project and generate all specs, architecture documents and task registries inside the isolated `dbv-specs-ops/` folder.
 
 ---
 
@@ -316,12 +330,28 @@ Este repositorio actúa como un "Blueprint" o plano maestro que transforma a la 
 <a name="es-origin"></a>
 ### 📑 Origen e Inspiración
 
-Este flujo de trabajo es una versión unificada y simplificada de dos pilares de la industria:
+Este flujo de trabajo es una versión unificada y simplificada de varios pilares de la industria:
 
 1. **[Agent Skills (Google/Addy Osmani)](https://github.com/addyosmani/agent-skills):** El **proceso y el flujo de trabajo** técnico (Ciclo: Spec → Plan → Build → Test → Simplify → Ship).
 2. **[GitHub Spec-Kit](https://github.com/github/spec-kit):** La **calidad de la especificación**, enfocándonos en entender el problema antes de codificar.
 3. **[AI Coding Best Practices](https://github.com/davidbuenov/ai-coding-best-practices):** La capa de **estilo y excelencia** que dicta cómo debe escribirse el código final.
 4. **[design.md (Google Labs)](https://github.com/google-labs-code/design.md):** El **estándar de sistema de diseño visual** — un formato para describir identidades visuales a agentes de codificación, ahora integrado como `docs/DESIGN.md`.
+5. **[The New SDLC With Vibe Coding (Google/Addy Osmani et al.)](https://www.kaggle.com/whitepaper-the-new-SDLC-with-vibe-coding):** La base teórica para la **Ingeniería Agéntica** (transición desde el prompting casual hacia un modelo controlado de fábrica de código, Evals y diseño del arnés).
+
+---
+
+<a name="es-workflow"></a>
+### 🗺️ Flujo de Trabajo Visual
+
+```mermaid
+flowchart TD
+    Spec["Spec<br/>(docs/SPECIFICATIONS.md)<br/>+ Viabilidad de MCP/Skills"] --> Plan["Plan<br/>(task.md, implementation_plan.md)<br/>+ Modo: Conductor o Orquestador"]
+    Plan --> Build["Build<br/>(incremental)"]
+    Build --> Test["Test<br/>+ pruebas deterministas<br/>+ Evals de trayectoria y output"]
+    Test --> Simplify["Code Simplify<br/>+ Security Review<br/>(auditoría de secretos/paquetes)"]
+    Simplify --> Ship["Ship<br/>(walkthrough.md, README.md)<br/>+ versión y git tag"]
+    Ship -- "El contexto persiste (memory.md)" --> Plan
+```
 
 ---
 
@@ -445,12 +475,23 @@ Usa `docs/ADOPTION_PROMPT.md` en su lugar. Ver la sección [Incorporar a un Proy
 <a name="es-adoption"></a>
 ### 🔄 Incorporar a un Proyecto Existente
 
+Ya tienes código pero no especificaciones ni metodología? Este flujo te permite adoptar SDD sin empezar de cero.
+
+**Opción A — Adopción en la Raíz (Estándar):**
 1. Copia los archivos de esta plantilla a la raíz de tu proyecto existente.
 2. Usa `docs/ADOPTION_PROMPT.md` en lugar del mensaje de la Fase 0.
    > *Mensaje sugerido:* "Sigue las instrucciones de `docs/ADOPTION_PROMPT.md` para analizar este proyecto e incorporarlo a la metodología SDD."
-3. La IA analizará tu proyecto de forma autónoma y te presentará un resumen.
-4. La IA analizará el proyecto en silencio y te presentará un borrador completo. Confirma o corrige en un solo paso.
-5. La IA generará `docs/SPECIFICATIONS.md`, `docs/ARCHITECTURE.md`, `docs/DESIGN.md` (si tiene interfaz) y `task.md` con el estado real.
+3. La IA analizará tu proyecto de forma autónoma, presentará un resumen y te pedirá confirmar o ajustar su borrador en un solo paso.
+4. La IA generará `docs/SPECIFICATIONS.md`, `docs/ARCHITECTURE.md`, `docs/DESIGN.md` (si tiene interfaz) y `task.md` en la raíz.
+
+**Opción B — Aislamiento en Subcarpeta (Recomendado para repositorios existentes):**
+Para evitar mezclar los archivos del framework con tu código o sobrescribir archivos del proyecto (como `README.md` o `CHANGELOG.md`):
+1. Copia la carpeta completa `dbv-specs-ops` en la raíz de tu proyecto existente.
+2. Coloca un archivo de activación pequeño (`CLAUDE.md`, `GEMINI.md` o `.windsurfrules` según tu plataforma) en la raíz de tu proyecto para dirigir a la IA.
+   > *Ejemplo de CLAUDE.md en la raíz:* `Please read and follow the master instructions in dbv-specs-ops/docs/MASTER_PROMPT.md. All specs, tasks, and memory logs are located inside the dbv-specs-ops/ folder.`
+3. Escribe a tu IA:
+   > *Mensaje sugerido:* "Adapta este proyecto a la metodología SDD utilizando la configuración del framework dentro de la carpeta `dbv-specs-ops`. Utiliza `dbv-specs-ops/docs/ADOPTION_PROMPT.md` como guía para las instrucciones."
+4. La IA analizará el código y generará las especificaciones, tareas e historial dentro de la carpeta aislada `dbv-specs-ops/`.
 
 ---
 
@@ -492,10 +533,64 @@ Listo. La IA detecta tu versión actual, calcula qué hay que actualizar y aplic
 
 ---
 
+<a name="es-example"></a>
+### 🧑‍💻 Ejemplo de Uso
+
+**1. Fase 1: Especificación**
+
+`docs/SPECIFICATIONS.md`:
+```markdown
+- Problema: "Los usuarios olvidan tareas importantes."
+- Objetivo: "Crear un sistema de recordatorios multiplataforma."
+- Funcionalidad A: "El usuario puede crear, editar y eliminar recordatorios."
+```
+
+**2. Fase 2: Planificación:**
+
+`task.md`:
+```markdown
+- [ ] Implementar modelo Reminder
+- [ ] Crear API REST para recordatorios
+- [ ] Añadir tests unitarios para Reminder
+```
+
+**3. Fases de Build / Test / Ship:**
+
+El ciclo continúa de forma incremental hasta que la funcionalidad se entrega y documenta en `walkthrough.md`.
+
+---
+
+<a name="es-faq"></a>
+### ❓ FAQ / Preguntas Frecuentes
+
+**¿Puedo usar esta plantilla con cualquier asistente de IA?**
+Sí, incluye archivos de activación compatibles con Claude Code, Copilot, Gemini, Antigravity, Windsurf y ChatGPT.
+
+**¿Qué pasa si ya tengo código existente?**
+Sigue las instrucciones de la sección "Incorporar a un Proyecto Existente" y utiliza `docs/ADOPTION_PROMPT.md`.
+
+**¿Qué pasa si la IA no sigue el ciclo de fases?**
+Asegúrate de que ha leído `docs/MASTER_PROMPT.md` y que tiene el contexto actualizado en `task.md`.
+
+**¿Cómo puedo contribuir al framework?**
+Realiza un Fork del repositorio, crea una rama descriptiva y abre una Pull Request explicando tu aportación.
+
+---
+
+<a name="es-contributing"></a>
+### 🤝 Contribuir
+
+1. Realiza un Fork del repositorio y crea una rama descriptiva.
+2. Realiza tus cambios siguiendo el ciclo: Spec → Plan → Build → Test → Simplify → Ship.
+3. Abre una Pull Request detallando los motivos y el impacto.
+4. Si es una mejora metodológica, añade ejemplos y actualiza la documentación.
+
+---
+
 <a name="status"></a>
 ## 🛠 Estado / Status
 
-* **Versión / Version:** 1.5.2
+* **Versión / Version:** 2.0.0
 * **Metodología / Methodology:** Spec-Driven Development (SDD)
 * **Objetivo / Goal:** Universal AI-assisted development template for any platform and assistant.
 
@@ -513,6 +608,11 @@ Listo. La IA detecta tu versión actual, calcula qué hay que actualizar y aplic
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-davidbueno-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/davidbueno/)
 [![Website](https://img.shields.io/badge/Web-davidbuenov.com-6366f1?logo=google-chrome&logoColor=white)](https://davidbuenov.com)
+
+---
+
+### 📖 Referencia Teórica Principal / Key Reference Book
+* **[The New SDLC With Vibe Coding](https://www.kaggle.com/whitepaper-the-new-SDLC-with-vibe-coding)** — Whitepaper de Addy Osmani, Shubham Saboo y Sokratis Kartakis (Google, Mayo 2026), utilizado como base teórica fundamental para el diseño del Arnés Agéntico, los Evals y el modelo de Fábrica en la versión 2.0.0.
 
 ---
 
@@ -534,6 +634,7 @@ Listo. La IA detecta tu versión actual, calcula qué hay que actualizar y aplic
 ## 📚 Inspiración y Referencias / Inspiration & References
 
 * **[Agent Skills](https://github.com/addyosmani/agent-skills)** — Addy Osmani (Google)
+* **[The New SDLC With Vibe Coding](https://www.kaggle.com/whitepaper-the-new-SDLC-with-vibe-coding)** — Addy Osmani, Shubham Saboo & Sokratis Kartakis (Google Whitepaper, May 2026)
 * **[GitHub Spec-Kit](https://github.com/github/spec-kit)** — GitHub
 * **[AI Coding Best Practices](https://github.com/davidbuenov/ai-coding-best-practices)** — David Bueno Vallejo
 * **[design.md](https://github.com/google-labs-code/design.md)** — Google Labs

@@ -76,14 +76,27 @@
 
 ---
 
-## 🤖 MCP (Model Context Protocol)
+## 🤖 Agent Harness (Arnés del Agente)
 
-> Rellena esta sección si el proyecto usa servidores MCP para conectar la IA con servicios externos.
+> Rellena esta sección para configurar la infraestructura, el contexto y las herramientas que rodean al agente de IA para que trabaje de forma segura y autónoma.
 
-- **Servidor MCP:** [Ej: filesystem, github, sqlite]
-- **Propósito:** [Ej: Acceso directo a la BD para queries de contexto]
-- **Configuración:** Ver `.claude/settings.json` o `CLAUDE.md`
+### 1. Gestión de Contexto (Context Engineering)
+- **Contexto Estático:** [Ficheros de reglas globales y memory cargados siempre en el arranque (ej: CLAUDE.md, GEMINI.md, memory.md)].
+- **Contexto Dinámico / Skills:** [Lista de módulos de habilidades en skills/ o pipelines RAG cargados bajo demanda por el agente].
+
+### 2. Herramientas y MCP (Model Context Protocol)
+- **Servidores MCP Requeridos:** [Ej: filesystem, sqlite (para acceso estructurado a datos), github (para gestión de PRs)].
+- **Propósito:** [Ej: Conexión directa a base de datos de staging para consultas de contexto].
+- **Configuración de Herramientas:** Ver `.claude/settings.json`, `.windsurfrules` o equivalentes.
+
+### 3. Entorno de Ejecución (Sandboxing)
+- **Aislamiento:** [Define el sandbox donde corre el agente. Ej: Docker local, máquina virtual, o entorno virtual local (venv)].
+- **Límites de Ejecución:** [Límites de coste de tokens, tiempos de timeout o número máximo de iteraciones en comandos asíncronos].
+
+### 4. Guardrails Deterministas de Seguridad
+- **Filtros de Código:** [Definición de scripts automáticos (linters, pre-commit hooks con gitleaks, herramientas SAST) para evitar la filtración de secretos o dependencias ficticias generadas por la IA].
+- **Políticas de Commit/Push:** [Ej: Bloquear commits que contengan strings que parezcan API keys o passwords].
 
 ---
 
-**Instrucción para la IA:** Respeta las decisiones documentadas aquí. Si necesitas desviarte por un motivo técnico, regístralo como "Decisión Técnica" en este archivo con fecha y justificación.
+**Instrucción para la IA:** Respeta las decisiones y configuraciones del arnés documentadas aquí. Si necesitas desviarte por un motivo técnico o sugerir una nueva herramienta MCP/Skill para el proyecto, regístralo como "Decisión Técnica" en `memory.md` y obtén la aprobación del desarrollador.

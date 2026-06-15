@@ -1,26 +1,37 @@
-# 📝 Task Register / Registro de Tareas
+# 📝 Registro de Tareas: dbv-specs-ops v2.0.0 (Agentic Engineering)
 
 ## 🏗 In Progress / En Curso
 
-- [ ] **Task 0:** Discovery session. Define the project purpose in `docs/SPECIFICATIONS.md` and the technical base in `docs/ARCHITECTURE.md`. → *Status: Waiting for user input.*
+*(No active tasks)*
 
 ## ⏳ Pending / Pendientes (Backlog)
 
-- [ ] Fill in `docs/SPECIFICATIONS.md` with the real project context.
-- [ ] Fill in `docs/ARCHITECTURE.md` with the chosen tech stack.
-- [ ] Fill in `docs/DESIGN.md` with the visual design system (if the project has a UI).
-- [ ] Create the first draft of technical tasks after the definition phase.
-- [ ] Sync code standards from the Reference repo indicated in `docs/MASTER_PROMPT.md`.
+*(No tasks pending)*
 
 ## ✅ Completed / Completadas
 
-*(No tasks completed yet)*
+- [x] **Fase 1: Instrucción Maestra (`docs/MASTER_PROMPT.md`)**
+  - [x] `/plan`: Clasificación implícita Conductor vs. Orquestador
+  - [x] `/test`: Unificar tests convencionales y Evals no deterministas
+  - [x] `/code-simplify`: Auditoría de seguridad (secrets, vulnerability scan, imports)
+  - [x] `/spec` y `/plan`: Proponer proactivamente Skills y MCPs locales
+- [x] **Fase 2: Plantillas de Especificación y Arquitectura**
+  - [x] `docs/SPECIFICATIONS.md`: Añadir secciones de Evals, Skills/MCP y Seguridad
+  - [x] `docs/ARCHITECTURE.md`: Estructurar sección `🤖 Agent Harness` con hooks y sandboxing
+- [x] **Fase 3: Documentación y Configuración del Repositorio**
+  - [x] `docs/AGENTIC_ENGINEERING.md`: Escribir guía teórica/educativa sobre Agentic Engineering, TCO y el Arnés
+  - [x] `project.config.md`: Incrementar versión a `2.0.0` y detallar Model Routing Guidelines
+  - [x] `CHANGELOG.md`: Registrar cambios de la v2.0.0
+- [x] **Fase 4: Verificación y Cierre**
+  - [x] Validar sintaxis de las plantillas y prompt maestro
+  - [x] Simular bootstrap/ciclo de vida
+  - [x] Completar `walkthrough.md` y etiquetar versión
 
 ---
 
 ## 🔄 Context Snapshot / Snapshot de Contexto
 
-> **Last update / Última actualización:** [Current Date]
-> **Exact point / Punto exacto:** Project initialized using dbv-specs-ops v1.4.1 template. Waiting for project requirements.
-> **Pending / Pendiente:** Complete the bootstrap interview and spec definition.
-> **Next step / Próximo paso:** Ask the user to define the core requirements.
+> **Last update / Última actualización:** 2026-06-15
+> **Exact point / Punto exacto:** Release v2.0.0 finalizada. Todas las fases de la transición a Agentic Engineering completadas.
+> **Pending / Pendiente:** Ninguna tarea pendiente. Framework listo para distribución y adopción.
+> **Next step / Próximo paso:** Informar al usuario humano del éxito del despliegue y presentar los archivos v2.0.0 generados.

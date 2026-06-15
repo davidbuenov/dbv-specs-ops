@@ -31,6 +31,7 @@
 
 - **Enfoque:** [Breve descripción de la solución técnica elegida].
 - **Dependencias Críticas:** [Ej: API externa, Servidor MCP específico].
+- **Oportunidades de Skills y MCPs**: [Analizar si el proyecto se beneficia de la creación de un servidor MCP local para conectar con la lógica interna, o de paquetes de habilidades dinámicas (skills/) para facilitar la orquestación del agente].
 - **Sistema de Diseño:** Si el proyecto tiene interfaz de usuario, ver `docs/DESIGN.md` para tokens de color, tipografía y componentes.
 
 ## 🚫 5. Fuera de Alcance (Out of Scope)
@@ -43,14 +44,20 @@
 
 - **Riesgo:** [Ej: La API externa tiene límites de tasa (Rate limiting)].
   - **Mitigación:** [Ej: Implementar un sistema de caché local].
-- **Riesgo:** [Ej: Manejo de datos sensibles de pacientes].
-  - **Mitigación:** [Ej: Encriptación en reposo y cumplimiento de normativa].
+- **Riesgo de Seguridad y Privacidad (IA/Datos):** [Ej: Fuga de secretos, inyección de código vulnerable por parte del agente, o alucinación de paquetes dependientes].
+  - **Mitigación:** [Ej: Implementar hooks deterministas de pre-commit con escaneo de secrets como gitleaks, o auditoría obligatoria de dependencias en /code-simplify].
 
 ## ❓ 7. Preguntas Abiertas
 *Cosas que aún no sabemos o decisiones que dependen del usuario.*
 
 - [ ] ¿Necesitamos soporte offline desde el primer día?
 - [ ] ¿Qué volumen de datos esperamos manejar en el primer mes?
+
+## 🧪 8. Criterios de Evaluación y Evals (No Deterministas)
+*Define las rúbricas y métricas de calidad para evaluar la salida de componentes no deterministas (IA, prompts, etc.) integrados en la fase /test.*
+
+- [ ] **Métricas de Output:** [Ej: Precisión de respuesta, conformidad de formato JSON, ausencia de alucinaciones].
+- [ ] **Métricas de Trayectoria:** [Ej: Eficiencia en el uso de herramientas MCP, límite de llamadas a la API].
 
 ---
 **Instrucción para la IA:** No pases a la fase `/plan` hasta que las "Preguntas Abiertas" críticas hayan sido resueltas o tengan un camino de solución definido.

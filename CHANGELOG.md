@@ -11,6 +11,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [2.0.0] — 2026-06-15
+
+### Added
+- **Ingeniería Agéntica (Agentic Engineering)**: Integración completa de los conceptos del libro blanco de Google *"The New SDLC With Vibe Coding"*.
+- **Modos de Trabajo Implícitos**: Clasificación automática e invisible entre modo *Conductor* (IDE interactivo de loops cortos) y modo *Orquestador* (ejecución asíncrona de fondo) durante la fase `/plan`.
+- **Evals Unificados en `/test`**: La fase `/test` ahora cubre tanto tests deterministas clásicos como Evals probabilísticos (rúbricas de output, trayectoria y verificación de alucinaciones).
+- **Auditoría de Seguridad en `/code-simplify`**: Fase obligatoria de revisión del código generado por IA para prevenir dependencias falsas (slopsquatting), inyección de secretos e inputs vulnerables.
+- **Agent Harness (Arnés del Agente)**: Transición de la antigua sección de MCP a una especificación de arnés en `docs/ARCHITECTURE.md` (definiendo contexto estático vs dinámico, sandboxing y hooks de seguridad).
+- **Guía de Fundamento**: Nuevo documento [docs/AGENTIC_ENGINEERING.md](file:///d:/Programacion/github-davidbuenov/dbv-specs-ops/docs/AGENTIC_ENGINEERING.md) detallando el razonamiento teórico detrás de v2.0.0.
+- **Model Routing Guidelines**: Directivas de asignación óptima de modelos de IA en `project.config.md` para reducir el coste operativo (OpEx/Token Burn).
+- **Sugerencia Activa de MCPs y Skills**: Mandato en `/spec` y `/plan` para proponer la creación de servidores MCP y habilidades dinámicas locales en los proyectos.
+- **Upgrade Prompt Actualizado**: Se actualizó [docs/UPGRADE_PROMPT.md](file:///d:/Programacion/github-davidbuenov/dbv-specs-ops/docs/UPGRADE_PROMPT.md) para incluir la versión `2.0.0` y permitir que los proyectos existentes se actualicen automáticamente sin quedar bloqueados en la versión v1.5.0.
+
+---
+
 ## [1.5.2] — 2026-05-12
 
 ### Added
