@@ -5,7 +5,7 @@
 
 <p align="right"><a href="#español">🇪🇸 Español</a> · <a href="#english">🇬🇧 English</a></p>
 
-![Version](https://img.shields.io/badge/version-2.0.0-blue)
+![Version](https://img.shields.io/badge/version-2.1.0-blue)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 
 ---
@@ -13,6 +13,7 @@
 ## 📑 Table of Contents / Índice
 
 **🇬🇧 English**
+- [Key Features](#en-features)
 - [Origin & Inspiration](#en-origin)
 - [Visual Workflow](#en-workflow)
 - [The 6 Development Phases](#en-phases)
@@ -26,6 +27,7 @@
 - [Contributing](#en-contributing)
 
 **🇪🇸 Español**
+- [Características Principales](#es-features)
 - [Origen e Inspiración](#es-origin)
 - [Flujo de Trabajo Visual](#es-workflow)
 - [Las 6 Fases de Desarrollo](#es-phases)
@@ -51,6 +53,20 @@
 **dbv-specs-ops** is a lightweight engineering system designed to maximize software quality and context persistence in AI-assisted development.
 
 This repository acts as a **master blueprint** that transforms your AI assistant from a simple code generator into a Senior Software Engineer that follows rigorous processes.
+
+---
+
+<a name="en-features"></a>
+### ✨ Key Features
+
+*   **Spec-Driven Development (SDD) Lifecycle**: A strict 6-phase flow (*Spec → Plan → Build → Test → Simplify → Ship*) that ensures your AI assistant understands the "why" and "what" before writing a single line of code.
+*   **Context & Token Economics**: Leverages structured persistence files (`memory.md` for qualitative design decisions and `task.md` for task logs) to eliminate AI amnesia and optimize token consumption in large projects.
+*   **Dual Coding Modes**: The AI self-classifies tasks as *Conductor Mode* (quick, interactive IDE edits) or *Orchestrator Mode* (autonomous, background tasks using asynchronous commands).
+*   **Unified Validation (Tests & Evals)**: Combines classical deterministic testing with non-deterministic AI Evals (LLM Judges, formatting checks, and hallucination scans) in the `/test` phase.
+*   **Security Review Gate**: A mandatory `/code-simplify` phase that automatically audits code for credential leaks, dependency squatting (*slopsquatting*), and input sanitization.
+*   **Declarative Agent Harness**: Configures how the AI interacts with local sandbox environments, specific Model Context Protocol (MCP) servers, and local procedurally-defined skills.
+*   **Native Agent Readiness (Web/APIs)**: If enabled, it automatically bootstraps the files and configurations needed (`robots.txt` with Content-Signals, `llms.txt`, `auth.md`, `agent.json`, `mcp.json`, and Link headers) to make your web project perfectly readable and discoverable for external AI agents.
+*   **Zero-Collision Upgrades**: A dedicated upgrade prompt agent that automatically migrates your project's framework files without touching your source code or custom specs.
 
 ---
 
@@ -165,18 +181,18 @@ Depending on your platform, the context loads differently:
 
 | Platform | Context loading | First message to type |
 |---|---|---|
-| **Claude Code** | ✅ Automatic | `/plan` |
-| **GitHub Copilot** | ✅ Automatic | `/plan` |
-| **Antigravity** | ✅ Automatic (via `GEMINI.md`) | `/plan` |
-| **Gemini CLI** | ✅ Automatic (via `GEMINI.md`) | `/plan` |
-| **Windsurf** | ✅ Automatic | `/plan` |
-| **Cursor** | ✅ Automatic (via `CLAUDE.md`) | `/plan` |
+| **Claude Code** | ✅ Automatic | `/spec` |
+| **GitHub Copilot** | ✅ Automatic | `/spec` |
+| **Antigravity** | ✅ Automatic (via `GEMINI.md`) | `/spec` |
+| **Gemini CLI** | ✅ Automatic (via `GEMINI.md`) | `/spec` |
+| **Windsurf** | ✅ Automatic | `/spec` |
+| **Cursor** | ✅ Automatic (via `CLAUDE.md`) | `/spec` |
 | **ChatGPT / Gemini Web** | ⚠️ Manual | See below |
 
 > **Auto-loading platforms (Claude, Copilot, Antigravity, Gemini CLI, Windsurf, Cursor):**
 > The AI has already read the full context. Just type:
 > ```
-> /plan
+> /spec
 > ```
 > The AI will start the Engineering Interview: it will analyze your project silently and propose a complete draft with marked assumptions. You confirm or adjust everything in one single step.
 
@@ -327,6 +343,20 @@ Este repositorio actúa como un "Blueprint" o plano maestro que transforma a la 
 
 ---
 
+<a name="es-features"></a>
+### ✨ Características Principales
+
+*   **Ciclo Spec-Driven Development (SDD)**: Un flujo riguroso de 6 fases (*Spec → Plan → Build → Test → Simplify → Ship*) que asegura que tu asistente de IA entienda el "por qué" y el "qué" antes de escribir una sola línea de código.
+*   **Optimización de Contexto y Token Economics**: Utiliza archivos de persistencia estructurados (`memory.md` para decisiones cualitativas de diseño y `task.md` para registro de tareas) para eliminar la amnesia de la IA y optimizar el consumo de tokens en proyectos grandes.
+*   **Modos de Trabajo Inteligentes**: La IA clasifica automáticamente las tareas en *Modo Conductor* (ediciones rápidas e interactivas en el IDE) o *Modo Orquestador* (tareas autónomas de fondo mediante comandos asíncronos).
+*   **Validación Unificada (Tests & Evals)**: Combina pruebas deterministas clásicas con Evals probabilísticos de IA (jueces LLM, verificación de formatos y detección de alucinaciones) en la fase `/test`.
+*   **Puerta de Auditoría de Seguridad**: Una fase `/code-simplify` obligatoria que audita el código generado buscando fugas de credenciales, dependencias alucinadas o falsas (*slopsquatting*) y validación de entradas.
+*   **Arnés del Agente Declarativo**: Configura cómo interactúa el agente con entornos virtuales aislados, servidores MCP (Model Context Protocol) y bibliotecas de habilidades locales.
+*   **Agent Readiness por Defecto (Web/APIs)**: Prepara automáticamente los ficheros e infraestructura de autodescubrimiento (`robots.txt` con Content-Signals, `llms.txt`, `auth.md`, `agent.json`, `mcp.json` y cabeceras Link HTTP) para que los agentes de IA externos naveguen y consuman tu sitio web eficientemente.
+*   **Actualizaciones Sin Colisiones**: Un agente de actualización dedicado (`docs/UPGRADE_PROMPT.md`) que migra los ficheros del framework sin tocar tu código fuente ni tus especificaciones personalizadas.
+
+---
+
 <a name="es-origin"></a>
 ### 📑 Origen e Inspiración
 
@@ -435,18 +465,18 @@ Según la plataforma, el contexto se carga de forma diferente:
 
 | Plataforma | Carga de contexto | Primer mensaje a escribir |
 |---|---|---|
-| **Claude Code** | ✅ Automática | `/plan` |
-| **GitHub Copilot** | ✅ Automática | `/plan` |
-| **Antigravity** | ✅ Automática (vía `GEMINI.md`) | `/plan` |
-| **Gemini CLI** | ✅ Automática (vía `GEMINI.md`) | `/plan` |
-| **Windsurf** | ✅ Automática | `/plan` |
-| **Cursor** | ✅ Automática (vía `CLAUDE.md`) | `/plan` |
+| **Claude Code** | ✅ Automática | `/spec` |
+| **GitHub Copilot** | ✅ Automática | `/spec` |
+| **Antigravity** | ✅ Automática (vía `GEMINI.md`) | `/spec` |
+| **Gemini CLI** | ✅ Automática (vía `GEMINI.md`) | `/spec` |
+| **Windsurf** | ✅ Automática | `/spec` |
+| **Cursor** | ✅ Automática (vía `CLAUDE.md`) | `/spec` |
 | **ChatGPT / Gemini Web** | ⚠️ Manual | Ver abajo |
 
 > **Plataformas con auto-carga (Claude, Copilot, Antigravity, Gemini CLI, Windsurf, Cursor):**
 > La IA ya ha leído todo el contexto. Simplemente escribe:
 > ```
-> /plan
+> /spec
 > ```
 > La IA iniciará la Entrevista de Ingeniería: analizará tu proyecto en silencio y propondrá un borrador completo con asunciones marcadas. Tú confirmas o corriges todo en un solo paso.
 
@@ -590,7 +620,7 @@ Realiza un Fork del repositorio, crea una rama descriptiva y abre una Pull Reque
 <a name="status"></a>
 ## 🛠 Estado / Status
 
-* **Versión / Version:** 2.0.0
+* **Versión / Version:** 2.1.0
 * **Metodología / Methodology:** Spec-Driven Development (SDD)
 * **Objetivo / Goal:** Universal AI-assisted development template for any platform and assistant.
 

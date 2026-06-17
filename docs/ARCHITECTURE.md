@@ -97,6 +97,12 @@
 - **Filtros de Código:** [Definición de scripts automáticos (linters, pre-commit hooks con gitleaks, herramientas SAST) para evitar la filtración de secretos o dependencias ficticias generadas por la IA].
 - **Políticas de Commit/Push:** [Ej: Bloquear commits que contengan strings que parezcan API keys o passwords].
 
+### 5. Interfaz Externa para Agentes (Agent Readiness)
+*Define la arquitectura y métodos que permiten a agentes externos descubrir y consumir los servicios del sitio:*
+- **Autodescubrimiento**: [Describe cómo se exponen los recursos de IA (ej: Link Headers en el servidor web inyectando las tarjetas de agente, api-catalog, etc.)].
+- **Protocolos y Tarjetas**: [Ubicación de tarjetas de agente (agent.json) y mcp.json. Detalla el soporte para el protocolo de contexto Model Context Protocol (MCP) y WebMCP en cliente].
+- **Formato del Contenido**: [Define las políticas de optimización de contexto, tales como la negociación dinámica de Markdown para cabeceras Accept: text/markdown y la estructura de agent-skills/].
+
 ---
 
 **Instrucción para la IA:** Respeta las decisiones y configuraciones del arnés documentadas aquí. Si necesitas desviarte por un motivo técnico o sugerir una nueva herramienta MCP/Skill para el proyecto, regístralo como "Decisión Técnica" en `memory.md` y obtén la aprobación del desarrollador.

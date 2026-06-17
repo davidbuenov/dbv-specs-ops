@@ -12,12 +12,13 @@
 - **Author / Company:** [Your Name or Company · https://yourwebsite.com]
 - **License:** [MIT]
 - **Languages:** [e.g. Python, JavaScript, HTML, CSS]
-- **Framework Version:** 2.0.0
+- **Agent Readiness (Web):** [Yes / No / Not Applicable]
+- **Framework Version:** 2.1.0
 
 
 ---
 
-## Model Routing Guidelines (V2.0.0)
+## Model Routing Guidelines (V2.1.0)
 
 To optimize OpEx (Token Burn) and latency, refer to this routing strategy when executing project development tasks:
 

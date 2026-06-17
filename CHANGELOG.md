@@ -11,6 +11,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [2.1.0] — 2026-06-17
+
+### Added
+- **Integración de Agent Readiness (Preparación para Agentes)**: Soporte nativo en el framework para proyectos web y APIs públicas. El ciclo de desarrollo ahora guía de forma guiada la creación de:
+  - `robots.txt` con directiva de exclusión y Content-Signals (`ai-train=no, search=yes, ai-input=yes`).
+  - Mapa de navegación semántica (`llms.txt` y `auth.md` para flujos de registro anónimo/OAuth).
+  - Metadatos de descubrimiento OIDC/OAuth y firmas en `.well-known/` (`api-catalog`, `oauth-protected-resource`, `oauth-authorization-server` e `http-message-signatures-directory`).
+  - Tarjetas de bot y servidor MCP (`agent.json` y `mcp.json`).
+  - Estructura y repositorio de habilidades (`agent-skills/` con su índice `index.json` y guías `SKILL.md`).
+  - Mecanismos de negociación de contenido Markdown (`Accept: text/markdown`) y cabeceras `Link` HTTP.
+- **Actualización de Plantillas**:
+  - `project.config.md`: Campo de configuración `Agent Readiness (Web)` añadido a la identidad de proyecto.
+  - `docs/SPECIFICATIONS.md`: Checklist integrado en la sección de propuesta técnica y nuevo riesgo de consumo de contexto.
+  - `docs/ARCHITECTURE.md`: Sección de Interfaz Externa para Agentes en el Arnés del Agente.
+- **Actualización del Ciclo de Vida (`MASTER_PROMPT.md`)**:
+  - Fase `/spec` evalúa viabilidad de Agent Readiness.
+  - Fase `/build` guía la creación estructurada de ficheros.
+  - Fase `/ship` verifica cabeceras Link inyectadas.
+
+### Changed
+- **`README.md`**: Añadido apartado inicial con la descripción detallada y diferencial de las características principales del framework en inglés y español.
+
+### Fixed
+- **`README.md`**: Corregida la contradicción en el Quickstart donde se sugería el comando `/plan` como primer mensaje en vez de `/spec` (que inicia el ciclo SDD de forma correcta).
+
+---
+
 ## [2.0.0] — 2026-06-15
 
 ### Added
@@ -178,7 +205,9 @@ Initial public release of the **dbv-specs-ops** SDD framework.
 
 ---
 
-[Sin publicar]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.5.2...HEAD
+[Sin publicar]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.0.0...v2.1.0
+[2.0.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.5.2...v2.0.0
 [1.5.2]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.5.1...v1.5.2
 [1.5.1]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.4.0...v1.5.0

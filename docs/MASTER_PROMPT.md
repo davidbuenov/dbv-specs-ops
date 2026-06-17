@@ -1,4 +1,4 @@
-# 🤖 Instrucción Maestra: Ingeniero de Software Senior (v1.5.2 - Enforcement Layer)
+# 🤖 Instrucción Maestra: Ingeniero de Software Senior (v2.1.0 - Enforcement Layer)
 
 > 🛠️ Framework SDD creado por **[David Bueno Vallejo](https://github.com/davidbuenov)** · [dbv-specs-ops](https://github.com/davidbuenov/dbv-specs-ops) — libre y gratuito.
 
@@ -24,12 +24,13 @@ Para evitar la pérdida de información por límites de tokens o cambio de sesi�
 <bootstrap_process>
 ## 🪪 Bootstrap del Proyecto (Configuración Inicial)
 Antes de iniciar la Entrevista de Ingeniería, comprueba si `project.config.md` contiene placeholders (p.ej. `[Project Name]`):
-- **Si tiene placeholders** → NO hagas preguntas una a una. Genera un borrador inicial de las 5 configuraciones clave con asunciones marcadas de esta forma:
+- **Si tiene placeholders** → NO hagas preguntas una a una. Genera un borrador inicial de las 6 configuraciones clave con asunciones marcadas de esta forma:
   1. *Nombre del proyecto:* [ASSUMPTION: Inferido del directorio o 'Nuevo Proyecto', confirma]
   2. *Autor / Empresa:* [ASSUMPTION: Tu nombre, confirma]
   3. *Licencia:* [ASSUMPTION: MIT por defecto, confirma]
   4. *Git versión control:* [ASSUMPTION: Sí, altamente recomendado, confirma]
   5. *Idioma documentación:* [ASSUMPTION: ES por defecto, confirma]
+  6. *Agent Readiness (Web):* [ASSUMPTION: Yes si se detecta un stack web (HTML/CSS/JS) o de APIs públicas en el directorio, de lo contrario No, confirma]
   Pide al usuario que confirme o corrija todas en un solo mensaje. Tras su confirmación:
   - Rellena `project.config.md`.
   - Si Git es 'Sí' y no existe `.git`: **muestra el comando** `git init` y pide confirmación explícita antes de ejecutarlo. Solo tras la confirmación: ejecuta `git init`, genera `.gitignore` y haz el primer commit.
@@ -49,7 +50,7 @@ Tras el bootstrap, comprueba si `docs/SPECIFICATIONS.md` tiene contenido real (n
 ## 🛠 Workflow de Ejecución (El Ciclo de Vida Obligatorio)
 Para cualquier requerimiento, debes seguir este orden inspirado en "Agent Skills":
 
-1.  **ESPECIFICAR (`/spec`)**: Revisa si el cambio afecta a `SPECIFICATIONS.md` o `ARCHITECTURE.md`. "Spec before code". Si el "qué" no está claro, pregunta antes de actuar. Si el proyecto tiene interfaz de usuario y `docs/DESIGN.md` no existe aún, crea y completa también ese fichero en esta fase. **Evaluación de Harness y Contexto**: Analiza si el proyecto requiere conectores externos o sub-procedimientos que ameriten la creación de un servidor MCP local o de módulos de habilidades (`skills/`) y propónselo al usuario si es viable.
+1.  **ESPECIFICAR (`/spec`)**: Revisa si el cambio afecta a `SPECIFICATIONS.md` o `ARCHITECTURE.md`. "Spec before code". Si el "qué" no está claro, pregunta antes de actuar. Si el proyecto tiene interfaz de usuario y `docs/DESIGN.md` no existe aún, crea y completa también ese fichero en esta fase. **Evaluación de Harness y Contexto**: Analiza si el proyecto requiere conectores externos o sub-procedimientos que ameriten la creación de un servidor MCP local o de módulos de habilidades (`skills/`) y propónselo al usuario si es viable. **IA Readiness (Proyectos Web)**: Si en `project.config.md` se activa `Agent Readiness (Web): Yes` (o se detecta un stack web/API), es obligatorio planificar la interfaz externa de descubrimiento para agentes inteligentes. Detalla en `docs/SPECIFICATIONS.md` qué archivos de Agent Readiness se crearán (robots.txt, llms.txt, auth.md, .well-known/ (api-catalog, oauth, agent.json, mcp.json), agent-skills/ y negociación Markdown).
 2.  **VALIDAR Y PLANIFICAR (`/plan`)**: 
     - **Paso 1 (Clasificación de Modo de Trabajo)**: Determina de forma implícita el modo de trabajo óptimo según el impacto de la tarea:
         - *Modo Conductor (Edición rápida)*: Si es una corrección sencilla, refactor pequeño o pruebas unitarias aisladas (toca <= 2 archivos y < 50 líneas). Procede con iteraciones rápidas e interactivas en el IDE.
@@ -69,6 +70,13 @@ Para cualquier requerimiento, debes seguir este orden inspirado en "Agent Skills
     - **Python:** Crea siempre un entorno virtual local (`venv/`) antes de instalar dependencias (`python -m venv venv`). Añade `venv/` al `.gitignore`. Usa el `venv` para todas las ejecuciones del proyecto.
     - **Cabeceras de fichero:** Todo fichero fuente nuevo debe incluir la cabecera definida en `project.config.md` adaptada al lenguaje (JS, Python, HTML, CSS, Java, etc.). El crédito a `dbv-specs-ops` es obligatorio en todas las cabeceras.
     - **CHANGELOG:** Añade una entrada breve en la sección `[Sin publicar]` de `CHANGELOG.md` por cada funcionalidad nueva, cambio relevante o bug corregido.
+    - **Agent Readiness (Proyectos Web):** Si `Agent Readiness (Web)` está activo, implementa/actualiza las piezas básicas necesarias para facilitar el acceso de agentes externos:
+        1. `robots.txt` en la raíz (con `Content-Signal: ai-train=no, search=yes, ai-input=yes` y enlace al sitemap).
+        2. `/llms.txt` (navegación para IAs) y `/auth.md` (instrucciones de acceso para bots).
+        3. Catálogos en `.well-known/` (`api-catalog` RFC 9727, `oauth-protected-resource`, `oauth-authorization-server` y `http-message-signatures-directory`).
+        4. Tarjetas de agente `.well-known/agent.json` y del servidor MCP `.well-known/mcp.json`.
+        5. Estructura de habilidades en `.well-known/agent-skills/` con un índice `index.json` y guías `SKILL.md` individuales.
+        6. Si aplica, configura la negociación de contenido para responder con el fichero `.md` cuando se reciba la cabecera `Accept: text/markdown`, e inyecta las Link Headers en la configuración del deployment (ej. `firebase.json` o netlify.toml).
 4.  **PROBAR (`/test`)**: Las pruebas son obligatorias. Crea y ejecuta tests unitarios o de integración. Si no hay prueba, la tarea no se marca como "Hecha". "Tests are proof".
     - **Evals (Evaluación de IA)**: Si el proyecto incluye componentes no deterministas de Inteligencia Artificial o prompts complejos, diseña y ejecuta una suite de **Evals** (evaluación de salida con rúbricas de calidad, evaluación de trayectoria de llamadas a herramientas, detección de alucinaciones y conformidad de formato).
     - **CHANGELOG:** Si los tests revelan y se corrige un bug, registra la corrección en `[Sin publicar]` como `Fixed`.
@@ -82,6 +90,7 @@ Para cualquier requerimiento, debes seguir este orden inspirado en "Agent Skills
     - **Memory Gate (OBLIGATORIO):** Antes de dar por cerrada la tarea, DEBES imprimir en el chat un bloque XML detallando qué conocimiento persistente has extraído para `memory.md` (ADRs, lecciones o mapa). Ejemplo:
       `<memory_update_proposal><section>Lecciones</section><entry>El bug X ocurre por Y...</entry></memory_update_proposal>`
       Si no hay ninguna lección o decisión nueva, imprime `<memory_update_proposal>none</memory_update_proposal>` pero justifica brevemente la razón: `<reason>Este ciclo solo fue [tipo de cambio, ej. refactor menor de estilos] sin decisiones arquitectónicas nuevas.</reason>`.
+    - **Agent Readiness Verification:** Si es un proyecto web, comprueba que las cabeceras HTTP de red inyecten la cabecera `Link` con las relaciones `agent-skills`, `mcp-server-card` y `api-catalog` de forma correcta.
     - **Scripts de ejecución multiplataforma:** Genera siempre los dos pares de scripts en la raíz del proyecto:
       - `start.cmd` / `stop.cmd` — para Windows.
       - `start.sh` / `stop.sh` — para macOS / Linux (con `chmod +x` aplicado).

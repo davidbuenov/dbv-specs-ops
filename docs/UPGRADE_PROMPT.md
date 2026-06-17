@@ -40,9 +40,9 @@ Lee el fichero `project.config.md`:
 - Si **no existe** ese campo → pregunta al usuario:
   > *"¿Qué versión de dbv-specs-ops estás usando? Puedes encontrarla buscando en tu `CHANGELOG.md` el primer commit del proyecto, o mirando qué ficheros de plataforma tienes (`.windsurfrules` fue añadido en v1.1.0, `project.config.md` en v1.2.0)."*
 
-La versión más reciente del framework es: **2.0.0**
+La versión más reciente del framework es: **2.1.0**
 
-Si el usuario ya tiene la **v2.0.0**, informa de que el proyecto está al día. No hay nada que hacer.
+Si el usuario ya tiene la **v2.1.0**, informa de que el proyecto está al día. No hay nada que hacer.
 </version_detection_phase>
 
 ---
@@ -144,6 +144,15 @@ Usa esta tabla para calcular qué hay que actualizar según la versión actual d
 | MODIFICADO | `README.md` | Soporte y documentación de instalación aislada en subcarpeta. |
 | MODIFICADO | `docs/ADOPTION_PROMPT.md` | Soporte para rutas en subcarpeta añadida al prompt de adopción. |
 | MODIFICADO | `docs/UPGRADE_PROMPT.md` | Este archivo actualizado a la versión v2.0.0. |
+
+### v2.1.0 (cambios desde v2.0.0)
+| Acción | Fichero | Nota |
+|---|---|---|
+| MODIFICADO | `docs/MASTER_PROMPT.md` | Directivas de Agent Readiness en bootstrap, `/spec`, `/build` y `/ship`. |
+| MODIFICADO | `docs/SPECIFICATIONS.md` | Checklist integrado en sección 4 y riesgo en sección 6. |
+| MODIFICADO | `docs/ARCHITECTURE.md` | Sección de Interfaz Externa para Agentes en el arnés. |
+| MODIFICADO | `project.config.md` | Campo `Agent Readiness (Web)` añadido a la identidad de proyecto. |
+| MODIFICADO | `docs/UPGRADE_PROMPT.md` | Este archivo actualizado a la versión v2.1.0. |
 </upgrade_manifest_phase>
 
 ---
@@ -224,11 +233,11 @@ Si el proyecto no tiene UI → omite este paso.
 
 Cuando todos los cambios estén aplicados:
 
-1. Actualiza el campo `Framework Version` en `project.config.md` a `2.0.0`.
+1. Actualiza el campo `Framework Version` en `project.config.md` a `2.1.0`.
 2. Muestra al usuario un resumen claro:
 
 ```
-✅ Framework actualizado de vX.X.X → v2.0.0
+✅ Framework actualizado de vX.X.X → v2.1.0
 
 Ficheros actualizados:
   • [lista de ficheros modificados/añadidos]
