@@ -211,7 +211,7 @@ Already using dbv-specs-ops and want to get the latest features? You only need *
 
 #### Step 1 — Download `UPGRADE_PROMPT.md`
 
-> **[⬇️ Download UPGRADE_PROMPT.md](https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/main/docs/UPGRADE_PROMPT.md)**
+> **[⬇️ Download UPGRADE_PROMPT.md](https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/UPGRADE_PROMPT.md)**
 >
 > Right-click → Save As → save it as `docs/UPGRADE_PROMPT.md` inside your project.
 
@@ -458,7 +458,7 @@ Según el estado de tu proyecto, escribe a tu asistente de IA:
 
 #### Paso 1 — Descarga `UPGRADE_PROMPT.md`
 
-> **[⬇️ Descargar UPGRADE_PROMPT.md](https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/main/docs/UPGRADE_PROMPT.md)**
+> **[⬇️ Descargar UPGRADE_PROMPT.md](https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/UPGRADE_PROMPT.md)**
 >
 > Clic derecho → Guardar como → guárdalo como `docs/UPGRADE_PROMPT.md` dentro de tu proyecto.
 

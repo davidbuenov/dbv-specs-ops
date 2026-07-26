@@ -176,18 +176,18 @@ Para cada fichero marcado como NUEVO o MODIFICADO, descarga el contenido desde e
 
 | Fichero | Raw URL de GitHub |
 |---|---|
-| `GEMINI.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/main/GEMINI.md` |
-| `CLAUDE.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/main/CLAUDE.md` |
-| `ANTIGRAVITY.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/main/ANTIGRAVITY.md` |
-| `.windsurfrules` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/main/.windsurfrules` |
-| `.github/copilot-instructions.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/main/.github/copilot-instructions.md` |
-| `README.template.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/main/README.template.md` |
-| `docs/MASTER_PROMPT.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/main/docs/MASTER_PROMPT.md` |
-| `docs/ADOPTION_PROMPT.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/main/docs/ADOPTION_PROMPT.md` |
-| `docs/UPGRADE_PROMPT.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/main/docs/UPGRADE_PROMPT.md` |
-| `docs/README.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/main/docs/README.md` |
-| `docs/DESIGN.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/main/docs/DESIGN.md` *(solo si no existe)* |
-| `docs/AGENTIC_ENGINEERING.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/main/docs/AGENTIC_ENGINEERING.md` *(NUEVO)* |
+| `GEMINI.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/GEMINI.md` |
+| `CLAUDE.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/CLAUDE.md` |
+| `ANTIGRAVITY.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/ANTIGRAVITY.md` |
+| `.windsurfrules` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/.windsurfrules` |
+| `.github/copilot-instructions.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/.github/copilot-instructions.md` |
+| `README.template.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/README.template.md` |
+| `docs/MASTER_PROMPT.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/MASTER_PROMPT.md` |
+| `docs/ADOPTION_PROMPT.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/ADOPTION_PROMPT.md` |
+| `docs/UPGRADE_PROMPT.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/UPGRADE_PROMPT.md` |
+| `docs/README.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/README.md` |
+| `docs/DESIGN.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/DESIGN.md` *(solo si no existe)* |
+| `docs/AGENTIC_ENGINEERING.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/AGENTIC_ENGINEERING.md` *(NUEVO)* |
 
 > **Nota:** Si alguna descarga falla, muestra el link al usuario para que lo descargue manualmente.
 
