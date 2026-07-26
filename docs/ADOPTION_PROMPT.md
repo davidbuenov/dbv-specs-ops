@@ -69,23 +69,24 @@ A continuación, NO me hagas preguntas de una en una. Redacta un borrador inicia
 <documentation_phase>
 ## Fase C — Generación de Documentos SDD
 
-Con el análisis y mis respuestas, crea o actualiza estos tres archivos:
-*(Nota: Si has instalado el framework en una subcarpeta como `dbv-specs-ops/` para evitar mezclar archivos en la raíz, genera/actualiza estos documentos dentro de dicha subcarpeta, por ejemplo: `dbv-specs-ops/docs/SPECIFICATIONS.md`).*
+Con el análisis y mis respuestas, crea o actualiza estos tres archivos **estrictamente dentro de la subcarpeta `dbv-specs-ops/`** (por ejemplo: `dbv-specs-ops/docs/SPECIFICATIONS.md`, `dbv-specs-ops/docs/ARCHITECTURE.md` y `dbv-specs-ops/task.md`):
 
-### `docs/SPECIFICATIONS.md`
-Rellénalo con lo que has entendido del proyecto. Usa estas marcas para ser transparente:
-- `[INFERIDO]` — deducido del código o estructura, pendiente de confirmación
+⚠️ **Diferenciación Crítica de Contexto**: La documentación de especificaciones y arquitectura debe centrarse única y exclusivamente en el código, lógica de negocio y stack de la aplicación del usuario. **Bajo ningún concepto debes documentar la estructura o lógica del propio framework de `dbv-specs-ops`** en estos ficheros.
+
+### `dbv-specs-ops/docs/SPECIFICATIONS.md`
+Rellénalo con lo que has entendido del proyecto del usuario. Usa estas marcas para ser transparente:
+- `[INFERIDO]` — deducido del código o estructura de la aplicación, pendiente de confirmación
 - `[CONFIRMADO]` — confirmado explícitamente por el usuario en la Fase B
-- `[PENDIENTE]` — información que falta y que habrá que resolver
+- `[PENDIENTE]` — información del negocio/aplicación que falta y que habrá que resolver
 
-### `docs/ARCHITECTURE.md`
-Documenta el stack y la estructura tal como **están ahora**, no como deberían ser. Incluye las decisiones técnicas inamovibles que identifiques.
+### `dbv-specs-ops/docs/ARCHITECTURE.md`
+Documenta el stack, componentes y la estructura de la aplicación del usuario tal como **están ahora**, no como deberían ser.
 
-### `task.md`
-Crea el backlog con:
-- Las tareas en curso que identifiques en el código (ramas, TODOs, tests fallidos…)
+### `dbv-specs-ops/task.md`
+Crea el backlog de la aplicación con:
+- Las tareas en curso que identifiques en el código de la aplicación (ramas, TODOs, tests fallidos…)
 - Las tareas pendientes que el usuario indicó en la Fase B
-- Un **Snapshot de Contexto** que capture el estado real del proyecto en este momento
+- Un **Snapshot de Contexto** que capture el estado real de la aplicación en este momento
 </documentation_phase>
 
 ---

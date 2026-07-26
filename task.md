@@ -1,38 +1,55 @@
-# 📝 Registro de Tareas: dbv-specs-ops v2.1.0 (Agent Readiness Integration)
+# Backlog - dbv-specs-ops v2.2.0
 
-## 🏗 In Progress / En Curso
+## Contexto del Proyecto (Context Snapshot)
+* **Objetivo**: Incorporar soporte de empaquetado para proyectos de Python y Node.js, simplificar el framework unificando la documentación bajo el método exclusivo de subcarpeta e implementar reglas estrictas de diferenciación de contexto.
+* **Estado actual**: COMPLETADO (v2.2.0 lista para entrega y commit).
+* **Última decisión técnica**: Publicar la versión 2.2.0 en CHANGELOG.md y actualizar walkthroughs.
+* **Próximo paso**: Proponer comandos de Git commit y Git tag v2.2.0 al usuario para cerrar la tarea.
 
-*(No active tasks)*
+## Checklist de Tareas
 
-## ⏳ Pending / Pendientes (Backlog)
+- [x] **Fase 1: Especificaciones (`/spec`)**
+  - [x] Validar que las características de Pip y Npm no tengan asunciones sin confirmar.
+  - [x] Identificar la simplificación a subcarpeta isolation como el único método de adopción soportado.
 
-*(No tasks pending)*
-
-## ✅ Completed / Completadas
-
-- [x] **Fase 2: Planificación y Preparación**
+- [x] **Fase 2: Planificación (`/plan`)**
   - [x] Crear `implementation_plan.md` y actualizar `task.md` con las tareas activas.
   - [x] Obtener aprobación final del usuario sobre los cambios propuestos.
+
 - [x] **Fase 3: Construcción (`/build`)**
-  - [x] Modificar `project.config.md` para añadir la propiedad de `Agent Readiness` y subir la versión a `2.1.0`.
-  - [x] Actualizar `docs/MASTER_PROMPT.md` con las directivas de Agent Readiness en bootstrap, `/spec`, `/build` y `/ship`.
-  - [x] Actualizar `docs/SPECIFICATIONS.md` con el checklist y el riesgo asociado.
-  - [x] Actualizar `docs/ARCHITECTURE.md` con la sección de interfaz externa bajo el arnés.
-  - [x] Corregir la contradicción en `README.md` (reemplazando `/plan` por `/spec` como comando inicial).
-  - [x] Registrar los cambios en `CHANGELOG.md` y `docs/UPGRADE_PROMPT.md`.
+  - [x] Incrementar la versión del framework a `2.2.0` en `project.config.md`.
+  - [x] Modificar `docs/MASTER_PROMPT.md` para:
+    - [x] Exigir la creación de `pyproject.toml`/`setup.py` (PyPI-ready) en Python y `package.json` (npm-ready) en Node.
+    - [x] Añadir directiva sobre archivos de activación (`CLAUDE.md`, `.github/copilot-instructions.md`, etc.) en la raíz cuando se usa aislamiento en subcarpeta.
+    - [x] Añadir directiva sobre diferenciación de contexto para evitar que la IA documente el framework en lugar de la aplicación.
+  - [x] Modificar `docs/ADOPTION_PROMPT.md` para:
+    - [x] Añadir directiva de diferenciación estricta de contexto en la Fase C.
+  - [x] Refactorizar `README.template.md` para incluir:
+    - [x] Secciones de instalación de Python (`pip` local + `git+https` remoto).
+    - [x] Secciones de instalación de Node (`npm` local + `git+https` remoto).
+    - [x] Instrucciones de publicación oficiales (PyPI con `twine` y npm registry con `npm publish`).
+  - [x] Actualizar `README.md` (English & Español):
+    - [x] Describir nuevas características de instalación y publicación.
+    - [x] Añadir instrucciones detalladas de copiar los archivos de activación a la raíz en la Opción B (Aislamiento en Subcarpeta) y dar ejemplos.
+  - [x] Actualizar el manifiesto de actualización en `docs/UPGRADE_PROMPT.md` para reflejar la versión `2.2.0`.
+  - [x] Registrar los cambios en `CHANGELOG.md` bajo `[Sin publicar]`.
+
 - [x] **Fase 4: Pruebas y Verificación (`/test`)**
   - [x] Validar la sintaxis de todos los archivos y plantillas modificados.
+
 - [x] **Fase 5: Simplificar (`/code-simplify`)**
-  - [x] Auditar coherencia y lenguaje del prompt.
+  - [x] Realizar una auditoría de seguridad y simplificación del código/texto.
+
 - [x] **Fase 6: Entrega (`/ship`)**
-  - [x] Completar `walkthrough.md` detallando las novedades de la v2.1.0.
-  - [x] Publicar la versión en `CHANGELOG.md` con fecha de hoy y corregir los links de comparación.
+  - [x] Completar `walkthrough.md`.
+  - [x] Publicar la versión en `CHANGELOG.md` con fecha de hoy.
+  - [x] Proponer commit y tags de Git.
 
 ---
 
 ## 🔄 Context Snapshot / Snapshot de Contexto
 
-> **Last update / Última actualización:** 2026-06-17
-> **Exact point / Punto exacto:** Versión 2.1.0 (Agent Readiness Integration) finalizada y documentada en walkthrough y changelog.
-> **Pending / Pendiente:** Ejecutar commit y tag en el repositorio local.
-> **Next step / Próximo paso:** Informar al usuario humano del éxito de la release y ofrecer los comandos Git.
+> **Last update / Última actualización:** 2026-07-26
+> **Exact point / Punto exacto:** Planificación terminada y registrada. Esperando aprobación del usuario.
+> **Pending / Pendiente:** Obtener aprobación del plan de implementación por parte del usuario.
+> **Next step / Próximo paso:** Una vez aprobado, iniciar la Fase 3 (`/build`).

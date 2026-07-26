@@ -11,6 +11,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [2.2.0] — 2026-07-26
+
+### Added
+- **Soporte de instalación y empaquetado para proyectos de Python y Node.js**:
+  - **Python (pip)**: El ciclo de vida en la fase `/build` genera automáticamente un archivo `pyproject.toml` (cumpliendo PEP 621) o `setup.py` mínimo para permitir la instalación del proyecto del usuario localmente (`pip install .` o `pip install -e .`).
+  - **Node.js (npm)**: El ciclo de vida en la fase `/build` genera un archivo `package.json` funcional con scripts de inicio (`start`) y pruebas (`test`) para permitir `npm install`.
+- **Plantilla de README (`README.template.md`) renovada**:
+  - Sección `Installation` mejorada que divide la instalación local del proyecto (tanto de Python como de Node.js) y la instalación desde un repositorio git remoto (`pip install git+https://...` y `npm install git+https://...`).
+  - Nueva sección `Publishing` que guía paso a paso sobre cómo publicar los paquetes en registros oficiales (PyPI con `twine` y npm registry con `npm publish`).
+- **Empotrado de directrices de buenas prácticas de código**: Para garantizar su cumplimiento incluso en entornos offline o aislados, se integraron las reglas clave de `ai-coding-best-practices` (UN SOLO return + Guard Clauses, Result Pattern, Tipado Estricto, Validación en Fronteras y Excepciones Específicas) directamente en `<coding_standards>`.
+- **Recomendaciones de tecnologías por defecto en bootstrap**: Se añadió un paso en la Fase 0 (Bootstrap) para proponer stacks estándar profesionales preseleccionados por el framework (FastAPI en Python, Express/TypeScript en Node, React/Tailwind, PostgreSQL/SQLite y uv/pnpm) si el usuario no tiene preferencia.
+- **Reglas de modularidad en Frontend**: Añadidas directivas obligatorias para impedir que la IA vuelque todo el código de React en un solo fichero `App.js`/`App.tsx`, exigiéndole estructurar componentes de única responsabilidad en subcarpetas (`components`, `hooks`, etc.).
+
+### Changed
+- **Unificación del método de instalación (Solo Subcarpeta)**:
+  - Se eliminan las opciones A y B de instalación/adopción en la documentación de `README.md`. A partir de ahora, el framework se integra siempre dentro de un subdirectorio dedicado `dbv-specs-ops/` para evitar colisiones y mantener limpia la raíz del proyecto.
+  - Se detallan las instrucciones y el contenido exacto de los archivos de activación en la raíz (`CLAUDE.md`, `.github/copilot-instructions.md`, `.windsurfrules`, `GEMINI.md`) para forzar a los asistentes de IA a leer la configuración del subdirectorio.
+- **Diferenciación estricta de contexto en `docs/MASTER_PROMPT.md` y `docs/ADOPTION_PROMPT.md`**:
+  - Se han añadido directivas explícitamente claras en el prompt para obligar a los agentes de IA a que todas las especificaciones, arquitectura, backlog de tareas y READMEs que generen hagan referencia **exclusivamente a la aplicación del usuario** y nunca detallen la estructura interna, fases o tecnologías del propio framework de `dbv-specs-ops`.
+
 ## [2.1.0] — 2026-06-17
 
 ### Added
@@ -205,7 +225,8 @@ Initial public release of the **dbv-specs-ops** SDD framework.
 
 ---
 
-[Sin publicar]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.1.0...HEAD
+[Sin publicar]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.2.0...HEAD
+[2.2.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.5.2...v2.0.0
 [1.5.2]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.5.1...v1.5.2

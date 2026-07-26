@@ -24,6 +24,7 @@
 - [About / Sobre el proyecto](#about)
 - [Requirements / Requisitos](#requirements)
 - [Installation / Instalación](#installation)
+- [Publishing / Publicación](#publishing)
 - [How to run / Cómo ejecutar](#usage)
 - [How to stop / Cómo parar](#stop)
 - [Project structure / Estructura del proyecto](#structure)
@@ -59,18 +60,60 @@
 
 <!-- Step-by-step instructions to get the project running for the first time. -->
 
-```bash
-# 1. Get the project files (if not already done)
-# Option A — GitHub Template: click "Use this template" on GitHub
-# Option B — Download ZIP: Code → Download ZIP
+### 🐍 Python (pip)
 
-# 2. Install dependencies
-# [AI: fill in the correct commands for the project's stack]
-# e.g. for Python:
+#### Local Installation / Instalación Local (Development / Desarrollo)
+```bash
+# 1. Create and activate virtual environment / Crear y activar entorno virtual
 python -m venv venv
 venv\Scripts\activate     # Windows
 source venv/bin/activate  # macOS / Linux
-pip install -r requirements.txt
+
+# 2. Install the project in editable mode / Instalar el proyecto en modo editable
+pip install -e .
+```
+
+#### Remote Installation / Instalación desde Repositorio (Git)
+```bash
+pip install git+https://github.com/USUARIO/REPO.git
+```
+
+### 🟢 Node.js (npm)
+
+#### Local Installation / Instalación Local
+```bash
+# Install dependencies / Instalar dependencias
+npm install
+```
+
+#### Remote Installation / Instalación desde Repositorio (Git)
+```bash
+npm install git+https://github.com/USUARIO/REPO.git
+```
+
+---
+
+<a name="publishing"></a>
+## 🚀 Publishing / Publicación
+
+<!-- Instructions for publishing the package to official package registries. -->
+
+### 🐍 Python (PyPI)
+```bash
+# 1. Build the distribution packages / Generar los paquetes de distribución
+python -m build
+
+# 2. Upload to PyPI / Subir a PyPI
+python -m twine upload dist/*
+```
+
+### 🟢 Node.js (npm Registry)
+```bash
+# 1. Login to npm / Iniciar sesión en npm
+npm login
+
+# 2. Publish to npm registry / Publicar en el registro de npm
+npm publish
 ```
 
 ---

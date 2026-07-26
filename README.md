@@ -5,7 +5,7 @@
 
 <p align="right"><a href="#español">🇪🇸 Español</a> · <a href="#english">🇬🇧 English</a></p>
 
-![Version](https://img.shields.io/badge/version-2.1.0-blue)
+![Version](https://img.shields.io/badge/version-2.2.0-blue)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 
 ---
@@ -119,23 +119,25 @@ Each phase has a **trigger command** you can type in the chat at any time. The A
 <a name="en-structure"></a>
 ### 📂 File Structure
 
-#### `/docs` folder:
-| File | Purpose |
-|---|---|
-| [`MASTER_PROMPT.md`](./docs/MASTER_PROMPT.md) | The brain of the system. Rules, workflow and constraints the AI must follow. |
-| [`SPECIFICATIONS.md`](./docs/SPECIFICATIONS.md) | The "What" and "Why". Problem, objectives and acceptance criteria. |
-| [`ARCHITECTURE.md`](./docs/ARCHITECTURE.md) | The "How". Tech stack, design decisions and system structure. |
-| [`DESIGN.md`](./docs/DESIGN.md) | The "Look". Visual design system: color tokens, typography, spacing and UI components. *(Optional for projects without UI)* |
+All control files of the framework reside inside the `dbv-specs-ops/` folder:
 
-#### Root:
+#### `/dbv-specs-ops/docs` folder:
 | File | Purpose |
 |---|---|
-| [`project.config.md`](./project.config.md) | Project identity: name, author, license and file header template. Filled by the AI during the bootstrap interview. |
-| [`CHANGELOG.md`](./CHANGELOG.md) | Version history. The AI updates the `[Unreleased]` section during `/build` and `/test`, and publishes it on each `/ship`. |
-| [`task.md`](./task.md) | The logbook. Quantitative progress (checklist), backlog, and **Context Snapshots**. |
-| [`memory.md`](./memory.md) | **Context and Decisions.** Qualitative knowledge: active context, technical decisions (ADRs), lessons learned, and relations map. AI must consult it at session start. |
-| [`implementation_plan.md`](./implementation_plan.md) | Created at the `/plan` phase. Detailed technical plan for the AI to fill in and get approved before building. |
-| [`walkthrough.md`](./walkthrough.md) | Created at the `/ship` phase. Summary of what was built, tested and delivered. |
+| [`MASTER_PROMPT.md`](./dbv-specs-ops/docs/MASTER_PROMPT.md) | The brain of the system. Rules, workflow and constraints the AI must follow. |
+| [`SPECIFICATIONS.md`](./dbv-specs-ops/docs/SPECIFICATIONS.md) | The "What" and "Why". Problem, objectives and acceptance criteria. |
+| [`ARCHITECTURE.md`](./dbv-specs-ops/docs/ARCHITECTURE.md) | The "How". Tech stack, design decisions and system structure. |
+| [`DESIGN.md`](./dbv-specs-ops/docs/DESIGN.md) | The "Look". Visual design system: color tokens, typography, spacing and UI components. *(Optional for projects without UI)* |
+
+#### `/dbv-specs-ops/` (Framework Root):
+| File | Purpose |
+|---|---|
+| [`project.config.md`](./dbv-specs-ops/project.config.md) | Project identity: name, author, license and file header template. Filled by the AI during the bootstrap interview. |
+| [`CHANGELOG.md`](./dbv-specs-ops/CHANGELOG.md) | Version history. The AI updates the `[Unreleased]` section during `/build` and `/test`, and publishes it on each `/ship`. |
+| [`task.md`](./dbv-specs-ops/task.md) | The logbook. Quantitative progress (checklist), backlog, and **Context Snapshots**. |
+| [`memory.md`](./dbv-specs-ops/memory.md) | **Context and Decisions.** Qualitative knowledge: active context, technical decisions (ADRs), lessons learned, and relations map. AI must consult it at session start. |
+| [`implementation_plan.md`](./dbv-specs-ops/implementation_plan.md) | Created at the `/plan` phase. Detailed technical plan for the AI to fill in and get approved before building. |
+| [`walkthrough.md`](./dbv-specs-ops/walkthrough.md) | Created at the `/ship` phase. Summary of what was built, tested and delivered. |
 
 ---
 
@@ -157,87 +159,48 @@ Each AI assistant loads context differently. Use the corresponding file:
 ---
 
 <a name="en-quickstart"></a>
-### 🚀 Quick Start
+### 🚀 Quick Start & Integration (Subfolder Isolation)
 
-This system requires no software installation — only **context installation**.
+This framework is designed to live in a dedicated subdirectory (`dbv-specs-ops/`) inside your project's workspace. This keeps your root folder clean, avoids overwriting project files, and keeps SDD metadata isolated.
 
-#### Step 1 — Get the template files
+#### Step 1 — Copy the Framework Folder
+Create a folder named `dbv-specs-ops` in the root of your project, and copy all the files from this repository into it.
 
-Choose the option that best fits your workflow. **Do not clone this repo directly** — your project should be independent, with no connection to the original repository.
+#### Step 2 — Place the Activation Files in the Root
+Since AI assistants only load configuration files from the workspace root directory, you **must copy or create** the appropriate activation file(s) in the root of your project to redirect the AI:
 
-**Option A — GitHub Template (recommended):**
-Click the **"Use this template"** button at the top of this repo on GitHub.
-GitHub will create a brand-new repository under your account, with all the files and no history from the original. 100% yours.
+*   **For Claude Code / Cursor (`CLAUDE.md` in root):**
+    ```markdown
+    Please read and follow the master instructions in dbv-specs-ops/docs/MASTER_PROMPT.md. All specs, tasks, and memory logs are located inside the dbv-specs-ops/ folder.
+    ```
+*   **For GitHub Copilot (`.github/copilot-instructions.md` in root):**
+    ```markdown
+    Este proyecto usa Spec-Driven Development (SDD). Las reglas, especificaciones y tareas se encuentran en el subdirectorio `dbv-specs-ops/`.
+    Lee y sigue estrictamente `dbv-specs-ops/docs/MASTER_PROMPT.md`.
+    ```
+*   **For Windsurf (`.windsurfrules` in root):**
+    ```json
+    {
+      "rules": [
+        "Please read and follow the master instructions in dbv-specs-ops/docs/MASTER_PROMPT.md. All specs, tasks, and memory logs are located inside the dbv-specs-ops/ folder."
+      ]
+    }
+    ```
+*   **For Gemini CLI / Antigravity (`GEMINI.md` in root):**
+    ```markdown
+    Please follow the SDD rules and files located in `dbv-specs-ops/`.
+    Master prompt is at `dbv-specs-ops/docs/MASTER_PROMPT.md`.
+    ```
 
-**Option B — Download ZIP (simplest):**
-Click the green **"Code"** button → **"Download ZIP"**. Extract the files and copy them to the root of your project folder.
-No git knowledge required. Works for any project, new or existing.
+#### Step 3 — Open your AI assistant and kick off the session
+Depending on your project state, write the following to your AI assistant:
 
-Either way, make sure **all files are at the root** of your project so your AI assistant can find them automatically.
-
-#### Step 2 — Open your AI assistant and kick off the session
-
-Depending on your platform, the context loads differently:
-
-| Platform | Context loading | First message to type |
-|---|---|---|
-| **Claude Code** | ✅ Automatic | `/spec` |
-| **GitHub Copilot** | ✅ Automatic | `/spec` |
-| **Antigravity** | ✅ Automatic (via `GEMINI.md`) | `/spec` |
-| **Gemini CLI** | ✅ Automatic (via `GEMINI.md`) | `/spec` |
-| **Windsurf** | ✅ Automatic | `/spec` |
-| **Cursor** | ✅ Automatic (via `CLAUDE.md`) | `/spec` |
-| **ChatGPT / Gemini Web** | ⚠️ Manual | See below |
-
-> **Auto-loading platforms (Claude, Copilot, Antigravity, Gemini CLI, Windsurf, Cursor):**
-> The AI has already read the full context. Just type:
-> ```
-> /spec
-> ```
-> The AI will start the Engineering Interview: it will analyze your project silently and propose a complete draft with marked assumptions. You confirm or adjust everything in one single step.
-
-> **Manual platforms (ChatGPT, Gemini Web):**
-> Paste the content of `docs/MASTER_PROMPT.md` in the first message, then add:
-> ```
-> Review task.md and start the Engineering Interview for a new project.
-> ```
-
-#### Step 3 — Answer the Engineering Interview
-
-The AI will ask you what you want to build, who it's for, and what the key requirements are.
-It fills `docs/SPECIFICATIONS.md` based on your answers — no manual editing needed.
-
-#### Step 4 — Approve the plan and build
-
-Once specs are confirmed, the AI generates `implementation_plan.md` and asks for your approval.
-After approval, it builds incrementally. You can always check progress in `task.md`.
-
-#### 🔄 Already have an existing project?
-
-Use `docs/ADOPTION_PROMPT.md` instead. See the [Adopting an Existing Project](#en-adoption) section.
-
----
-
-<a name="en-adoption"></a>
-### 🔄 Adopting an Existing Project
-
-Already have code but no specs or methodology? This flow lets you adopt SDD without starting from scratch.
-
-**Option A — Root Adoption (Standard):**
-1. Copy these template files to the root of your existing project.
-2. Use `docs/ADOPTION_PROMPT.md` instead of the Phase 0 message.
-   > *Suggested message:* "Follow the instructions in `docs/ADOPTION_PROMPT.md` to analyze this project and incorporate it into SDD methodology."
-3. The AI will autonomously analyze your project, present a summary, and prompt you to confirm or adjust its draft in one single step.
-4. The AI will generate `docs/SPECIFICATIONS.md`, `docs/ARCHITECTURE.md`, `docs/DESIGN.md` (if UI project) and `task.md` at the root.
-
-**Option B — Subfolder Isolation (Recommended for existing repositories):**
-If you want to keep your project root pristine and avoid overwriting existing files (like `README.md` or `CHANGELOG.md`):
-1. Copy the entire `dbv-specs-ops` folder into the root of your existing project.
-2. Place a small activation file (`CLAUDE.md`, `GEMINI.md` or `.windsurfrules`) at your project's root directing the AI to the folder.
-   > *Example root CLAUDE.md:* `Please read and follow the master instructions in dbv-specs-ops/docs/MASTER_PROMPT.md. All specs, tasks, and memory logs are located inside the dbv-specs-ops/ folder.`
-3. Tell your AI assistant:
-   > *Suggested message:* "Adapt this project to the SDD methodology using the framework configuration inside the `dbv-specs-ops` folder. Refer to `dbv-specs-ops/docs/ADOPTION_PROMPT.md` for instructions."
-4. The AI will analyze your project and generate all specs, architecture documents and task registries inside the isolated `dbv-specs-ops/` folder.
+*   **For New Projects (Quick Start):**
+    Simply write `/spec` (or paste `dbv-specs-ops/docs/MASTER_PROMPT.md` if using a manual interface like ChatGPT web). The AI will start the Engineering Interview to define the application requirements, filling out `dbv-specs-ops/docs/SPECIFICATIONS.md`.
+*   **For Existing Projects (Adoption):**
+    Type the following message:
+    > "Adapt this project to the SDD methodology using the framework configuration inside the `dbv-specs-ops` folder. Refer to `dbv-specs-ops/docs/ADOPTION_PROMPT.md` for instructions."
+    The AI will analyze your existing files and run the interview to populate the SDD files under `dbv-specs-ops/`.
 
 ---
 
@@ -388,23 +351,25 @@ flowchart TD
 <a name="es-structure"></a>
 ### 📂 Estructura de Archivos
 
-#### Carpeta `/docs`:
-| Archivo | Propósito |
-|---|---|
-| [`MASTER_PROMPT.md`](./docs/MASTER_PROMPT.md) | El cerebro del sistema. Reglas, workflow y restricciones que la IA debe obedecer. |
-| [`SPECIFICATIONS.md`](./docs/SPECIFICATIONS.md) | El "Qué" y el "Por qué". Problema, objetivos y criterios de aceptación. |
-| [`ARCHITECTURE.md`](./docs/ARCHITECTURE.md) | El "Cómo". Stack tecnológico, decisiones de diseño y estructura del sistema. |
-| [`DESIGN.md`](./docs/DESIGN.md) | El "Aspecto". Sistema de diseño visual: tokens de color, tipografía, espaciado y componentes. *(Opcional para proyectos sin UI)* |
+Todos los archivos de control del framework residen dentro de la subcarpeta `dbv-specs-ops/` en tu espacio de trabajo:
 
-#### Raíz del proyecto:
+#### Carpeta `/dbv-specs-ops/docs`:
 | Archivo | Propósito |
 |---|---|
-| [`project.config.md`](./project.config.md) | Identidad del proyecto: nombre, autor, licencia y plantilla de cabeceras. Lo rellena la IA durante la entrevista de bootstrap. |
-| [`CHANGELOG.md`](./CHANGELOG.md) | Historial de versiones. La IA actualiza la sección `[Sin publicar]` durante `/build` y `/test`, y la publica en cada `/ship`. |
-| [`task.md`](./task.md) | El diario de a bordo. Progreso cuantitativo (checklist), backlog, y **Snapshots de Contexto**. |
-| [`memory.md`](./memory.md) | **Contexto y Decisiones.** Base de conocimiento cualitativo: contexto activo, decisiones técnicas (ADR), lecciones aprendidas y mapa de relaciones. La IA debe consultarlo al iniciar la sesión. |
-| [`implementation_plan.md`](./implementation_plan.md) | Se crea en la fase `/plan`. Plan técnico detallado que la IA rellena y el usuario aprueba antes de construir. |
-| [`walkthrough.md`](./walkthrough.md) | Se crea en la fase `/ship`. Resumen de lo construido, probado y entregado. |
+| [`MASTER_PROMPT.md`](./dbv-specs-ops/docs/MASTER_PROMPT.md) | El cerebro del sistema. Reglas, workflow y restricciones que la IA debe obedecer. |
+| [`SPECIFICATIONS.md`](./dbv-specs-ops/docs/SPECIFICATIONS.md) | El "Qué" y el "Por qué". Problema, objetivos y criterios de aceptación. |
+| [`ARCHITECTURE.md`](./dbv-specs-ops/docs/ARCHITECTURE.md) | El "Cómo". Stack tecnológico, decisiones de diseño y estructura del sistema. |
+| [`DESIGN.md`](./dbv-specs-ops/docs/DESIGN.md) | El "Aspecto". Sistema de diseño visual: tokens de color, tipografía, espaciado y componentes. *(Opcional para proyectos sin UI)* |
+
+#### Carpeta raíz `/dbv-specs-ops/`:
+| Archivo | Propósito |
+|---|---|
+| [`project.config.md`](./dbv-specs-ops/project.config.md) | Identidad del proyecto: nombre, autor, licencia y plantilla de cabeceras. Lo rellena la IA durante la entrevista de bootstrap. |
+| [`CHANGELOG.md`](./dbv-specs-ops/CHANGELOG.md) | Historial de versiones. La IA actualiza la sección `[Sin publicar]` durante `/build` y `/test`, y la publica en cada `/ship`. |
+| [`task.md`](./dbv-specs-ops/task.md) | El diario de a bordo. Progreso cuantitativo (checklist), backlog, y **Snapshots de Contexto**. |
+| [`memory.md`](./dbv-specs-ops/memory.md) | **Contexto y Decisiones.** Base de conocimiento cualitativo: contexto activo, decisiones técnicas (ADR), lecciones aprendidas y mapa de relaciones. La IA debe consultarlo al iniciar la sesión. |
+| [`implementation_plan.md`](./dbv-specs-ops/implementation_plan.md) | Se crea en la fase `/plan`. Plan técnico detallado que la IA rellena y el usuario aprueba antes de construir. |
+| [`walkthrough.md`](./dbv-specs-ops/walkthrough.md) | Se crea en la fase `/ship`. Resumen de lo construido, probado y entregado. |
 
 ---
 
@@ -441,87 +406,48 @@ Cada fase tiene un **comando de activación** que puedes escribir en el chat en 
 ---
 
 <a name="es-quickstart"></a>
-### 🚀 Cómo usar (Quick Start)
+### 🚀 Integración y Cómo Usar (Aislamiento en Subcarpeta)
 
-Este sistema no requiere instalación de software, sino **instalación de contexto**.
+Este framework está diseñado para vivir dentro de un subdirectorio dedicado (`dbv-specs-ops/`) en tu espacio de trabajo. Esto mantiene limpia la raíz de tu proyecto, evita sobreescrituras accidentales de tus archivos y aísla los registros de SDD.
 
-#### Paso 1 — Obtén los archivos de la plantilla
+#### Paso 1 — Copia la carpeta del Framework
+Crea una carpeta llamada `dbv-specs-ops` en la raíz de tu proyecto y copia todos los archivos de este repositorio dentro de ella.
 
-Elige la opción que mejor se adapte a tu flujo. **No clones este repo directamente** — tu proyecto debe ser independiente, sin ninguna conexión con el repositorio original.
+#### Paso 2 — Coloca los archivos de activación en la raíz
+Debido a que los asistentes de IA solo leen archivos de configuración desde la raíz del espacio de trabajo (workspace root), **debes copiar o crear** los archivos de activación correspondientes en la raíz de tu proyecto para redirigir al asistente:
 
-**Opción A — GitHub Template (recomendada):**
-Haz clic en el botón **"Use this template"** en la página principal de este repo en GitHub.
-GitHub creará un repositorio nuevo bajo tu cuenta, con todos los archivos y sin el historial del original. 100% tuyo.
+*   **Para Claude Code / Cursor (`CLAUDE.md` en la raíz):**
+    ```markdown
+    Please read and follow the master instructions in dbv-specs-ops/docs/MASTER_PROMPT.md. All specs, tasks, and memory logs are located inside the dbv-specs-ops/ folder.
+    ```
+*   **Para GitHub Copilot (`.github/copilot-instructions.md` en la raíz):**
+    ```markdown
+    Este proyecto usa Spec-Driven Development (SDD). Las reglas, especificaciones y tareas se encuentran en el subdirectorio `dbv-specs-ops/`.
+    Lee y sigue estrictamente `dbv-specs-ops/docs/MASTER_PROMPT.md`.
+    ```
+*   **Para Windsurf (`.windsurfrules` en la raíz):**
+    ```json
+    {
+      "rules": [
+        "Please read and follow the master instructions in dbv-specs-ops/docs/MASTER_PROMPT.md. All specs, tasks, and memory logs are located inside the dbv-specs-ops/ folder."
+      ]
+    }
+    ```
+*   **Para Gemini CLI / Antigravity (`GEMINI.md` en la raíz):**
+    ```markdown
+    Please follow the SDD rules and files located in `dbv-specs-ops/`.
+    Master prompt is at `dbv-specs-ops/docs/MASTER_PROMPT.md`.
+    ```
 
-**Opción B — Descargar ZIP (la más sencilla):**
-Haz clic en el botón verde **"Code"** → **"Download ZIP"**. Extrae los archivos y cópialos a la raíz de tu proyecto.
-No se necesita ningún conocimiento de git. Funciona para cualquier proyecto, nuevo o existente.
+#### Paso 3 — Abre tu asistente de IA y arranca la sesión
+Según el estado de tu proyecto, escribe a tu asistente de IA:
 
-En ambos casos, asegúrate de que **todos los archivos estén en la raíz** de tu proyecto para que el asistente de IA los encuentre automáticamente.
-
-#### Paso 2 — Abre tu asistente de IA y arranca la sesión
-
-Según la plataforma, el contexto se carga de forma diferente:
-
-| Plataforma | Carga de contexto | Primer mensaje a escribir |
-|---|---|---|
-| **Claude Code** | ✅ Automática | `/spec` |
-| **GitHub Copilot** | ✅ Automática | `/spec` |
-| **Antigravity** | ✅ Automática (vía `GEMINI.md`) | `/spec` |
-| **Gemini CLI** | ✅ Automática (vía `GEMINI.md`) | `/spec` |
-| **Windsurf** | ✅ Automática | `/spec` |
-| **Cursor** | ✅ Automática (vía `CLAUDE.md`) | `/spec` |
-| **ChatGPT / Gemini Web** | ⚠️ Manual | Ver abajo |
-
-> **Plataformas con auto-carga (Claude, Copilot, Antigravity, Gemini CLI, Windsurf, Cursor):**
-> La IA ya ha leído todo el contexto. Simplemente escribe:
-> ```
-> /spec
-> ```
-> La IA iniciará la Entrevista de Ingeniería: analizará tu proyecto en silencio y propondrá un borrador completo con asunciones marcadas. Tú confirmas o corriges todo en un solo paso.
-
-> **Plataformas manuales (ChatGPT, Gemini Web):**
-> Pega el contenido de `docs/MASTER_PROMPT.md` en el primer mensaje y añade:
-> ```
-> Revisa task.md e inicia la Entrevista de Ingeniería para un proyecto nuevo.
-> ```
-
-#### Paso 3 — Responde la Entrevista de Ingeniería
-
-La IA te preguntará qué quieres construir, para quién y cuáles son los requisitos clave.
-Rellena `docs/SPECIFICATIONS.md` basándose en tus respuestas — sin edición manual.
-
-#### Paso 4 — Aprueba el plan y construye
-
-Una vez confirmadas las specs, la IA genera `implementation_plan.md` y te pide aprobación.
-Tras aprobar, construye de forma incremental. Puedes seguir el progreso en `task.md`.
-
-#### 🔄 ¿Ya tienes un proyecto existente?
-
-Usa `docs/ADOPTION_PROMPT.md` en su lugar. Ver la sección [Incorporar a un Proyecto Existente](#es-adoption).
-
----
-
-<a name="es-adoption"></a>
-### 🔄 Incorporar a un Proyecto Existente
-
-Ya tienes código pero no especificaciones ni metodología? Este flujo te permite adoptar SDD sin empezar de cero.
-
-**Opción A — Adopción en la Raíz (Estándar):**
-1. Copia los archivos de esta plantilla a la raíz de tu proyecto existente.
-2. Usa `docs/ADOPTION_PROMPT.md` en lugar del mensaje de la Fase 0.
-   > *Mensaje sugerido:* "Sigue las instrucciones de `docs/ADOPTION_PROMPT.md` para analizar este proyecto e incorporarlo a la metodología SDD."
-3. La IA analizará tu proyecto de forma autónoma, presentará un resumen y te pedirá confirmar o ajustar su borrador en un solo paso.
-4. La IA generará `docs/SPECIFICATIONS.md`, `docs/ARCHITECTURE.md`, `docs/DESIGN.md` (si tiene interfaz) y `task.md` en la raíz.
-
-**Opción B — Aislamiento en Subcarpeta (Recomendado para repositorios existentes):**
-Para evitar mezclar los archivos del framework con tu código o sobrescribir archivos del proyecto (como `README.md` o `CHANGELOG.md`):
-1. Copia la carpeta completa `dbv-specs-ops` en la raíz de tu proyecto existente.
-2. Coloca un archivo de activación pequeño (`CLAUDE.md`, `GEMINI.md` o `.windsurfrules` según tu plataforma) en la raíz de tu proyecto para dirigir a la IA.
-   > *Ejemplo de CLAUDE.md en la raíz:* `Please read and follow the master instructions in dbv-specs-ops/docs/MASTER_PROMPT.md. All specs, tasks, and memory logs are located inside the dbv-specs-ops/ folder.`
-3. Escribe a tu IA:
-   > *Mensaje sugerido:* "Adapta este proyecto a la metodología SDD utilizando la configuración del framework dentro de la carpeta `dbv-specs-ops`. Utiliza `dbv-specs-ops/docs/ADOPTION_PROMPT.md` como guía para las instrucciones."
-4. La IA analizará el código y generará las especificaciones, tareas e historial dentro de la carpeta aislada `dbv-specs-ops/`.
+*   **Para Proyectos Nuevos (Quick Start):**
+    Escribe `/spec` (o pega el contenido de `dbv-specs-ops/docs/MASTER_PROMPT.md` si usas una interfaz manual como la web de ChatGPT). La IA iniciará la Entrevista de Ingeniería para definir la aplicación, rellenando `dbv-specs-ops/docs/SPECIFICATIONS.md`.
+*   **Para Incorporar a Proyectos Existentes (Adopción):**
+    Escribe el siguiente mensaje:
+    > "Sigue las instrucciones de `dbv-specs-ops/docs/ADOPTION_PROMPT.md` para analizar este proyecto e incorporarlo a la metodología SDD utilizando la configuración dentro de la carpeta `dbv-specs-ops`."
+    La IA analizará el código existente y rellenará las especificaciones e historial dentro del subdirectorio `dbv-specs-ops/`.
 
 ---
 
@@ -620,7 +546,7 @@ Realiza un Fork del repositorio, crea una rama descriptiva y abre una Pull Reque
 <a name="status"></a>
 ## 🛠 Estado / Status
 
-* **Versión / Version:** 2.1.0
+* **Versión / Version:** 2.2.0
 * **Metodología / Methodology:** Spec-Driven Development (SDD)
 * **Objetivo / Goal:** Universal AI-assisted development template for any platform and assistant.
 
