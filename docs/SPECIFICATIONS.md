@@ -32,7 +32,7 @@
 - **Enfoque:** [Breve descripción de la solución técnica elegida].
 - **Dependencias Críticas:** [Ej: API externa, Servidor MCP específico].
 - **Oportunidades de Skills y MCPs**: [Analizar si el proyecto se beneficia de la creación de un servidor MCP local para conectar con la lógica interna, o de paquetes de habilidades dinámicas (skills/) para facilitar la orquestación del agente].
-- **Sistema de Diseño:** Si el proyecto tiene interfaz de usuario, ver `docs/DESIGN.md` para tokens de color, tipografía y componentes.
+- **Sistema de Diseño:** Si el proyecto tiene interfaz de usuario, ver `docs/DESIGN.md` para tokens de color, tipografía y componentes. Se puede enriquecer opcionalmente mediante **Impeccable** (auditorías y critique de diseño) y **SkillUI** (ingeniería inversa de paletas y estilos). Ver `docs/DESIGN_ENRICHMENT.md` para más información.
 
 ### 4.1. Agent Readiness Checklist (Proyectos Web)
 *Si la configuración de Agent Readiness (Web) está activa, documentar las tareas de descubrimiento para agentes inteligentes:*

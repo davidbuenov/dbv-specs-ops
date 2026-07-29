@@ -11,6 +11,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [2.3.0] — 2026-07-29
+
+### Added
+- **Soporte para Enriquecimiento y Auditoría de Diseño (Design Enrichment)**:
+  - Nueva guía técnica [docs/DESIGN_ENRICHMENT.md](file:///d:/Programacion/github-davidbuenov/dbv-specs-ops/docs/DESIGN_ENRICHMENT.md) detallando el flujo de trabajo con las herramientas de diseño **Impeccable** y **SkillUI**.
+  - Paso de decisión interactivo en `/spec` para ofrecer la instalación acotada de Impeccable (filtrando proveedores activos) y extracción de tokens con SkillUI.
+  - Gestión automatizada y sincronización del archivo `DESIGN.md` en la raíz del proyecto durante la fase `/ship`, manteniendo la fuente de verdad aislada en `dbv-specs-ops/docs/DESIGN.md`.
+  - Integración de directivas en `/test` para recomendar auditorías de diseño con `/impeccable critique` (para verificar contraste WCAG AA, heurísticas y usabilidad).
+  - Integración de directivas en `/code-simplify` para sugerir comandos de pulido visual y robustez de UI con `/impeccable polish` e `/impeccable harden`.
+  - Referencias cruzadas en `docs/SPECIFICATIONS.md` y soporte en `docs/UPGRADE_PROMPT.md` para migrar de forma automática a v2.3.0.
+
+---
+
 ## [2.2.0] — 2026-07-26
 
 ### Added
@@ -225,7 +238,8 @@ Initial public release of the **dbv-specs-ops** SDD framework.
 
 ---
 
-[Sin publicar]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.2.0...HEAD
+[Sin publicar]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.3.0...HEAD
+[2.3.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v1.5.2...v2.0.0

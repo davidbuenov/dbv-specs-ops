@@ -15,6 +15,7 @@
 *Registro de por qué se tomaron ciertas rutas (ej. cambios en librerías, arquitectura o patrones).*
 
 - **2026-06-15 - Transición a dbv-specs-ops v2.0.0 (Agentic Engineering):** Implementación de los principios del libro blanco de Google. Se unificaron los Evals no deterministas de IA en la fase `/test` para simplificar el flujo, y se añadió la auditoría de seguridad en `/code-simplify` para evitar la fuga de credenciales o de paquetes alucinados (*slopsquatting*). Se transicionó la sección MCP en la arquitectura a una definición explícita de Arnés (Harness) del Agente.
+- **2026-07-29 - Integración de Enriquecimiento de Diseño (v2.3.0):** Adición opcional de Impeccable y SkillUI. Para mantener la subcarpeta como única fuente de verdad sin romper compatibilidad con herramientas de raíz, `dbv-specs-ops/docs/DESIGN.md` sigue siendo la fuente de verdad, y se copia a la raíz como un archivo derivado. Se automatizó la sincronización del archivo de la raíz en la fase `/ship` para evitar desajustes o ediciones inconsistentes.
 
 ## ⚠️ Lecciones Aprendidas / Errores Evitados
 *Notas sobre bugs específicos, configuraciones que fallaron o refactors intentados para no repetirlos.*
