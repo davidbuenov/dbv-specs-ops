@@ -19,18 +19,18 @@
 
 ---
 
-## Model Routing Guidelines (V2.1.0)
+## Model Routing Guidelines (V2.4.0)
 
 To optimize OpEx (Token Burn) and latency, refer to this routing strategy when executing project development tasks:
 
 | Development Phase | Required Reasoning Complexity | Recommended Model Class | Example Models |
 | --- | --- | --- | --- |
-| `/spec` (Specifications) | Very High | Advanced Reasoning / Frontier Models | Gemini 1.5 Pro, Claude 3.5 Sonnet, GPT-4o |
-| `/plan` (Planning / Architecture) | Very High | Advanced Reasoning / Frontier Models | Gemini 1.5 Pro, Claude 3.5 Sonnet, GPT-4o |
-| `/build` (Code Implementation) | Medium | Fast, high-accuracy coding models | Gemini 1.5 Flash, Claude 3.5 Sonnet, GPT-4o |
-| `/test` (Conventional Tests / Evals) | Medium-Low | Fast & cheap models | Gemini 1.5 Flash, Claude 3 Haiku, GPT-4o-mini |
-| `/code-simplify` (Security & Refactor) | High | Security-conscious reasoning models | Gemini 1.5 Pro, Claude 3.5 Sonnet |
-| `/ship` (Documentation, Changelog) | Low | Fast, text-optimized models | Gemini 1.5 Flash, Claude 3 Haiku, GPT-4o-mini |
+| `/spec` (Specifications) | Very High | Advanced Reasoning / Frontier Models | Gemini 3.1 Pro, Claude Opus 5, GPT-5.6 Sol |
+| `/plan` (Planning / Architecture) | Very High | Advanced Reasoning / Frontier Models | Gemini 3.1 Pro, Claude Opus 5, GPT-5.6 Sol |
+| `/build` (Code Implementation) | Medium | Fast, high-accuracy coding models | Gemini 3.5 Flash, Claude Sonnet 5, GPT-5.6 Terra |
+| `/test` (Conventional Tests / Evals) | Medium-Low | Fast & cheap models | Gemini 2.5 Flash-Lite, Claude Haiku 5, GPT-5.6 Luna |
+| `/code-simplify` (Security & Refactor) | High | Security-conscious reasoning models | Gemini 3.1 Pro, Claude Sonnet 5, GPT-5.6 Sol |
+| `/ship` (Documentation, Changelog) | Low | Fast, text-optimized models | Gemini 2.5 Flash-Lite, Claude Haiku 5, GPT-5.6 Luna |
 
 ---
 
