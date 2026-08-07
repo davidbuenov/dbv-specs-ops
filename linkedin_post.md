@@ -45,4 +45,4 @@ Prueba el framework aquí:
 
 ## 🎨 Imagen Promocional Generada
 
-![ dbv-specs-ops v2.3.0 LinkedIn Post Asset](/C:/Users/bueno/.gemini/antigravity-ide/brain/316833a4-2d1d-4cbf-b045-e4cf55e551a4/dbv_specs_ops_v230_linkedin_1785357249909.png)
+![ dbv-specs-ops v2.3.0 LinkedIn Post Asset](C:/Users/bueno/.gemini/antigravity-ide/brain/316833a4-2d1d-4cbf-b045-e4cf55e551a4/dbv_specs_ops_v230_linkedin_1785357249909.png)

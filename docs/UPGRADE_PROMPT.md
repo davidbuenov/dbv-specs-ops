@@ -40,9 +40,9 @@ Lee el fichero `project.config.md`:
 - Si **no existe** ese campo → pregunta al usuario:
   > *"¿Qué versión de dbv-specs-ops estás usando? Puedes encontrarla buscando en tu `CHANGELOG.md` el primer commit del proyecto, o mirando qué ficheros de plataforma tienes (`.windsurfrules` fue añadido en v1.1.0, `project.config.md` en v1.2.0)."*
 
-La versión más reciente del framework es: **2.3.0**
+La versión más reciente del framework es: **2.4.0**
  
-Si el usuario ya tiene la **v2.3.0**, informa de que el proyecto está al día. No hay nada que hacer.
+Si el usuario ya tiene la **v2.4.0**, informa de que el proyecto está al día. No hay nada que hacer.
 </version_detection_phase>
 
 ---
@@ -172,6 +172,17 @@ Usa esta tabla para calcular qué hay que actualizar según la versión actual d
 | MODIFICADO | `docs/SPECIFICATIONS.md` | Referencias en sección 4 a herramientas de auditoría visual. |
 | MODIFICADO | `project.config.md` | Versión incrementada a `2.3.0`. |
 | MODIFICADO | `docs/UPGRADE_PROMPT.md` | Este archivo actualizado a la versión v2.3.0. |
+
+### v2.4.0 (cambios desde v2.3.0)
+| Acción | Fichero | Nota |
+|---|---|---|
+| NUEVO | `docs/AGENT_PLUGINS.md` | Guía técnica detallada sobre el estándar Agent Plugins 1.0.0. |
+| MODIFICADO | `docs/MASTER_PROMPT.md` | Integración nativa de Agent Plugins 1.0.0 en el flujo SDD. |
+| MODIFICADO | `docs/SPECIFICATIONS.md` | Checklist de Agent Readiness v2.4.0 alineado a Agent Plugins. |
+| MODIFICADO | `docs/ARCHITECTURE.md` | Formato Agent Plugins para MCP y Skills en la plantilla de arnés. |
+| MODIFICADO | `project.config.md` | Versión incrementada a `2.4.0`. |
+| MODIFICADO | `README.md` | Documentación y referencias al estándar Agent Plugins actualizados. |
+| MODIFICADO | `docs/UPGRADE_PROMPT.md` | Este archivo actualizado con la versión v2.4.0 y asistente de migración. |
 </upgrade_manifest_phase>
 
 ---
@@ -198,6 +209,7 @@ Para cada fichero marcado como NUEVO o MODIFICADO, descarga el contenido desde e
 | `docs/DESIGN.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/DESIGN.md` *(solo si no existe)* |
 | `docs/AGENTIC_ENGINEERING.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/AGENTIC_ENGINEERING.md` *(NUEVO)* |
 | `docs/DESIGN_ENRICHMENT.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/DESIGN_ENRICHMENT.md` *(NUEVO)* |
+| `docs/AGENT_PLUGINS.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/AGENT_PLUGINS.md` *(NUEVO)* |
 
 > **Nota:** Si alguna descarga falla, muestra el link al usuario para que lo descargue manualmente.
 
@@ -248,16 +260,42 @@ Si el proyecto no tiene UI → omite este paso.
 
 ---
 
+<skills_migration_phase>
+## Fase 5 — Migración activa de Skills y MCPs antiguos (Opcional)
+
+Si el proyecto contiene implementaciones antiguas de habilidades (ej: carpetas `agent-skills/`, `skills/` locales antiguas, o tarjetas de bot `agent.json` / `mcp.json` sueltos en la raíz):
+
+1. **Pregunta al usuario**: *"He detectado que tu proyecto tiene configuraciones antiguas de skills/MCP. ¿Deseas que las migre de forma automática al nuevo estándar universal Agent Plugins 1.0.0?"*
+2. **Si el usuario confirma**:
+   - Crea la estructura del plugin bajo `.well-known/agent-plugin/` (si es un proyecto web/API) o bajo `agent-plugin/` en la raíz.
+   - Crea el archivo `.well-known/agent-plugin/plugin.json` (o `agent-plugin/plugin.json`) con la estructura oficial:
+     ```json
+     {
+       "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+       "name": "[nombre-del-proyecto-inferido]-plugin",
+       "version": "1.0.0",
+       "description": "Ported skills and tools plugin for [nombre-del-proyecto]"
+     }
+     ```
+   - Mueve todas las carpetas que contengan `SKILL.md` al subdirectorio `skills/` del plugin (conservando las subcarpetas `scripts/`, `references/`, etc. intactas).
+   - Lee las herramientas configuradas en las antiguas tarjetas (`agent.json`, `mcp.json` de la raíz) y consolídalas en el nuevo `.well-known/agent-plugin/mcp.json` (o `agent-plugin/mcp.json`) bajo el formato oficial de `mcpServers`.
+   - **IMPORTANTE**: Traduce las rutas absolutas locales antiguas en los comandos y argumentos MCP a los placeholders `${PLUGIN_ROOT}` y `${PLUGIN_DATA}` para garantizar que el plugin sea portable entre clientes e IDEs.
+   - Elimina los directorios y ficheros sueltos antiguos (`agent-skills/`, `agent.json`, etc.) para limpiar el proyecto.
+   - Informa al usuario del resultado de la migración.
+</skills_migration_phase>
+
+---
+
 <closing_phase>
-## Fase 5 — Cierre
+## Fase 6 — Cierre
 
 Cuando todos los cambios estén aplicados:
 
-1. Actualiza el campo `Framework Version` en `project.config.md` a `2.3.0`.
+1. Actualiza el campo `Framework Version` en `project.config.md` a `2.4.0`.
 2. Muestra al usuario un resumen claro:
  
 ```
-✅ Framework actualizado de vX.X.X → v2.3.0
+✅ Framework actualizado de vX.X.X → v2.4.0
 
 Ficheros actualizados:
   • [lista de ficheros modificados/añadidos]
@@ -273,6 +311,7 @@ Próximos pasos:
   [Si se creó DESIGN.md] → Rellena docs/DESIGN.md con los tokens de diseño de tu proyecto.
   [Si se creó AGENTIC_ENGINEERING.md] → Lee docs/AGENTIC_ENGINEERING.md para entender la metodología v2.0.0.
   [Si se creó DESIGN_ENRICHMENT.md] → Lee docs/DESIGN_ENRICHMENT.md para ver cómo auditar y pulir tu UI con Impeccable y SkillUI.
+  [Si se creó AGENT_PLUGINS.md] → Lee docs/AGENT_PLUGINS.md para ver cómo estructurar tus herramientas y skills bajo el estándar Agent Plugins 1.0.0.
   → Continúa con tu proyecto normalmente. El framework ya está al día.
 ```
 </closing_phase>

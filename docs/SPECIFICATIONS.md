@@ -35,14 +35,13 @@
 - **Sistema de Diseño:** Si el proyecto tiene interfaz de usuario, ver `docs/DESIGN.md` para tokens de color, tipografía y componentes. Se puede enriquecer opcionalmente mediante **Impeccable** (auditorías y critique de diseño) y **SkillUI** (ingeniería inversa de paletas y estilos). Ver `docs/DESIGN_ENRICHMENT.md` para más información.
 
 ### 4.1. Agent Readiness Checklist (Proyectos Web)
-*Si la configuración de Agent Readiness (Web) está activa, documentar las tareas de descubrimiento para agentes inteligentes:*
-- [ ] **robots.txt**: Configurar con directiva `Content-Signal: ai-train=no, search=yes, ai-input=yes` y ruta al sitemap.
+*Si la configuración de Agent Readiness (Web) está activa, documentar las tareas de descubrimiento e integración para agentes inteligentes:*
+- [ ] **robots.txt**: Configurar con directiva `Content-Signal: ai-train=no, search=yes, ai-input=yes` y ruta al sitemap. Exponer el directorio del plugin.
 - [ ] **llms.txt**: Crear mapa de contenidos en Markdown para agilizar la lectura semántica de la IA.
 - [ ] **auth.md**: Describir los procesos de registro y acceso para los bots.
 - [ ] **Metadatos en `.well-known/`**: Crear `api-catalog`, `oauth-protected-resource`, `oauth-authorization-server` y `http-message-signatures-directory`.
-- [ ] **Agent & MCP Cards**: Declarar la identidad del bot (`agent.json`) y la conexión al servidor MCP (`mcp.json`).
-- [ ] **agent-skills/**: Definir el índice `index.json` y los manifiestos `SKILL.md` de habilidades del proyecto.
-- [ ] **Negociación de Markdown**: Configurar el enrutamiento para retornar texto plano Markdown con la cabecera `Accept: text/markdown` y definir las cabeceras `Link` HTTP en el hosting.
+- [ ] **Agent Plugin**: Crear el paquete universal de herramientas y habilidades en `.well-known/agent-plugin/` (con manifiesto `plugin.json` y config `mcp.json` válidos según el estándar 1.0.0).
+- [ ] **Negociación de Markdown y Links**: Configurar el enrutamiento para retornar texto plano Markdown con la cabecera `Accept: text/markdown` y definir la cabecera HTTP `Link` apuntando al plugin (`Link: </.well-known/agent-plugin/plugin.json>; rel="agent-plugin"; type="application/json"`).
 
 ## 🚫 5. Fuera de Alcance (Out of Scope)
 *Vital para evitar el "scope creep" (crecimiento descontrolado del proyecto).*

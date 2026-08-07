@@ -64,8 +64,8 @@ This repository acts as a **master blueprint** that transforms your AI assistant
 *   **Dual Coding Modes**: The AI self-classifies tasks as *Conductor Mode* (quick, interactive IDE edits) or *Orchestrator Mode* (autonomous, background tasks using asynchronous commands).
 *   **Unified Validation (Tests & Evals)**: Combines classical deterministic testing with non-deterministic AI Evals (LLM Judges, formatting checks, and hallucination scans) in the `/test` phase.
 *   **Security Review Gate**: A mandatory `/code-simplify` phase that automatically audits code for credential leaks, dependency squatting (*slopsquatting*), and input sanitization.
-*   **Declarative Agent Harness**: Configures how the AI interacts with local sandbox environments, specific Model Context Protocol (MCP) servers, and local procedurally-defined skills.
-*   **Native Agent Readiness (Web/APIs)**: If enabled, it automatically bootstraps the files and configurations needed (`robots.txt` with Content-Signals, `llms.txt`, `auth.md`, `agent.json`, `mcp.json`, and Link headers) to make your web project perfectly readable and discoverable for external AI agents.
+*   **Declarative Agent Harness**: Configures how the AI interacts with local sandbox environments and resources via the universal **Agent Plugins 1.0.0** standard.
+*   **Native Agent Readiness (Web/APIs)**: If enabled, it automatically bootstraps the standard files, headers, and directories (`robots.txt` with Content-Signals, `llms.txt`, `auth.md`, catálogos en `.well-known/` and a unified **Agent Plugin** directory containing `plugin.json` and `mcp.json` specs) to make your web project perfectly readable and discoverable for external AI agents.
 *   **Zero-Collision Upgrades**: A dedicated upgrade prompt agent that automatically migrates your project's framework files without touching your source code or custom specs.
 *   **Design Enrichment & Audits (Optional)**: Seamlessly integrates community visual design tools (**[Impeccable](https://github.com/pbakaus/impeccable)** for dual-agent accessibility/contrast audits and Nielsen heuristics, and **[SkillUI](https://github.com/amaancoderx/npxskillui)** for extraction/reverse engineering of design tokens from reference URLs).
 
@@ -81,6 +81,7 @@ This workflow is a unified, simplified version of industry pillars, adapted to b
 3. **[AI Coding Best Practices](https://github.com/davidbuenov/ai-coding-best-practices):** The final layer of **style and excellence** that dictates how the final code should be written.
 4. **[design.md (Google Labs)](https://github.com/google-labs-code/design.md):** The **visual design system standard** — a format for describing a visual identity to coding agents, now integrated as `docs/DESIGN.md`.
 5. **[The New SDLC With Vibe Coding (Google/Addy Osmani et al.)](https://www.kaggle.com/whitepaper-the-new-SDLC-with-vibe-coding):** The theoretical foundation for **Agentic Engineering** (transitioning from prompting to a controlled codebase factory model, Evals, and Harness engineering).
+6. **[Agent Plugins](https://agent-plugins.org/specification):** The **vendor-neutral standard** (by Google, Amazon, Microsoft, OpenAI, Vercel) for packaging Agent Skills and MCP servers into a portable unit, integrated under `docs/AGENT_PLUGINS.md`.
 
 ---
 
@@ -89,7 +90,7 @@ This workflow is a unified, simplified version of industry pillars, adapted to b
 
 ```mermaid
 flowchart TD
-    Spec["Spec<br/>(docs/SPECIFICATIONS.md)<br/>+ MCP/Skills viability"] --> Plan["Plan<br/>(task.md, implementation_plan.md)<br/>+ Mode: Conductor/Orchestrator"]
+    Spec["Spec<br/>(docs/SPECIFICATIONS.md)<br/>+ Agent Plugins viability"] --> Plan["Plan<br/>(task.md, implementation_plan.md)<br/>+ Mode: Conductor/Orchestrator"]
     Plan --> Build["Build<br/>(incremental)"]
     Build --> Test["Test<br/>+ deterministic tests<br/>+ non-deterministic Evals"]
     Test --> Simplify["Code Simplify<br/>+ Security Review<br/>(secrets & dependencies check)"]
@@ -316,8 +317,8 @@ Este repositorio actúa como un "Blueprint" o plano maestro que transforma a la 
 *   **Modos de Trabajo Inteligentes**: La IA clasifica automáticamente las tareas en *Modo Conductor* (ediciones rápidas e interactivas en el IDE) o *Modo Orquestador* (tareas autónomas de fondo mediante comandos asíncronos).
 *   **Validación Unificada (Tests & Evals)**: Combina pruebas deterministas clásicas con Evals probabilísticos de IA (jueces LLM, verificación de formatos y detección de alucinaciones) en la fase `/test`.
 *   **Puerta de Auditoría de Seguridad**: Una fase `/code-simplify` obligatoria que audita el código generado buscando fugas de credenciales, dependencias alucinadas o falsas (*slopsquatting*) y validación de entradas.
-*   **Arnés del Agente Declarativo**: Configura cómo interactúa el agente con entornos virtuales aislados, servidores MCP (Model Context Protocol) y bibliotecas de habilidades locales.
-*   **Agent Readiness por Defecto (Web/APIs)**: Prepara automáticamente los ficheros e infraestructura de autodescubrimiento (`robots.txt` con Content-Signals, `llms.txt`, `auth.md`, `agent.json`, `mcp.json` y cabeceras Link HTTP) para que los agentes de IA externos naveguen y consuman tu sitio web eficientemente.
+*   **Arnés del Agente Declarativo**: Configura cómo interactúa el agente con entornos virtuales aislados y recursos mediante el estándar universal **Agent Plugins 1.0.0**.
+*   **Agent Readiness por Defecto (Web/APIs)**: Prepara automáticamente los ficheros, cabeceras e infraestructura de autodescubrimiento (`robots.txt` con Content-Signals, `llms.txt`, `auth.md`, catálogos en `.well-known/` y una carpeta de **Agent Plugin** conteniendo `plugin.json` y `mcp.json` estándar) para que los agentes de IA externos naveguen y consuman tu sitio web eficientemente.
 *   **Actualizaciones Sin Colisiones**: Un agente de actualización dedicado (`docs/UPGRADE_PROMPT.md`) que migra los ficheros del framework sin tocar tu código fuente ni tus especificaciones personalizadas.
 *   **Enriquecimiento y Auditoría de Diseño (Opcional)**: Integra herramientas visuales comunitarias (**[Impeccable](https://github.com/pbakaus/impeccable)** para auditorías de contraste/accesibilidad y heurísticas Nielsen, y **[SkillUI](https://github.com/amaancoderx/npxskillui)** para extracción e ingeniería inversa de tokens a partir de URLs de referencia).
 
@@ -333,6 +334,7 @@ Este flujo de trabajo es una versión unificada y simplificada de varios pilares
 3. **[AI Coding Best Practices](https://github.com/davidbuenov/ai-coding-best-practices):** La capa de **estilo y excelencia** que dicta cómo debe escribirse el código final.
 4. **[design.md (Google Labs)](https://github.com/google-labs-code/design.md):** El **estándar de sistema de diseño visual** — un formato para describir identidades visuales a agentes de codificación, ahora integrado como `docs/DESIGN.md`.
 5. **[The New SDLC With Vibe Coding (Google/Addy Osmani et al.)](https://www.kaggle.com/whitepaper-the-new-SDLC-with-vibe-coding):** La base teórica para la **Ingeniería Agéntica** (transición desde el prompting casual hacia un modelo controlado de fábrica de código, Evals y diseño del arnés).
+6. **[Agent Plugins](https://agent-plugins.org/specification):** El **estándar neutral de la industria** (Google, Amazon, Microsoft, OpenAI, Vercel) para empaquetar Agent Skills y servidores MCP, integrado bajo `docs/AGENT_PLUGINS.md`.
 
 ---
 
@@ -341,7 +343,7 @@ Este flujo de trabajo es una versión unificada y simplificada de varios pilares
 
 ```mermaid
 flowchart TD
-    Spec["Spec<br/>(docs/SPECIFICATIONS.md)<br/>+ Viabilidad de MCP/Skills"] --> Plan["Plan<br/>(task.md, implementation_plan.md)<br/>+ Modo: Conductor o Orquestador"]
+    Spec["Spec<br/>(docs/SPECIFICATIONS.md)<br/>+ Viabilidad de Agent Plugins"] --> Plan["Plan<br/>(task.md, implementation_plan.md)<br/>+ Modo: Conductor o Orquestador"]
     Plan --> Build["Build<br/>(incremental)"]
     Build --> Test["Test<br/>+ pruebas deterministas<br/>+ Evals de trayectoria y output"]
     Test --> Simplify["Code Simplify<br/>+ Security Review<br/>(auditoría de secretos/paquetes)"]
@@ -550,7 +552,7 @@ Realiza un Fork del repositorio, crea una rama descriptiva y abre una Pull Reque
 <a name="status"></a>
 ## 🛠 Estado / Status
 
-* **Versión / Version:** 2.3.0
+* **Versión / Version:** 2.4.0
 * **Metodología / Methodology:** Spec-Driven Development (SDD)
 * **Objetivo / Goal:** Universal AI-assisted development template for any platform and assistant.
 
@@ -600,3 +602,4 @@ Realiza un Fork del repositorio, crea una rama descriptiva y abre una Pull Reque
 * **[design.md](https://github.com/google-labs-code/design.md)** — Google Labs
 * **[Impeccable](https://github.com/pbakaus/impeccable)** — Paul Bakaus (Visual Audits and Critique CLI)
 * **[SkillUI](https://github.com/amaancoderx/npxskillui)** — Amaan Coder (Design System Reverse Engineering CLI)
+* **[Agent Plugins Specification](https://agent-plugins.org/specification)** — TSC of Core Maintainers (Google, Amazon, Microsoft, OpenAI, Vercel)

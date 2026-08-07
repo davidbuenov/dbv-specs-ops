@@ -11,6 +11,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [2.4.0] — 2026-08-07
+
+### Added
+- **Soporte Nativo de Agent Plugins 1.0.0**:
+  - Integración completa del estándar universal **Agent Plugins 1.0.0** (Google, Amazon, Microsoft, OpenAI, Vercel) para empaquetar Agent Skills y servidores MCP.
+  - Nueva guía técnica detallada [docs/AGENT_PLUGINS.md](file:///d:/Programacion/github-davidbuenov/dbv-specs-ops/docs/AGENT_PLUGINS.md) que explica el diseño, manifiestos (`plugin.json`), transporte (`mcp.json`), aislamiento y autodescubrimiento.
+  - Actualización del checklist de `Agent Readiness` en la fase `/spec` para recomendar y estructurar la interfaz externa de descubrimiento web bajo el directorio estandarizado `.well-known/agent-plugin/`.
+  - Integración de directivas en `/test` para validar sintáctica y semánticamente que `plugin.json` y `mcp.json` cumplan estrictamente sus respectivos esquemas oficiales y reglas de portabilidad (uso de `${PLUGIN_ROOT}` y `${PLUGIN_DATA}`).
+- **Asistente de Migración Activa en Upgrade Prompt**:
+  - Incorporada una fase opcional en [docs/UPGRADE_PROMPT.md](file:///d:/Programacion/github-davidbuenov/dbv-specs-ops/docs/UPGRADE_PROMPT.md) que escanea el proyecto en busca de skills (`agent-skills/` o locales sueltas) o tarjetas (`agent.json`/`mcp.json`) antiguas y ofrece migrarlas automáticamente al estándar unificado de Agent Plugins, asegurando portabilidad de rutas MCP.
+- **Actualización de Plantillas**:
+  - `docs/SPECIFICATIONS.md`: Checklist de Agent Readiness v2.4.0 actualizado para usar Agent Plugins.
+  - `docs/ARCHITECTURE.md`: Sección de Arnés del Agente alineada a la especificación de Agent Plugins.
+  - `project.config.md`: Versión de framework actualizada a `2.4.0`.
+  - `README.md`: Documentadas las aportaciones de la v2.4.0 y añadidas referencias al estándar Agent Plugins en español e inglés.
+
+---
+
 ## [2.3.0] — 2026-07-29
 
 ### Added

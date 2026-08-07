@@ -82,16 +82,17 @@
 
 ### 1. Gestión de Contexto (Context Engineering)
 - **Contexto Estático:** [Ficheros de reglas globales y memory cargados siempre en el arranque (ej: CLAUDE.md, GEMINI.md, memory.md)].
-- **Contexto Dinámico / Skills:** [Lista de módulos de habilidades en skills/ o pipelines RAG cargados bajo demanda por el agente].
+- **Contexto Dinámico / Skills:** [Lista de módulos de habilidades bajo la estructura `skills/` del Agent Plugin cargados bajo demanda por el agente].
 
 ### 2. Herramientas y MCP (Model Context Protocol)
 - **Servidores MCP Requeridos:** [Ej: filesystem, sqlite (para acceso estructurado a datos), github (para gestión de PRs)].
 - **Propósito:** [Ej: Conexión directa a base de datos de staging para consultas de contexto].
-- **Configuración de Herramientas:** Ver `.claude/settings.json`, `.windsurfrules` o equivalentes.
+- **Configuración de Herramientas:** Definidas en el descriptor `mcp.json` bajo el estándar Agent Plugins 1.0.0.
 
 ### 3. Entorno de Ejecución (Sandboxing)
 - **Aislamiento:** [Define el sandbox donde corre el agente. Ej: Docker local, máquina virtual, o entorno virtual local (venv)].
 - **Límites de Ejecución:** [Límites de coste de tokens, tiempos de timeout o número máximo de iteraciones en comandos asíncronos].
+- **Aislamiento del Plugin:** Soporte para variables `${PLUGIN_ROOT}` y `${PLUGIN_DATA}` en la ejecución del servidor MCP.
 
 ### 4. Guardrails Deterministas de Seguridad
 - **Filtros de Código:** [Definición de scripts automáticos (linters, pre-commit hooks con gitleaks, herramientas SAST) para evitar la filtración de secretos o dependencias ficticias generadas por la IA].
@@ -99,9 +100,9 @@
 
 ### 5. Interfaz Externa para Agentes (Agent Readiness)
 *Define la arquitectura y métodos que permiten a agentes externos descubrir y consumir los servicios del sitio:*
-- **Autodescubrimiento**: [Describe cómo se exponen los recursos de IA (ej: Link Headers en el servidor web inyectando las tarjetas de agente, api-catalog, etc.)].
-- **Protocolos y Tarjetas**: [Ubicación de tarjetas de agente (agent.json) y mcp.json. Detalla el soporte para el protocolo de contexto Model Context Protocol (MCP) y WebMCP en cliente].
-- **Formato del Contenido**: [Define las políticas de optimización de contexto, tales como la negociación dinámica de Markdown para cabeceras Accept: text/markdown y la estructura de agent-skills/].
+- **Autodescubrimiento**: [Describe cómo se exponen los recursos de IA (ej: cabecera Link en el servidor web inyectando la relación agent-plugin pointing to plugin.json, api-catalog, etc.)].
+- **Estructura del Plugin**: Exponer la carpeta `.well-known/agent-plugin/` con los descriptores universales `plugin.json` y `mcp.json`.
+- **Formato del Contenido**: [Define las políticas de optimización de contexto, tales como la negociación de formato text/markdown y la navegación semántica en llms.txt].
 
 ---
 
