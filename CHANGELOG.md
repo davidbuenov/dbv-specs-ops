@@ -11,7 +11,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
-## [2.4.0] — 2026-08-07
+## [2.5.0] — 2026-08-13
+
+### Added
+- **Soporte Nativo para Aplicaciones de Escritorio Compiladas (Rust + Tauri v2)**:
+  - Nueva guía técnica y de arquitectura [docs/NATIVE_DESKTOP_APPS.md](file:///d:/Programacion/github-davidbuenov/dbv-specs-ops/docs/NATIVE_DESKTOP_APPS.md) con Tauri v2 como stack de referencia, arquitectura Core Rust vs Frontend Web, patrón "sin bundler" y 8 lecciones de diseño transferibles (sanitización en capa final, file watching por directorio, instancia única multi-ventana, par de claves de auto-actualizador, comprobación no bloqueante en arranque, desactivación de updater en ejecuciones desde tienda/`WindowsApps`, i18n ligero y persistencia JSON).
+- **Patrones de CI/CD Multiplataforma para Binarios Nativos (GitHub Actions)**:
+  - Nueva guía técnica [docs/NATIVE_APPS_RELEASE_CI.md](file:///d:/Programacion/github-davidbuenov/dbv-specs-ops/docs/NATIVE_APPS_RELEASE_CI.md) con patrones para compilar en runners específicos por SO (`ubuntu-*`, `macos-*`, `windows-*`), patrón de Releases como borrador acumulativo (`releaseDraft: true`), lectura de versión desde config JSON, permisos explícitos de `GITHUB_TOKEN` (`contents: write`), resolución del runner Apple Silicon (`aarch64`) vs. target `universal-apple-darwin` y gestión de artefactos sin firma como deuda técnica consciente.
+- **Guía y Checklist para Publicación en Marketplaces**:
+  - Nueva guía operativa [docs/MARKETPLACE_PUBLISHING.md](file:///d:/Programacion/github-davidbuenov/dbv-specs-ops/docs/MARKETPLACE_PUBLISHING.md) con comparativa de canales de distribución (Self-hosted vs. Tienda curada con auto-firma MSIX en Microsoft Store vs. Firma Authenticode/Apple vs. Catálogos de terceros como Uptodown), auditoría de empaquetadores de terceros, checklist pre-certificación contra placeholders silenciosos de color sólido y formularios por tienda.
+- **Integración de Phase Gates en el Master Prompt**:
+  - `docs/MASTER_PROMPT.md`: Añadida la 4ª opción de stack en Bootstrap §7 (Rust + Tauri v2).
+  - `docs/MASTER_PROMPT.md`: Añadido Phase Gate de app nativa compilada en `/plan` (Paso 3) para exigir la definición de la matriz de CI multiplataforma.
+  - `docs/MASTER_PROMPT.md`: Añadido Phase Gate de publicación en marketplace en `/ship` (Paso 6) para exigir la ejecución del checklist de `MARKETPLACE_PUBLISHING.md` antes de cerrar la entrega.
+- **Actualización de Índices y Herramientas de Migración**:
+  - `docs/README.md` y `README.md`: Tablas e índices de documentación actualizados en español e inglés con las 3 nuevas guías condicionales.
+  - `docs/UPGRADE_PROMPT.md`: Manifest actualizado a v2.5.0.
+  - `project.config.md`: Versión incrementada a `2.5.0`.
 
 ### Added
 - **Soporte Nativo de Agent Plugins 1.0.0**:
@@ -256,7 +272,9 @@ Initial public release of the **dbv-specs-ops** SDD framework.
 
 ---
 
-[Sin publicar]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.3.0...HEAD
+[Sin publicar]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.5.0...HEAD
+[2.5.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.4.0...v2.5.0
+[2.4.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.3.0...v2.4.0
 [2.3.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.0.0...v2.1.0

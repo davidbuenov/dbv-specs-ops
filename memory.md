@@ -8,8 +8,8 @@
 > *Instrucción para la IA: Consulta este archivo al inicio de cada sesión para recuperar el hilo técnico. Actualiza las secciones correspondientes cuando el workflow lo indique (triggers en `/plan`, `/build`, `/test` y gate en `/ship`).*
 
 ## 🎯 Contexto Activo
-- **Estado actual del desarrollo:** Release de la versión v2.0.0 finalizada con éxito. El framework ha sido actualizado por completo para soportar la metodología de ingeniería agéntica y optimización del arnés.
-- **Foco inmediato:** Distribución y documentación de la v2.0.0 para desarrolladores de equipo.
+- **Estado actual del desarrollo:** Release de la versión v2.5.0 finalizado con éxito. Soporte nativo para apps de escritorio compiladas (Rust + Tauri v2), CI/CD multiplataforma y publicación en marketplaces integrado.
+- **Foco inmediato:** Distribución y actualización a v2.5.0.
 
 ## 🏗️ Log de Decisiones Técnicas (ADR Ligero)
 *Registro de por qué se tomaron ciertas rutas (ej. cambios en librerías, arquitectura o patrones).*
@@ -17,12 +17,14 @@
 - **2026-06-15 - Transición a dbv-specs-ops v2.0.0 (Agentic Engineering):** Implementación de los principios del libro blanco de Google. Se unificaron los Evals no deterministas de IA en la fase `/test` para simplificar el flujo, y se añadió la auditoría de seguridad en `/code-simplify` para evitar la fuga de credenciales o de paquetes alucinados (*slopsquatting*). Se transicionó la sección MCP en la arquitectura a una definición explícita de Arnés (Harness) del Agente.
 - **2026-07-29 - Integración de Enriquecimiento de Diseño (v2.3.0):** Adición opcional de Impeccable y SkillUI. Para mantener la subcarpeta como única fuente de verdad sin romper compatibilidad con herramientas de raíz, `dbv-specs-ops/docs/DESIGN.md` sigue siendo la fuente de verdad, y se copia a la raíz como un archivo derivado. Se automatizó la sincronización del archivo de la raíz en la fase `/ship` para evitar desajustes o ediciones inconsistentes.
 - **2026-08-07 - Adopción de Agent Plugins 1.0.0 (v2.4.0):** Integración completa del estándar universal de empaquetado para herramientas MCP y Agent Skills. Se unificaron los directorios de autodescubrimiento web bajo `.well-known/agent-plugin/` y se implementó un asistente de migración en `UPGRADE_PROMPT.md` para trasladar automáticamente proyectos antiguos con configuraciones ad-hoc a esta estructura portable, traduciendo rutas locales absolutas a los placeholders `${PLUGIN_ROOT}` y `${PLUGIN_DATA}`.
+- **2026-08-13 - Integración de Apps de Escritorio Nativas, CI Multiplataforma y Marketplaces (v2.5.0):** Incorporación de guías operativas (`NATIVE_DESKTOP_APPS.md`, `NATIVE_APPS_RELEASE_CI.md`, `MARKETPLACE_PUBLISHING.md`) basadas en la experiencia real con Tauri v2, GitHub Actions y Microsoft Store / Uptodown. Se añadieron opciones de stack de escritorio nativo en el Bootstrap §7 de `MASTER_PROMPT.md` y dos Phase Gates (verificación de CI multiplataforma en `/plan` y checklist de publicación pre-envío en `/ship`) manteniendo el framework 100% modular y no invasivo para proyectos web.
 
 ## ⚠️ Lecciones Aprendidas / Errores Evitados
 *Notas sobre bugs específicos, configuraciones que fallaron o refactors intentados para no repetirlos.*
 
 - **[Feedback de Usabilidad]**: Es mejor integrar los conceptos nuevos (como Evals) en las fases existentes (`/test`) y delegar los modos de ejecución (Conductor/Orquestador) de forma implícita, en lugar de sobrecargar al desarrollador final con configuraciones complejas o preguntas confusas.
 - **[Estructura de Onboarding]**: En proyectos existentes con archivos raíz consolidados (como `README.md` y `CHANGELOG.md`), es preferible descargar el framework completo en una subcarpeta dedicada (`dbv-specs-ops/`) e indicar al agente su ubicación a través de un archivo de activación ligero (`CLAUDE.md`, `GEMINI.md`). Esto evita colisiones de archivos y mantiene limpio el código de producción.
+- **[Preferencia de Commit]**: Para los mensajes de git commit en este proyecto, usar siempre el formato conciso "Version v.X.Y.Z" (ejemplo: `Version v.2.5.0`) en lugar de mensajes largos de Conventional Commits.
 
 
 ## 🗺️ Mapa de Relaciones

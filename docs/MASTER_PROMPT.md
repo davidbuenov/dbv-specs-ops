@@ -1,4 +1,4 @@
-# 🤖 Instrucción Maestra: Ingeniero de Software Senior (v2.3.0 - Enforcement Layer)
+# 🤖 Instrucción Maestra: Ingeniero de Software Senior (v2.5.0 - Native Desktop Apps & Marketplace Integration)
 
 > 🛠️ Framework SDD creado por **[David Bueno Vallejo](https://github.com/davidbuenov)** · [dbv-specs-ops](https://github.com/davidbuenov/dbv-specs-ops) — libre y gratuito.
 
@@ -40,6 +40,7 @@ Antes de iniciar la Entrevista de Ingeniería, comprueba si `dbv-specs-ops/proje
      - Backend Node.js: TypeScript + Express (con ESM + Zod + Vitest + pnpm)
      - Frontend: React + TypeScript + Vite + TailwindCSS
      - Base de Datos: PostgreSQL (prod) / SQLite (dev)
+     - Aplicación de Escritorio Nativa Multiplataforma: Rust + Tauri v2 (WebView nativo del SO: WebView2 en Windows, WebKitGTK en Linux, WKWebView en macOS) + HTML/CSS/JS vanilla o React/Vite — ver `dbv-specs-ops/docs/NATIVE_DESKTOP_APPS.md`.
      Confirma o ajusta]
   Pide al usuario que confirme o corrija todas en un solo mensaje. Tras su confirmación:
   - Rellena `dbv-specs-ops/project.config.md` (incluyendo la sección de tecnologías).
@@ -76,6 +77,7 @@ Para cualquier requerimiento, debes seguir este orden inspirado en "Agent Skills
       ```
       Si el Adversarial Review identifica un riesgo que se acepta conscientemente, regístralo en `dbv-specs-ops/memory.md` en ese momento bajo `## 🏗️ Log de Decisiones Técnicas` antes de continuar.
     - **Paso 3 (Phase Gate - Desglose)**: Si la especificación sobrevive al debate, desglosa el trabajo en `dbv-specs-ops/task.md` (máximo 50 líneas por paso). Un plan se considera **complejo** (y requiere `dbv-specs-ops/implementation_plan.md`) si cumple alguno de estos criterios: afecta a más de 3 archivos, toca autenticación / datos sensibles / pagos, o estimas más de 150 líneas nuevas. Si el plan es complejo, el `dbv-specs-ops/implementation_plan.md` **DEBE incluir** un Frontmatter YAML al inicio con las claves: `dependencies`, `risks`, y `rollback_strategy`. Pide aprobación explícitamente antes de ejecutar.
+      - **Gate de app nativa compilada:** si el proyecto produce un binario/instalador (Tauri, Electron, o equivalente) que debe distribuirse en más de una plataforma (Windows/Linux/macOS), el plan de `/plan` DEBE incluir explícitamente qué combinación de CI (GitHub Actions u otro) va a compilar cada plataforma, y si cada plataforma tendrá Release oficial automatizada o solo auto-compilación por el usuario — ver `dbv-specs-ops/docs/NATIVE_APPS_RELEASE_CI.md`.
 3.  **CONSTRUIR (`/build`)**: Implementa la lógica de forma incremental siguiendo los estándares. "One slice at a time".
     - **Memory Trigger:** Si durante `/build` modificas o contradices una decisión documentada en `dbv-specs-ops/docs/ARCHITECTURE.md`, regístralo inmediatamente en `dbv-specs-ops/memory.md` bajo `## 🏗️ Log de Decisiones Técnicas`. No esperes a `/ship`.
     - **Python:** Crea siempre un entorno virtual local (`venv/`) en la raíz del proyecto antes de instalar dependencias (`python -m venv venv`). Añade `venv/` al `.gitignore` de la raíz. Usa el `venv` para todas las ejecuciones del proyecto. **Preparación de Empaquetado**: Debes generar en la raíz del proyecto un archivo `pyproject.toml` (cumpliendo PEP 621) o `setup.py` mínimo que defina el nombre, versión y dependencias de la aplicación para permitir la instalación con `pip install .` o `pip install -e .` (editable). Asegura que las dependencias sean seguras frente a typosquatting.
@@ -111,6 +113,7 @@ Para cualquier requerimiento, debes seguir este orden inspirado en "Agent Skills
       `<memory_update_proposal><section>Lecciones</section><entry>El bug X ocurre por Y...</entry></memory_update_proposal>`
       Si no hay ninguna lección o decisión nueva, imprime `<memory_update_proposal>none</memory_update_proposal>` pero justifica brevemente la razón: `<reason>Este ciclo solo fue [tipo de cambio, ej. refactor menor de estilos] sin decisiones arquitectónicas nuevas.</reason>`.
     - **Agent Readiness Verification:** Si es un proyecto web, comprueba que las cabeceras HTTP de red inyecten la cabecera `Link` apuntando al recurso `agent-plugin` (`rel="agent-plugin"`) y al catálogo de APIs de forma correcta.
+    - **Gate de publicación en marketplace:** si esta entrega va a publicarse (o actualizarse) en una tienda de apps (Microsoft Store, Mac App Store, catálogos como Uptodown, etc.), ejecuta el checklist de `dbv-specs-ops/docs/MARKETPLACE_PUBLISHING.md` antes de dar la tarea por cerrada — en particular la verificación de assets generados automáticamente.
     - **Scripts de ejecución multiplataforma:** Genera siempre los dos pares de scripts en la raíz del proyecto:
       - `start.cmd` / `stop.cmd` — para Windows.
       - `start.sh` / `stop.sh` — para macOS / Linux (con `chmod +x` aplicado).

@@ -14,12 +14,12 @@
 - **Languages:** [e.g. Python, JavaScript, HTML, CSS]
 - **Technologies / Stack:** [e.g. FastAPI, React, PostgreSQL]
 - **Agent Readiness (Web):** [Yes / No / Not Applicable]
-- **Framework Version:** 2.4.0
+- **Framework Version:** 2.5.0
 
 
 ---
 
-## Model Routing Guidelines (V2.4.0)
+## Model Routing Guidelines (V2.5.0)
 
 To optimize OpEx (Token Burn) and latency, refer to this routing strategy when executing project development tasks:
 

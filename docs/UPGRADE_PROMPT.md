@@ -40,9 +40,9 @@ Lee el fichero `project.config.md`:
 - Si **no existe** ese campo → pregunta al usuario:
   > *"¿Qué versión de dbv-specs-ops estás usando? Puedes encontrarla buscando en tu `CHANGELOG.md` el primer commit del proyecto, o mirando qué ficheros de plataforma tienes (`.windsurfrules` fue añadido en v1.1.0, `project.config.md` en v1.2.0)."*
 
-La versión más reciente del framework es: **2.4.0**
+La versión más reciente del framework es: **2.5.0**
  
-Si el usuario ya tiene la **v2.4.0**, informa de que el proyecto está al día. No hay nada que hacer.
+Si el usuario ya tiene la **v2.5.0**, informa de que el proyecto está al día. No hay nada que hacer.
 </version_detection_phase>
 
 ---
@@ -183,6 +183,18 @@ Usa esta tabla para calcular qué hay que actualizar según la versión actual d
 | MODIFICADO | `project.config.md` | Versión incrementada a `2.4.0`. |
 | MODIFICADO | `README.md` | Documentación y referencias al estándar Agent Plugins actualizados. |
 | MODIFICADO | `docs/UPGRADE_PROMPT.md` | Este archivo actualizado con la versión v2.4.0 y asistente de migración. |
+
+### v2.5.0 (cambios desde v2.4.0)
+| Acción | Fichero | Nota |
+|---|---|---|
+| NUEVO | `docs/NATIVE_DESKTOP_APPS.md` | Arquitectura y lecciones para apps de escritorio nativas (Tauri v2). |
+| NUEVO | `docs/NATIVE_APPS_RELEASE_CI.md` | Patrón de CI/CD multiplataforma con GitHub Actions. |
+| NUEVO | `docs/MARKETPLACE_PUBLISHING.md` | Guía y checklist de publicación en marketplaces (Microsoft Store, Uptodown, etc.). |
+| MODIFICADO | `docs/MASTER_PROMPT.md` | Opción de stack en Bootstrap §7, Phase Gates en `/plan` y `/ship`. |
+| MODIFICADO | `docs/README.md` | Tablas e índice de flujo de documentos. |
+| MODIFICADO | `project.config.md` | Versión incrementada a `2.5.0`. |
+| MODIFICADO | `README.md` | Documentación y versión actualizada a v2.5.0. |
+| MODIFICADO | `docs/UPGRADE_PROMPT.md` | Este archivo actualizado con la versión v2.5.0. |
 </upgrade_manifest_phase>
 
 ---
@@ -210,6 +222,9 @@ Para cada fichero marcado como NUEVO o MODIFICADO, descarga el contenido desde e
 | `docs/AGENTIC_ENGINEERING.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/AGENTIC_ENGINEERING.md` *(NUEVO)* |
 | `docs/DESIGN_ENRICHMENT.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/DESIGN_ENRICHMENT.md` *(NUEVO)* |
 | `docs/AGENT_PLUGINS.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/AGENT_PLUGINS.md` *(NUEVO)* |
+| `docs/NATIVE_DESKTOP_APPS.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/NATIVE_DESKTOP_APPS.md` *(NUEVO)* |
+| `docs/NATIVE_APPS_RELEASE_CI.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/NATIVE_APPS_RELEASE_CI.md` *(NUEVO)* |
+| `docs/MARKETPLACE_PUBLISHING.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/MARKETPLACE_PUBLISHING.md` *(NUEVO)* |
 
 > **Nota:** Si alguna descarga falla, muestra el link al usuario para que lo descargue manualmente.
 
@@ -291,11 +306,11 @@ Si el proyecto contiene implementaciones antiguas de habilidades (ej: carpetas `
 
 Cuando todos los cambios estén aplicados:
 
-1. Actualiza el campo `Framework Version` en `project.config.md` a `2.4.0`.
+1. Actualiza el campo `Framework Version` en `project.config.md` a `2.5.0`.
 2. Muestra al usuario un resumen claro:
  
 ```
-✅ Framework actualizado de vX.X.X → v2.4.0
+✅ Framework actualizado de vX.X.X → v2.5.0
 
 Ficheros actualizados:
   • [lista de ficheros modificados/añadidos]
@@ -312,6 +327,7 @@ Próximos pasos:
   [Si se creó AGENTIC_ENGINEERING.md] → Lee docs/AGENTIC_ENGINEERING.md para entender la metodología v2.0.0.
   [Si se creó DESIGN_ENRICHMENT.md] → Lee docs/DESIGN_ENRICHMENT.md para ver cómo auditar y pulir tu UI con Impeccable y SkillUI.
   [Si se creó AGENT_PLUGINS.md] → Lee docs/AGENT_PLUGINS.md para ver cómo estructurar tus herramientas y skills bajo el estándar Agent Plugins 1.0.0.
+  [Si se creó NATIVE_DESKTOP_APPS.md / NATIVE_APPS_RELEASE_CI.md / MARKETPLACE_PUBLISHING.md] → Lee estas guías si tu proyecto es una app de escritorio nativa compilada (Tauri/Electron).
   → Continúa con tu proyecto normalmente. El framework ya está al día.
 ```
 </closing_phase>
