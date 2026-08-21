@@ -1,44 +1,44 @@
-# Backlog - dbv-specs-ops v2.5.0 (Native Desktop Apps, CI & Marketplace Integration)
+# Backlog - dbv-specs-ops v2.5.1 (Tauri v2 Gotchas, NSIS Customization & CI Release Templates)
 
 ## Contexto del Proyecto (Context Snapshot)
-* **Objetivo**: Incorporar soporte nativo para aplicaciones de escritorio compiladas (Rust + Tauri v2), CI/CD multiplataforma en GitHub Actions y guías de publicación en marketplaces de apps (Microsoft Store, Uptodown, etc.).
-* **Estado actual**: ENTREGA COMPLETADA (v2.5.0 lista para commit y tags).
-* **Última decisión técnica**: Crear 3 nuevas guías operativas (`NATIVE_DESKTOP_APPS.md`, `NATIVE_APPS_RELEASE_CI.md`, `MARKETPLACE_PUBLISHING.md`) e integrar sus Phase Gates y opciones de stack en `MASTER_PROMPT.md`, `README.md`, `UPGRADE_PROMPT.md`, `project.config.md`, `CHANGELOG.md` y `memory.md`.
-* **Próximo paso**: Proponer los comandos de Git commit y Git tag v2.5.0 al desarrollador.
+* **Objetivo**: Incorporar gotchas reales de Tauri v2 (permisos, WebView2, WKWebView, threading), personalización de NSIS e identidad MSIX, y plantillas completas de GitHub Actions para release de desktop apps.
+* **Estado actual**: ENTREGA COMPLETADA (v2.5.1 lista para commit y tags).
+* **Última decisión técnica**: Endurecer `docs/NATIVE_DESKTOP_APPS.md`, `docs/MARKETPLACE_PUBLISHING.md` y `docs/NATIVE_APPS_RELEASE_CI.md` con contenido 100% genérico extraído de lecciones reales, e incrementar versión a v2.5.1 en `project.config.md`, `UPGRADE_PROMPT.md`, `CHANGELOG.md` y `memory.md`.
+* **Próximo paso**: Realizar commit de v2.5.1 y solicitar confirmación para push/tag.
 
 ## Checklist de Tareas
 
 - [x] **Fase 1: Especificaciones (`/spec`)**
-  - [x] Crear y obtener aprobación de `implementation_plan.md` (v2.5.0).
-  - [x] Validar que el alcance incluye los 3 nuevos documentos y las actualizaciones en `MASTER_PROMPT.md`, `README.md`, `UPGRADE_PROMPT.md`, `project.config.md`, `CHANGELOG.md` y `memory.md`.
+  - [x] Revisar diffs generados en la sesión previa.
+  - [x] Validar que todo el contenido es 100% genérico y sin rutas o identificadores acoplados.
 
 - [x] **Fase 3: Construcción (`/build`)**
-  - [x] **1. Nuevas Guías Operativas**:
-    - [x] Crear `docs/NATIVE_DESKTOP_APPS.md`.
-    - [x] Crear `docs/NATIVE_APPS_RELEASE_CI.md`.
-    - [x] Crear `docs/MARKETPLACE_PUBLISHING.md`.
-  - [x] **2. Instrucción Maestra**: Modificar `docs/MASTER_PROMPT.md` (opción de stack en Bootstrap §7, Phase Gate en `/plan` y Phase Gate en `/ship`).
-  - [x] **3. Índices de Documentación**: Modificar `docs/README.md` y `README.md`.
-  - [x] **4. Asistente de Migración**: Modificar `docs/UPGRADE_PROMPT.md` para v2.5.0.
-  - [x] **5. Configuración y Registro**:
-    - [x] Modificar `project.config.md` para establecer la versión en `2.5.0`.
-    - [x] Modificar `CHANGELOG.md` para registrar la versión `2.5.0`.
-    - [x] Modificar `memory.md` para registrar el ADR de v2.5.0.
+  - [x] **1. Actualización de Guías Operativas**:
+    - [x] `docs/NATIVE_DESKTOP_APPS.md`: 9 gotchas de Tauri v2 y matiz `.deb` vs `.AppImage`.
+    - [x] `docs/MARKETPLACE_PUBLISHING.md`: personalización NSIS e identidad MSIX.
+    - [x] `docs/NATIVE_APPS_RELEASE_CI.md`: plantillas YAML completas (`release-windows.yml`, `release-linux.yml`, `release-macos.yml`).
+  - [x] **2. Asistente de Migración y Versiones**:
+    - [x] Modificar `docs/UPGRADE_PROMPT.md` para v2.5.1.
+    - [x] Modificar `project.config.md` para establecer la versión en `2.5.1`.
+    - [x] Modificar `CHANGELOG.md` para registrar la versión `2.5.1`.
+    - [x] Modificar `memory.md` para registrar el ADR de v2.5.1.
 
 - [x] **Fase 4: Pruebas y Verificación (`/test`)**
-  - [x] Validar sintaxis Markdown y consistencia de enlaces relativos en todos los documentos.
+  - [x] Validar consistencia de versiones en todos los documentos.
+  - [x] Verificar que no existan nombres o rutas específicas filtradas.
 
 - [x] **Fase 5: Simplificar (`/code-simplify`)**
-  - [x] Auditoría de estilo, enlaces y consistencia de textos.
+  - [x] Auditoría de estilo y coherencia con la convención SemVer (patch 2.5.1).
 
 - [x] **Fase 6: Entrega (`/ship`)**
-  - [x] Crear `walkthrough.md` de los cambios y actualizar el Context Snapshot.
+  - [x] Actualizar `memory.md` y `task.md`.
+  - [x] Ejecutar Git commit de la versión v2.5.1.
 
 ---
 
 ## 🔄 Context Snapshot / Snapshot de Contexto
 
-> **Last update / Última actualización:** 2026-08-13
-> **Exact point / Punto exacto:** Todo finalizado. v2.5.0 lista para commit en Git.
-> **Pending / Pendiente:** Ninguna.
-> **Next step / Próximo paso:** Ejecutar commit y tag en Git.
+> **Last update / Última actualización:** 2026-08-21
+> **Exact point / Punto exacto:** Cambios revisados y consistentes. v2.5.1 lista para commit.
+> **Pending / Pendiente:** Confirmación del usuario antes de `git push`.
+> **Next step / Próximo paso:** Realizar commit local y consultar al usuario.

@@ -78,7 +78,69 @@ Cuando el mismo producto se distribuye simultáneamente self-hosted y en una tie
   riesgo de que los usuarios existentes vean una instalación **nueva y paralela** en vez de una actualización
   in-place — es un riesgo real y ya observado, no hipotético.
 
-## 6. Checklist de envío (genérico, adaptar por tienda)
+## 6. NSIS (instalador Windows) — trampas reales de personalización
+
+Si el bundler genera el instalador Windows vía NSIS (caso de Tauri) y hace falta personalizarlo más allá de
+lo que expone la configuración declarativa:
+
+- **La mayoría de config declarativa sí es suficiente sin forkear nada:** `nsis.sidebarImage`/`headerImage`
+  (branding), `nsis.installerHooks` (`NSIS_HOOK_POSTINSTALL`/`NSIS_HOOK_PREINSTALL` para lógica propia como
+  un `MessageBox` de confirmación) y `bundle.publisher` (nombre explícito — sin él, "Agregar o quitar
+  programas" muestra un valor derivado del identificador técnico del paquete, no el nombre real del
+  desarrollador) son puntos de extensión oficiales y estables entre versiones del bundler. Empezar siempre
+  por aquí.
+- **Personalizar el texto de las páginas de Bienvenida/Fin, o añadir una página de componentes con
+  checkboxes propios, sí exige forkear la plantilla completa** (`bundle.windows.nsis.template`, ~1000
+  líneas) — no son alcanzables por configuración. Si se necesita, descargar la plantilla oficial de la
+  **misma versión exacta** del bundler que usa el proyecto (fijada en el lockfile), no la última de GitHub —
+  una plantilla de otra versión puede haber cambiado de estructura interna. Documentar el diff aplicado en
+  algún sitio versionado: cualquier subida futura de versión del bundler exige re-diffear la plantilla contra
+  la nueva oficial para no perder fixes upstream, y eso solo es viable si el diff propio está documentado.
+- **`XPStyle on` no está activado por defecto ni siquiera con MUI2** (la UI moderna de NSIS) — sin ese flag,
+  los controles se dibujan con el estilo clásico sin temas, no con el tema visual activo del sistema
+  operativo del usuario. Cambio de una línea, alto impacto visual.
+- **`fileAssociations` se registra de forma automática y silenciosa** al instalar — no hay checkbox de
+  opt-in/opt-out nativo, es una limitación real del bundler, no una opción de configuración por descubrir. Si
+  el producto necesita que el usuario pueda elegir (p. ej. "asociar como app por defecto" como paso
+  opcional), hay que forkear la plantilla (punto anterior) y añadir secciones NSIS propias marcadas por
+  defecto, con el desinstalador deshaciendo **solo** lo que un marcador propio (escrito durante la
+  instalación) dice que se registró — nunca asumir que "siempre se registró todo" al desinstalar, o se
+  puede restaurar una asociación que el usuario nunca activó.
+- **El instalador generado por el bundler puede no llamar a `SHChangeNotify` tras escribir la asociación de
+  archivo en el registro** — Explorer no refresca sus iconos/asociaciones hasta el siguiente inicio de sesión
+  sin esa notificación, así que el instalador puede "decir" que asoció el tipo de archivo sin que el
+  doble clic funcione de inmediato. Verificar explícitamente esto probando el doble clic justo después de
+  instalar en una máquina limpia, no solo revisando las claves de registro escritas.
+- **Un ProgId (identificador de asociación de tipo de archivo) que cambia entre versiones queda huérfano en
+  el registro** si el usuario instala la versión nueva sin desinstalar la anterior — resultado observado:
+  dos entradas en el menú "Abrir con", una con el icono correcto y otra con un icono/nombre obsoleto. Si se
+  cambia el ProgId alguna vez, documentar para el usuario que debe desinstalar la versión previa antes de
+  instalar la nueva, o aceptar la entrada duplicada como deuda conocida.
+- **Regenerar un icono (`.ico`) no garantiza que el binario recompilado lo incluya** si el sistema de build
+  cachea artefactos agresivamente (p. ej. Cargo) — un rebuild puede detectar "nada que compilar" en el
+  crate y dejar el icono anterior embebido en el ejecutable, sin ningún aviso. Tras cambiar solo un recurso
+  incrustado por el paso de build (icono, no código), forzar una limpieza del crate afectado antes de
+  reconstruir en vez de confiar en el build incremental.
+
+## 7. MSIX / identidad de paquete para tiendas — coincidencia exacta con la consola
+
+Si el paquete final para una tienda (p. ej. MSIX para Microsoft Store) declara un nombre de binario o de
+paquete distinto al que produce el compilador:
+
+- El nombre de archivo del ejecutable esperado **dentro** del paquete se suele derivar del nombre visible
+  configurado (`displayName` o similar) — si ese campo no coincide exactamente con el binario real que
+  produce el build, el empaquetado falla con un error tipo "Executable not found", no con un error obvio de
+  "nombre no coincide". Si se renombra el producto de cara al usuario, renombrar también el binario
+  compilado en el mismo cambio, no solo la configuración de branding.
+- El campo de nombre visible del manifiesto del paquete (`DisplayName` o equivalente) debe coincidir con un
+  nombre **reservado explícitamente** en la consola de la tienda — un nombre técnico usado solo internamente
+  (el identificador del repositorio/proyecto, por ejemplo) puede no estar reservado aunque el nombre
+  comercial sí lo esté. La mayoría de consolas permiten reservar **nombres adicionales** bajo la misma
+  identidad de producto exactamente para este caso (nombre técnico del manifiesto ≠ nombre comercial) — más
+  simple y de menor riesgo que forzar el manifiesto a usar el nombre comercial completo si eso rompe otro
+  canal de distribución ya publicado con el nombre técnico.
+
+## 8. Checklist de envío (genérico, adaptar por tienda)
 
 1. Reservar/verificar el nombre e identidad del producto en la consola de la tienda.
 2. Copiar la identidad real (publisher ID, identificador de paquete) a la configuración de empaquetado del

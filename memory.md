@@ -8,8 +8,8 @@
 > *Instrucción para la IA: Consulta este archivo al inicio de cada sesión para recuperar el hilo técnico. Actualiza las secciones correspondientes cuando el workflow lo indique (triggers en `/plan`, `/build`, `/test` y gate en `/ship`).*
 
 ## 🎯 Contexto Activo
-- **Estado actual del desarrollo:** Release de la versión v2.5.0 finalizado con éxito. Soporte nativo para apps de escritorio compiladas (Rust + Tauri v2), CI/CD multiplataforma y publicación en marketplaces integrado.
-- **Foco inmediato:** Distribución y actualización a v2.5.0.
+- **Estado actual del desarrollo:** Release v2.5.1 preparado. Endurecimiento de documentación de Desktop Apps (Tauri v2 gotchas, personalización NSIS, MSIX y plantillas completas de GitHub Actions).
+- **Foco inmediato:** Distribución y sincronización en proyectos downstream (ej. `dbv-tauri-starter`).
 
 ## 🏗️ Log de Decisiones Técnicas (ADR Ligero)
 *Registro de por qué se tomaron ciertas rutas (ej. cambios en librerías, arquitectura o patrones).*
@@ -18,6 +18,7 @@
 - **2026-07-29 - Integración de Enriquecimiento de Diseño (v2.3.0):** Adición opcional de Impeccable y SkillUI. Para mantener la subcarpeta como única fuente de verdad sin romper compatibilidad con herramientas de raíz, `dbv-specs-ops/docs/DESIGN.md` sigue siendo la fuente de verdad, y se copia a la raíz como un archivo derivado. Se automatizó la sincronización del archivo de la raíz en la fase `/ship` para evitar desajustes o ediciones inconsistentes.
 - **2026-08-07 - Adopción de Agent Plugins 1.0.0 (v2.4.0):** Integración completa del estándar universal de empaquetado para herramientas MCP y Agent Skills. Se unificaron los directorios de autodescubrimiento web bajo `.well-known/agent-plugin/` y se implementó un asistente de migración en `UPGRADE_PROMPT.md` para trasladar automáticamente proyectos antiguos con configuraciones ad-hoc a esta estructura portable, traduciendo rutas locales absolutas a los placeholders `${PLUGIN_ROOT}` y `${PLUGIN_DATA}`.
 - **2026-08-13 - Integración de Apps de Escritorio Nativas, CI Multiplataforma y Marketplaces (v2.5.0):** Incorporación de guías operativas (`NATIVE_DESKTOP_APPS.md`, `NATIVE_APPS_RELEASE_CI.md`, `MARKETPLACE_PUBLISHING.md`) basadas en la experiencia real con Tauri v2, GitHub Actions y Microsoft Store / Uptodown. Se añadieron opciones de stack de escritorio nativo en el Bootstrap §7 de `MASTER_PROMPT.md` y dos Phase Gates (verificación de CI multiplataforma en `/plan` y checklist de publicación pre-envío en `/ship`) manteniendo el framework 100% modular y no invasivo para proyectos web.
+- **2026-08-21 - Endurecimiento de Desktop Apps y Plantillas de CI Completas (v2.5.1):** Generalización de lecciones aprendidas reales en producción: 9 gotchas concretos de Tauri v2 (permisos `allow-destroy`/`allow-print`, `confirm` asíncrono, caché WebView2, glob en `capabilities`, reentrancia `run_on_main_thread`, `RunEvent::Opened` en macOS), guía de personalización de instaladores NSIS vs. forkeo de plantillas, requisitos de identidad MSIX, y adición de 3 plantillas YAML completas y operativas para GitHub Actions (`release-{windows,linux,macos}.yml`).
 
 ## ⚠️ Lecciones Aprendidas / Errores Evitados
 *Notas sobre bugs específicos, configuraciones que fallaron o refactors intentados para no repetirlos.*

@@ -40,9 +40,9 @@ Lee el fichero `project.config.md`:
 - Si **no existe** ese campo → pregunta al usuario:
   > *"¿Qué versión de dbv-specs-ops estás usando? Puedes encontrarla buscando en tu `CHANGELOG.md` el primer commit del proyecto, o mirando qué ficheros de plataforma tienes (`.windsurfrules` fue añadido en v1.1.0, `project.config.md` en v1.2.0)."*
 
-La versión más reciente del framework es: **2.5.0**
+La versión más reciente del framework es: **2.5.1**
  
-Si el usuario ya tiene la **v2.5.0**, informa de que el proyecto está al día. No hay nada que hacer.
+Si el usuario ya tiene la **v2.5.1**, informa de que el proyecto está al día. No hay nada que hacer.
 </version_detection_phase>
 
 ---
@@ -195,6 +195,16 @@ Usa esta tabla para calcular qué hay que actualizar según la versión actual d
 | MODIFICADO | `project.config.md` | Versión incrementada a `2.5.0`. |
 | MODIFICADO | `README.md` | Documentación y versión actualizada a v2.5.0. |
 | MODIFICADO | `docs/UPGRADE_PROMPT.md` | Este archivo actualizado con la versión v2.5.0. |
+
+### v2.5.1 (cambios desde v2.5.0)
+| Acción | Fichero | Nota |
+|---|---|---|
+| MODIFICADO | `docs/NATIVE_DESKTOP_APPS.md` | Nueva §6 "Trampas concretas de Tauri v2 — permisos, WebView y threading": 8 gotchas reales de permisos (`core:window:allow-destroy`, glob de `capabilities.windows`), `window.confirm()`/`alert()` asíncronos y rotos en `tauri-plugin-dialog` 2.7.2, caché de WebView2 entre relanzamientos, reentrancia de `run_on_main_thread()`, orden no garantizado entre `invoke()` y eventos de watcher, `label` obligatorio por ventana y `RunEvent::Opened` para asociación de ficheros en macOS; ítem 9 sobre `core:webview:allow-print` en WKWebView; §5 ampliada con `.deb` vs `.AppImage`. |
+| MODIFICADO | `docs/MARKETPLACE_PUBLISHING.md` | Nueva §6 "NSIS (instalador Windows) — trampas reales de personalización" y §7 "MSIX / identidad de paquete para tiendas". |
+| MODIFICADO | `docs/NATIVE_APPS_RELEASE_CI.md` | Nueva §9 con plantillas completas y copiables de `release-{windows,linux,macos}.yml`. |
+| MODIFICADO | `project.config.md` | Versión incrementada a `2.5.1`. |
+| MODIFICADO | `CHANGELOG.md` | Entrada v2.5.1 añadida. |
+| MODIFICADO | `docs/UPGRADE_PROMPT.md` | Este archivo actualizado con la versión v2.5.1. |
 </upgrade_manifest_phase>
 
 ---
@@ -306,11 +316,11 @@ Si el proyecto contiene implementaciones antiguas de habilidades (ej: carpetas `
 
 Cuando todos los cambios estén aplicados:
 
-1. Actualiza el campo `Framework Version` en `project.config.md` a `2.5.0`.
+1. Actualiza el campo `Framework Version` en `project.config.md` a `2.5.1`.
 2. Muestra al usuario un resumen claro:
  
 ```
-✅ Framework actualizado de vX.X.X → v2.5.0
+✅ Framework actualizado de vX.X.X → v2.5.1
 
 Ficheros actualizados:
   • [lista de ficheros modificados/añadidos]

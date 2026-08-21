@@ -113,5 +113,101 @@ Antes de dar por buena esta separación, verificar (no asumir) que el código Ru
 ninguna dependencia real de plataforma — buscar `cfg(windows)`/registro de Windows/rutas hardcodeadas antes
 de prometer soporte multiplataforma.
 
+**Asociación de archivos por formato de paquete Linux — no todos los formatos se comportan igual:**
+
+- **`.deb`**: la asociación de tipo de archivo se registra de forma declarativa vía `bundle.fileAssociations`
+  — el bundler genera la entrada `.desktop` correspondiente al instalar el paquete. Esto típicamente **no se
+  puede verificar de extremo a extremo sin una máquina Linux real** (doble clic desde el gestor de archivos,
+  integración distinta entre entornos de escritorio GNOME/KDE) — si el proyecto no tiene esa máquina
+  disponible, documentarlo como riesgo aceptado ("el workflow de CI compila y empaqueta sin error" es una
+  verificación distinta de "la asociación funciona en un escritorio real"), no darlo por validado solo porque
+  el build pasó.
+- **`.AppImage`**: es portátil por diseño — **no se integra con el sistema ni asocia tipos de archivo
+  automáticamente**, con o sin `fileAssociations` configurado. No es un bug del proyecto ni algo que el
+  bundler pueda resolver: es una limitación del propio formato, que requiere una herramienta externa
+  (`AppImageLauncher` o similar) instalada por el usuario para integrarse con el escritorio. Documentar esto
+  explícitamente de cara al usuario final (README/instrucciones de instalación) en vez de tratarlo como una
+  asociación de archivo rota.
+
+## 6. Trampas concretas de Tauri v2 — permisos, WebView y threading
+
+Los 8 principios de la sección anterior son necesarios pero no suficientes: estas son trampas *concretas*
+de la API de Tauri v2 que cuestan horas reales de depuración la primera vez que aparecen, porque fallan en
+silencio o con un error que no apunta a la causa real.
+
+1. **`onCloseRequested` exige el permiso `core:window:allow-destroy`, aunque nunca llames a `.destroy()` a
+   mano.** Si el handler no hace `event.preventDefault()`, la propia librería `@tauri-apps/api/window`
+   invoca `this.destroy()` internamente para completar el cierre. Sin ese permiso en `capabilities/*.json`
+   (no incluido en `core:default`, que solo trae lecturas de estado), la ventana se queda **permanentemente
+   sin poder cerrarse** por ningún medio (ni la X, ni Alt+F4) — no un error de consola, un bug de UX severo
+   y silencioso. Concede el permiso *antes* de escribir el handler, no después de que la ventana se quede
+   bloqueada.
+
+2. **`window.confirm()`/`window.alert()` no son síncronos en un WebView de Tauri con `tauri-plugin-dialog`
+   registrado — y en algunas versiones el de `confirm` está directamente roto.** El script de inicialización
+   del plugin redefine esos globales para invocar comandos IPC asíncronos (`plugin:dialog|confirm`/
+   `|message`); `window.confirm()` devuelve una **promesa**, no un booleano — tratarlo como síncrono no
+   lanza ningún error, simplemente evalúa la promesa como verdadera siempre. Además, en `tauri-plugin-dialog`
+   2.7.2 concretamente, el comando `confirm` no está registrado en el lado Rust (se fusionó con `message` en
+   algún punto y el script JS del plugin nunca se actualizó) — cualquier permiso que concedas es irrelevante,
+   el comando no existe. Si necesitas confirmación bloqueante de verdad, construye un modal propio en
+   HTML/CSS — no dependas de los diálogos nativos del navegador reescritos por un plugin, y verifica el
+   comportamiento real leyendo el código fuente del crate instalado
+   (`~/.cargo/registry/src/.../<crate>-<version>/src/lib.rs`, buscar `generate_handler!`), no solo la
+   documentación.
+
+3. **WebView2 (Windows) cachea agresivamente entre relanzamientos del *proceso*, no solo en memoria.** Si
+   editas frontend y `tauri dev`/el `.exe` de debug sigue mostrando la versión anterior tras recompilar,
+   sospecha primero de esto antes que de un bug de código: cierra la app y borra únicamente
+   `EBWebView\Default\Cache` y `EBWebView\Default\Code Cache` bajo el directorio de datos de la app
+   (`%LOCALAPPDATA%\<identifier>\EBWebView\`) — nunca la carpeta `EBWebView` completa, ahí vive también
+   `localStorage` con las preferencias reales del usuario si compartes `identifier` con la build de
+   producción instalada.
+
+4. **`capabilities/*.json` → `"windows"` filtra por *label* con un patrón glob, no da permisos a toda la
+   app.** Cualquier ventana creada dinámicamente en tiempo de ejecución (`WebviewWindowBuilder`, p. ej. con
+   labels `doc-0`, `doc-1`...) con una etiqueta que no case con los patrones declarados se queda **sin
+   ningún permiso** — `event:listen` incluido — y falla en silencio o con `Command ... not allowed by ACL`
+   la primera vez que intenta usar cualquier capability. Si generas labels dinámicos con un prefijo, añade
+   el glob correspondiente (`"windows": ["main", "doc-*"]`) desde el principio, no tras el primer error de
+   ACL.
+
+5. **`run_on_main_thread()` llamado ya desde el hilo principal se ejecuta de forma reentrante e inline —
+   puede colgar la creación de una ventana nueva.** Si un `#[tauri::command]` síncrono ya se despacha sobre
+   el hilo principal (depende de la versión/configuración de Tauri — verificarlo con
+   `std::thread::current().id()`, no asumirlo), llamar a `run_on_main_thread()` desde dentro de ese comando
+   no produce un salto de hilo real: el cierre se ejecuta anidado dentro del propio despacho del mensaje IPC
+   que lo originó. Crear una `WebviewWindowBuilder` ahí cuelga `.build()` indefinidamente (su inicialización
+   asíncrona necesita que el bucle de mensajes siga bombeando, y no puede mientras ese mismo hilo procesa el
+   mensaje exterior). Si necesitas de verdad un hilo distinto desde un comando (a diferencia de un callback
+   de plugin, que sí llega en una iteración nueva del bucle), despacha explícitamente desde
+   `tauri::async_runtime::spawn(async move { ... })` antes de llamar a `run_on_main_thread()`.
+
+6. **Dos caminos async independientes desde Rust hacia el mismo frontend no garantizan orden de llegada.**
+   Si un comando `invoke()` y un evento disparado por un watcher/observador en segundo plano (file watcher,
+   etc.) pueden ambos notificar al frontend sobre el mismo cambio, el evento del observador puede llegar
+   *antes* de que se resuelva la promesa del `invoke` que lo causó. Cualquier estado que dependa de "ya
+   terminé esta operación" (p. ej. una ventana de supresión para no reaccionar a tu propio cambio) debe
+   fijarse de forma optimista en el punto donde se *inicia* la operación, no en el callback de éxito —
+   revertirlo en el `.catch()` si la operación falla de verdad.
+
+7. **Cada entrada de `"windows"` en `tauri.conf.json` exige `"label"` explícito.** Sin él, la aplicación se
+   cierra inmediatamente al arrancar, sin mensaje de error obvio que apunte a la causa.
+
+8. **En macOS, "Abrir con" desde Finder no pasa por `argv` — solo por `RunEvent::Opened`.** Leer
+   `std::env::args()` para saber qué archivo abrir funciona en Windows (el Explorador lo pasa como argumento
+   literal) pero no existe ese mecanismo en macOS: Finder entrega la apertura como un Apple Event
+   `kAEOpenDocuments`, expuesto en Tauri v2 exclusivamente vía `tauri::RunEvent::Opened { urls }` (requiere
+   `.build(...)?.run(closure)` en vez de `.run(...)` directo para poder interceptarlo). El evento llega
+   *antes* de que exista cualquier ventana, así que hay que guardar la ruta en un estado gestionado y
+   recogerla al crear la ventana principal, no asumir que ya habrá una ventana lista para recibirla.
+
+9. **Un mismo permiso web puede exigirse en un motor WebView y no en otro.** `window.print()` funciona sin
+   permiso adicional en WebView2 (Windows), pero WKWebView (macOS) exige explícitamente
+   `core:webview:allow-print` en `capabilities/*.json` — sin él, `Cmd+P`/el botón de imprimir falla en
+   silencio solo en Mac. No asumas que un permiso probado en una plataforma cubre las otras dos: revisa la
+   tabla de diferencias de motores (WebView2/WebKitGTK/WKWebView) contra cada API nueva que uses, no solo al
+   final.
+
 Para el patrón de CI que compila cada plataforma y las particularidades de cada tienda de apps, ver
 [`NATIVE_APPS_RELEASE_CI.md`](./NATIVE_APPS_RELEASE_CI.md) y [`MARKETPLACE_PUBLISHING.md`](./MARKETPLACE_PUBLISHING.md).

@@ -129,3 +129,229 @@ derecho → Abrir, o `xattr -cr` sobre el `.app`).
 
 Para el checklist de qué exige cada tienda de apps en materia de firma/certificación, ver
 [`MARKETPLACE_PUBLISHING.md`](./MARKETPLACE_PUBLISHING.md).
+
+## 9. Plantillas completas de workflow (Windows, Linux, macOS)
+
+Los fragmentos de las secciones anteriores son principios; estas son las 3 plantillas completas y copiables
+que los aplican todos a la vez, validadas contra ejecuciones reales de GitHub Actions. Build sin firmar en
+las 3 plataformas (§8), sin artefactos de actualizador (§6) — el punto de partida más simple que funciona de
+extremo a extremo el primer día, antes de añadir firma/notarización/auto-actualización más adelante si hace
+falta. Los 3 comparten el mismo patrón: leer la versión desde `src-tauri/tauri.conf.json` (§3), input
+`draft` para poder relanzar manualmente sobre una Release ya publicada (§2), y `permissions: contents:
+write` acotado al propio job (§4).
+
+### `release-windows.yml`
+
+```yaml
+name: Release Windows
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      draft:
+        description: >
+          "true" (normal): crea/usa un borrador para esa versión. "false": la Release de esa
+          versión ya está PUBLICADA y solo quieres añadirle artefactos de esta plataforma.
+        required: false
+        default: "true"
+        type: choice
+        options:
+          - "true"
+          - "false"
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Leer versión de tauri.conf.json
+        id: version
+        run: echo "tag=v$(node -p "require('./src-tauri/tauri.conf.json').version")" >> "$env:GITHUB_OUTPUT"
+
+      - name: Determinar si la Release debe crearse/tratarse como borrador
+        id: draft
+        run: |
+          if ("${{ github.event_name }}" -eq "workflow_dispatch") {
+            "value=${{ github.event.inputs.draft }}" >> $env:GITHUB_OUTPUT
+          } else {
+            "value=true" >> $env:GITHUB_OUTPUT
+          }
+
+      - name: Instalar Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Instalar Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+
+      - name: Instalar dependencias de Node
+        run: npm install
+
+      - name: Build y Release (Windows)
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ steps.version.outputs.tag }}
+          releaseName: ${{ steps.version.outputs.tag }}
+          releaseDraft: ${{ steps.draft.outputs.value }}
+          prerelease: false
+          includeUpdaterJson: false
+```
+
+### `release-linux.yml`
+
+```yaml
+name: Release Linux
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      draft:
+        description: >
+          "true" (normal): crea/usa un borrador para esa versión. "false": la Release de esa
+          versión ya está PUBLICADA y solo quieres añadirle artefactos de esta plataforma.
+        required: false
+        default: "true"
+        type: choice
+        options:
+          - "true"
+          - "false"
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Leer versión de tauri.conf.json
+        id: version
+        run: echo "tag=v$(node -p "require('./src-tauri/tauri.conf.json').version")" >> "$GITHUB_OUTPUT"
+
+      - name: Determinar si la Release debe crearse/tratarse como borrador
+        id: draft
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "value=${{ github.event.inputs.draft }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "value=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Dependencias de sistema para compilar Tauri v2 en un runner Ubuntu — ver también §5 de
+      # NATIVE_DESKTOP_APPS.md sobre la diferencia de comportamiento entre .deb y .AppImage.
+      - name: Instalar dependencias del sistema (WebKitGTK)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf xdg-utils
+
+      - name: Instalar Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Instalar Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+
+      - name: Instalar dependencias de Node
+        run: npm install
+
+      - name: Build y Release (Linux)
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ steps.version.outputs.tag }}
+          releaseName: ${{ steps.version.outputs.tag }}
+          releaseDraft: ${{ steps.draft.outputs.value }}
+          prerelease: false
+          includeUpdaterJson: false
+```
+
+### `release-macos.yml`
+
+```yaml
+name: Release macOS
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      draft:
+        description: >
+          "true" (normal): crea/usa un borrador para esa versión. "false": la Release de esa
+          versión ya está PUBLICADA y solo quieres añadirle artefactos de esta plataforma.
+        required: false
+        default: "true"
+        type: choice
+        options:
+          - "true"
+          - "false"
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Leer versión de tauri.conf.json
+        id: version
+        run: echo "tag=v$(node -p "require('./src-tauri/tauri.conf.json').version")" >> "$GITHUB_OUTPUT"
+
+      - name: Determinar si la Release debe crearse/tratarse como borrador
+        id: draft
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "value=${{ github.event.inputs.draft }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "value=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # macos-latest es Apple Silicon — sin el target universal, un Mac Intel no podría ejecutar
+      # el binario (ver §5, gotcha real de runners).
+      - name: Instalar Rust (targets Intel + Apple Silicon)
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: "aarch64-apple-darwin,x86_64-apple-darwin"
+
+      - name: Instalar Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+
+      - name: Instalar dependencias de Node
+        run: npm install
+
+      - name: Build y Release (macOS)
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          args: --target universal-apple-darwin
+          tagName: ${{ steps.version.outputs.tag }}
+          releaseName: ${{ steps.version.outputs.tag }}
+          releaseDraft: ${{ steps.draft.outputs.value }}
+          prerelease: false
+          includeUpdaterJson: false
+```
+
+**Cuándo dejan de bastar estas plantillas:** en cuanto se añada firma de código en cualquier plataforma
+(certificado Authenticode en Windows, notarización de Apple en macOS) o auto-actualización con
+`tauri-plugin-updater` — en ambos casos hay que inyectar secretos de firma vía `env`/`secrets` en el paso de
+`tauri-action` y quitar `includeUpdaterJson: false` (más `createUpdaterArtifacts: false` del `tauri.<platform>.conf.json`
+correspondiente, §6) solo en las plataformas que de verdad tengan ya la clave configurada.
