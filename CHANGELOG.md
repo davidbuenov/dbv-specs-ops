@@ -17,6 +17,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - **Estrategia de Migración de Apps Web Existentes a Escritorio Nativo**:
   - Nueva guía [docs/WEB_TO_DESKTOP_MIGRATION.md](./docs/WEB_TO_DESKTOP_MIGRATION.md), que cubre las decisiones **previas** a `NATIVE_DESKTOP_APPS.md` cuando el código web ya existe y ya tiene usuarios: clasificación en 4 arquetipos (estática pura / SPA con bundler / servidor local ligero / servidor local pesado) como paso 0 que determina coste y estrategia; dirección de la adopción (la plantilla viaja hacia el repo existente, nunca al revés, para no perder historial, issues y URLs); un repo por app frente a monorepo; modo dual escritorio+web como opción por defecto con el patrón de **capa de adaptación única** (`api.js` con detección `window.__TAURI__` y enrutado a `invoke()` o `fetch`) como el único punto donde el coste del modo dual se concentra; regla de decisión **Rust vs sidecar aplicada por función, no por aplicación**; montaje del sidecar (`bundle.externalBin`, cierre explícito del proceso hijo, puerto no cableado, congelado en el runner de CI de cada plataforma); el coste oculto del sidecar de ML sobre el tamaño del instalador con 3 estrategias de provisionamiento; auditoría de licencias copyleft como decisión arquitectónica previa a invertir; orden de migración por **riesgo de tubería** en portfolios de varias apps; y checklist de migración de 12 puntos.
   - `docs/README.md`: índice y diagrama de flujo de documentos actualizados con el nuevo documento, situado **antes** de `NATIVE_DESKTOP_APPS.md` en el flujo.
+- **`docs/NATIVE_DESKTOP_APPS.md` §3 — la IIFE es obligatoria en TODOS los ficheros JS propios**, no solo
+  el principal, incluidos los "ficheros de utilidades que solo definen funciones": los scripts clásicos
+  comparten un único ámbito global, así que dos ficheros que declaren el mismo identificador en su nivel
+  superior hacen morir al segundo entero con un `SyntaxError` de **parseo** — y al ser de parseo, ninguna
+  línea de ese fichero llega a ejecutarse, ni sus listeners ni sus handlers de error. El síntoma (página
+  que renderiza perfecta con la interfaz completamente muerta y sin ningún error visible) cuesta horas si
+  no se sabe buscar. Añadida además la técnica de depuración: registrar `window.onerror` /
+  `unhandledrejection` en un `<script>` inline sin `defer` en el `<head>`, antes de cualquier script
+  externo — un capturador definido dentro del fichero que falla nunca llega a registrarse.
 - **Integración de Phase Gates en el Master Prompt**:
   - `docs/MASTER_PROMPT.md`: Bootstrap §7 obliga a resolver las 4 decisiones previas de `WEB_TO_DESKTOP_MIGRATION.md` antes de proponer stack cuando ya existe código web funcionando.
   - `docs/MASTER_PROMPT.md`: Nuevo **Gate de migración web → escritorio** en `/plan` (Paso 3), que exige registrar por escrito arquetipo, repositorio de destino, modo dual vs sustitución y decisión Rust/sidecar por función — más estrategia de provisionamiento y auditoría de licencias si hay sidecar, **antes** de escribir código.

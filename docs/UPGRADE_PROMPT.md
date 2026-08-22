@@ -210,6 +210,7 @@ Usa esta tabla para calcular qué hay que actualizar según la versión actual d
 | Acción | Fichero | Nota |
 |---|---|---|
 | NUEVO | `docs/WEB_TO_DESKTOP_MIGRATION.md` | Decisiones estratégicas previas a migrar una app web **existente** a escritorio nativo: 4 arquetipos de app como paso 0, dirección de la adopción (la plantilla viaja al repo existente, no al revés), modo dual con capa de adaptación única (`api.js`), regla Rust vs sidecar por función, coste oculto del sidecar sobre el tamaño del instalador, auditoría de licencias copyleft y orden de migración por riesgo de tubería. |
+| MODIFICADO | `docs/NATIVE_DESKTOP_APPS.md` | §3: la IIFE es obligatoria en TODOS los ficheros JS propios (colisión de identificadores en el ámbito global → `SyntaxError` de parseo que mata el fichero entero en silencio), y técnica de depuración con capturadores `window.onerror`/`unhandledrejection` en `<script>` inline en el `<head>`. |
 | MODIFICADO | `docs/MASTER_PROMPT.md` | Bootstrap §7: obliga a resolver las 4 decisiones previas si ya existe código web. Nuevo "Gate de migración web → escritorio" en `/plan` (Paso 3). |
 | MODIFICADO | `docs/README.md` | Índice y diagrama de flujo con el nuevo documento, situado antes de `NATIVE_DESKTOP_APPS.md`. |
 | MODIFICADO | `README.md` | Tablas de documentos (EN y ES) actualizadas. |

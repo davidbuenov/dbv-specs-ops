@@ -44,6 +44,20 @@ Si el frontend no necesita un framework reactivo complejo, evitar Vite/Webpack p
 - Vendorizar cada librería de terceros como script UMD/IIFE en `src/vendor/` (descargado una vez, sin CDN).
 - Encapsular el código propio en una IIFE clásica (`app.js`), **no** `<script type="module">` — los ES
   Modules dan fallos silenciosos en algunos WebViews embebidos bajo `tauri://` / protocolo custom.
+- **La IIFE es obligatoria en TODOS los ficheros JS propios, no solo el principal — incluso "ficheros de
+  utilidades que solo definen funciones".** Los scripts clásicos comparten un único ámbito global: si dos
+  ficheros declaran el mismo identificador en su top-level (p. ej. un `i18n.js` que define `function t()`
+  y un `app.js` que hace `const { t } = window.miI18n`), el segundo fichero muere entero con
+  `SyntaxError: Identifier already declared` — y al ser un error de *parseo*, ninguna línea de ese fichero
+  llega a ejecutarse: ni listeners, ni handlers de error definidos dentro de él. El síntoma resultante
+  (página que renderiza perfectamente pero con la interfaz completamente muerta, sin ningún error visible)
+  cuesta horas si no se sabe buscar. Cada fichero se envuelve en su propia IIFE y expone su API por una
+  única asignación a `window.<nombre>`.
+- **Para depurar este tipo de muerte silenciosa de un script:** los capturadores
+  `window.onerror`/`unhandledrejection` deben registrarse en un `<script>` inline (sin `defer`) en el
+  `<head>` del HTML, antes de cualquier script externo — un capturador definido dentro del fichero que
+  falla nunca llega a registrarse. En un WebView de escritorio sin DevTools abiertos, pintar el error en
+  un banner dentro de la propia página es el equivalente práctico de la consola.
 - Activar `"withGlobalTauri": true` en `tauri.conf.json` para que `window.__TAURI__` esté disponible sin
   necesidad de `import` — imprescindible para que este patrón sin bundler funcione con los plugins de Tauri.
 
