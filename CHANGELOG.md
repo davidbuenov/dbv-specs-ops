@@ -11,6 +11,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [2.6.0] — 2026-08-22
+
+### Added
+- **Estrategia de Migración de Apps Web Existentes a Escritorio Nativo**:
+  - Nueva guía [docs/WEB_TO_DESKTOP_MIGRATION.md](./docs/WEB_TO_DESKTOP_MIGRATION.md), que cubre las decisiones **previas** a `NATIVE_DESKTOP_APPS.md` cuando el código web ya existe y ya tiene usuarios: clasificación en 4 arquetipos (estática pura / SPA con bundler / servidor local ligero / servidor local pesado) como paso 0 que determina coste y estrategia; dirección de la adopción (la plantilla viaja hacia el repo existente, nunca al revés, para no perder historial, issues y URLs); un repo por app frente a monorepo; modo dual escritorio+web como opción por defecto con el patrón de **capa de adaptación única** (`api.js` con detección `window.__TAURI__` y enrutado a `invoke()` o `fetch`) como el único punto donde el coste del modo dual se concentra; regla de decisión **Rust vs sidecar aplicada por función, no por aplicación**; montaje del sidecar (`bundle.externalBin`, cierre explícito del proceso hijo, puerto no cableado, congelado en el runner de CI de cada plataforma); el coste oculto del sidecar de ML sobre el tamaño del instalador con 3 estrategias de provisionamiento; auditoría de licencias copyleft como decisión arquitectónica previa a invertir; orden de migración por **riesgo de tubería** en portfolios de varias apps; y checklist de migración de 12 puntos.
+  - `docs/README.md`: índice y diagrama de flujo de documentos actualizados con el nuevo documento, situado **antes** de `NATIVE_DESKTOP_APPS.md` en el flujo.
+- **Integración de Phase Gates en el Master Prompt**:
+  - `docs/MASTER_PROMPT.md`: Bootstrap §7 obliga a resolver las 4 decisiones previas de `WEB_TO_DESKTOP_MIGRATION.md` antes de proponer stack cuando ya existe código web funcionando.
+  - `docs/MASTER_PROMPT.md`: Nuevo **Gate de migración web → escritorio** en `/plan` (Paso 3), que exige registrar por escrito arquetipo, repositorio de destino, modo dual vs sustitución y decisión Rust/sidecar por función — más estrategia de provisionamiento y auditoría de licencias si hay sidecar, **antes** de escribir código.
+- **Actualización de Índices y Herramientas de Migración**:
+  - `README.md`: tablas de documentos (EN y ES) actualizadas.
+  - `docs/UPGRADE_PROMPT.md`: Manifest actualizado a v2.6.0.
+  - `project.config.md`: Versión incrementada a `2.6.0`.
+
+---
+
 ## [2.5.1] — 2026-08-21
 
 ### Added
@@ -290,7 +306,8 @@ Initial public release of the **dbv-specs-ops** SDD framework.
 
 ---
 
-[Sin publicar]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.5.1...HEAD
+[Sin publicar]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.6.0...HEAD
+[2.6.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.5.1...v2.6.0
 [2.5.1]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.5.0...v2.5.1
 [2.5.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.4.0...v2.5.0
 [2.4.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.3.0...v2.4.0

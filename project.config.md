@@ -14,7 +14,7 @@
 - **Languages:** [e.g. Python, JavaScript, HTML, CSS]
 - **Technologies / Stack:** [e.g. FastAPI, React, PostgreSQL]
 - **Agent Readiness (Web):** [Yes / No / Not Applicable]
-- **Framework Version:** 2.5.1
+- **Framework Version:** 2.6.0
 
 
 ---

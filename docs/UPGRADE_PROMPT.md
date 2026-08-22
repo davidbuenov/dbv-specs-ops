@@ -40,9 +40,9 @@ Lee el fichero `project.config.md`:
 - Si **no existe** ese campo → pregunta al usuario:
   > *"¿Qué versión de dbv-specs-ops estás usando? Puedes encontrarla buscando en tu `CHANGELOG.md` el primer commit del proyecto, o mirando qué ficheros de plataforma tienes (`.windsurfrules` fue añadido en v1.1.0, `project.config.md` en v1.2.0)."*
 
-La versión más reciente del framework es: **2.5.1**
+La versión más reciente del framework es: **2.6.0**
  
-Si el usuario ya tiene la **v2.5.1**, informa de que el proyecto está al día. No hay nada que hacer.
+Si el usuario ya tiene la **v2.6.0**, informa de que el proyecto está al día. No hay nada que hacer.
 </version_detection_phase>
 
 ---
@@ -205,6 +205,17 @@ Usa esta tabla para calcular qué hay que actualizar según la versión actual d
 | MODIFICADO | `project.config.md` | Versión incrementada a `2.5.1`. |
 | MODIFICADO | `CHANGELOG.md` | Entrada v2.5.1 añadida. |
 | MODIFICADO | `docs/UPGRADE_PROMPT.md` | Este archivo actualizado con la versión v2.5.1. |
+
+### v2.6.0 (cambios desde v2.5.1)
+| Acción | Fichero | Nota |
+|---|---|---|
+| NUEVO | `docs/WEB_TO_DESKTOP_MIGRATION.md` | Decisiones estratégicas previas a migrar una app web **existente** a escritorio nativo: 4 arquetipos de app como paso 0, dirección de la adopción (la plantilla viaja al repo existente, no al revés), modo dual con capa de adaptación única (`api.js`), regla Rust vs sidecar por función, coste oculto del sidecar sobre el tamaño del instalador, auditoría de licencias copyleft y orden de migración por riesgo de tubería. |
+| MODIFICADO | `docs/MASTER_PROMPT.md` | Bootstrap §7: obliga a resolver las 4 decisiones previas si ya existe código web. Nuevo "Gate de migración web → escritorio" en `/plan` (Paso 3). |
+| MODIFICADO | `docs/README.md` | Índice y diagrama de flujo con el nuevo documento, situado antes de `NATIVE_DESKTOP_APPS.md`. |
+| MODIFICADO | `README.md` | Tablas de documentos (EN y ES) actualizadas. |
+| MODIFICADO | `project.config.md` | Versión incrementada a `2.6.0`. |
+| MODIFICADO | `CHANGELOG.md` | Entrada v2.6.0 añadida. |
+| MODIFICADO | `docs/UPGRADE_PROMPT.md` | Este archivo actualizado con la versión v2.6.0. |
 </upgrade_manifest_phase>
 
 ---
@@ -232,6 +243,7 @@ Para cada fichero marcado como NUEVO o MODIFICADO, descarga el contenido desde e
 | `docs/AGENTIC_ENGINEERING.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/AGENTIC_ENGINEERING.md` *(NUEVO)* |
 | `docs/DESIGN_ENRICHMENT.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/DESIGN_ENRICHMENT.md` *(NUEVO)* |
 | `docs/AGENT_PLUGINS.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/AGENT_PLUGINS.md` *(NUEVO)* |
+| `docs/WEB_TO_DESKTOP_MIGRATION.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/WEB_TO_DESKTOP_MIGRATION.md` *(NUEVO)* |
 | `docs/NATIVE_DESKTOP_APPS.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/NATIVE_DESKTOP_APPS.md` *(NUEVO)* |
 | `docs/NATIVE_APPS_RELEASE_CI.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/NATIVE_APPS_RELEASE_CI.md` *(NUEVO)* |
 | `docs/MARKETPLACE_PUBLISHING.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/MARKETPLACE_PUBLISHING.md` *(NUEVO)* |
