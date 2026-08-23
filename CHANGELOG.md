@@ -26,6 +26,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
   no se sabe buscar. Añadida además la técnica de depuración: registrar `window.onerror` /
   `unhandledrejection` en un `<script>` inline sin `defer` en el `<head>`, antes de cualquier script
   externo — un capturador definido dentro del fichero que falla nunca llega a registrarse.
+- **`docs/WEB_TO_DESKTOP_MIGRATION.md` — dos gotchas reales encontrados en la primera migración completa
+  llevada a publicación en tiendas (`dbv-teleprompter`)**:
+  - **§1 (Arquetipo A), aviso sobre `frontendDist`:** "apunta a la carpeta y ya" deja de ser cierto si
+    `src-tauri/` vive dentro de esa misma carpeta (migración in-place, típico cuando la raíz del repo ya la
+    publica GitHub Pages). Tauri embebe entonces recursivamente `src-tauri/target/...`: build roto por lock
+    de Cargo, o peor, ventana en negro con `ERR_CONNECTION_REFUSED` sin relación aparente con la causa.
+    Documentado el patrón `scripts/sync-frontend.mjs` (copia el frontend a `src-tauri/frontend/` gitignored,
+    enganchado a `beforeDevCommand`/`beforeBuildCommand`) como solución.
+  - **§3.1, ejemplo de capa de adaptación renombrado de `isTauri` a `runningInTauri`:** con
+    `withGlobalTauri: true` (obligatorio para el patrón sin bundler de `NATIVE_DESKTOP_APPS.md` §3), Tauri
+    v2 ya declara un global `isTauri` propio; declarar `const isTauri = ...` en un script clásico choca con
+    él y mata el fichero entero con el mismo `SyntaxError` de parseo silencioso que ya advierte §3 — solo
+    que aquí el segundo declarante es el propio runtime de Tauri, no un fichero propio.
 - **Integración de Phase Gates en el Master Prompt**:
   - `docs/MASTER_PROMPT.md`: Bootstrap §7 obliga a resolver las 4 decisiones previas de `WEB_TO_DESKTOP_MIGRATION.md` antes de proponer stack cuando ya existe código web funcionando.
   - `docs/MASTER_PROMPT.md`: Nuevo **Gate de migración web → escritorio** en `/plan` (Paso 3), que exige registrar por escrito arquetipo, repositorio de destino, modo dual vs sustitución y decisión Rust/sidecar por función — más estrategia de provisionamiento y auditoría de licencias si hay sidecar, **antes** de escribir código.

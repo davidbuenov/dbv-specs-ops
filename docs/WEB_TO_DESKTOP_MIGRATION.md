@@ -48,6 +48,18 @@ Verifica el arquetipo mirando el fichero de dependencias real (`requirements.txt
 `package.json`), no la descripción del repo. Una sola línea (`torch`, `easyocr`, un stack de ASR) mueve una
 app de C a D y multiplica el coste por diez.
 
+> ⚠️ **"`frontendDist` apunta a la carpeta y ya" (Arquetipo A) solo es cierto si `src-tauri/` NO vive dentro
+> de esa misma carpeta.** En una migración in-place, `src-tauri/` se añade en la raíz del repo — la misma
+> raíz que ya sirve como sitio estático (y que GitHub Pages puede estar publicando). Apuntar `frontendDist`
+> ahí hace que Tauri intente embeber recursivamente `src-tauri/target/...`: en el mejor caso el build muere
+> con un error de lock de Cargo (`failed to read asset ... (os error 33)`); en el peor, termina pero embebe
+> un árbol sin `index.html` resoluble en la raíz — ventana en negro, WebView2 cae a `127.0.0.1` y falla con
+> `ERR_CONNECTION_REFUSED`, un síntoma que no apunta en absoluto a la causa real. **Solución:** un script
+> (`scripts/sync-frontend.mjs`) copia solo los ficheros del frontend a una carpeta *fuera* del árbol servido
+> por Pages, p. ej. `src-tauri/frontend/` (gitignored), enganchado a `beforeDevCommand`/`beforeBuildCommand`
+> en `tauri.conf.json`, y `frontendDist` apunta a esa copia — nunca a la raíz del repo ni a `src-tauri/`
+> mismo. Mover los ficheros de sitio en vez de copiarlos no es alternativa: la raíz es lo que Pages publica.
+
 ---
 
 ## 2. Dirección de la adopción: el repo existente manda
@@ -114,10 +126,10 @@ El patrón es un único módulo que detecta el entorno y enruta:
 
 ```js
 // src/api.js — ÚNICO fichero de la app que sabe si estamos en Tauri o en el navegador
-const isTauri = typeof window !== "undefined" && !!window.__TAURI__;
+const runningInTauri = typeof window !== "undefined" && !!window.__TAURI__;
 
 export async function convertImage(payload) {
-  if (isTauri) {
+  if (runningInTauri) {
     return window.__TAURI__.core.invoke("convert_image", payload);
   }
   const res = await fetch("/api/convert", {
@@ -130,6 +142,16 @@ export async function convertImage(payload) {
 }
 ```
 
+> ⚠️ **No llames `isTauri` a esta constante.** Con `"withGlobalTauri": true` (obligatorio para el patrón sin
+> bundler, ver `NATIVE_DESKTOP_APPS.md` §3), Tauri v2 ya declara un global `isTauri` propio. En un script
+> clásico (no ES module), declarar `const isTauri = ...` en el nivel superior de tu propio fichero choca con
+> ese global y el fichero entero muere con `SyntaxError: Identifier 'isTauri' has already been declared` —
+> error de *parseo*, así que ni un solo listener llega a registrarse y la interfaz queda completamente
+> muerta sin ningún error visible en pantalla. Es el mismo tipo de fallo silencioso que la colisión entre
+> dos ficheros propios (§3 de `NATIVE_DESKTOP_APPS.md`), solo que aquí el segundo declarante es el propio
+> runtime de Tauri. Usa un nombre que no sea genérico ni relacionado con Tauri (`runningInTauri`,
+> `isDesktopRuntime`, etc.).
+
 Reglas de la capa:
 
 - **Una sola función por operación de negocio**, no por endpoint. La firma la dicta lo que la UI necesita,
@@ -139,7 +161,7 @@ Reglas de la capa:
 - **Los errores se normalizan aquí**: un `invoke()` rechaza con un string de Rust, un `fetch` devuelve un
   status HTTP. La UI debe ver un único formato de error.
 - **Las capacidades exclusivas de escritorio se exponen como consulta, no como excepción**: un
-  `export const canPickDirectory = isTauri;` permite a la UI ocultar un botón, en vez de esparcir
+  `export const canPickDirectory = runningInTauri;` permite a la UI ocultar un botón, en vez de esparcir
   condicionales por el árbol de componentes.
 
 ---
