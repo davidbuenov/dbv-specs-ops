@@ -223,5 +223,20 @@ silencio o con un error que no apunta a la causa real.
    tabla de diferencias de motores (WebView2/WebKitGTK/WKWebView) contra cada API nueva que uses, no solo al
    final.
 
+10. **Tauri v2 no trae menú de aplicación por defecto en macOS — sin uno propio, la app no se siente
+    nativa** (falta `Cmd+Q`, `Cmd+H`, el `Edit` con Cortar/Copiar/Pegar del sistema, etc.). Windows/Linux no
+    lo necesitan (ya tienen su propia UI de ventana para esas acciones), así que se construye solo bajo
+    `#[cfg(target_os = "macos")]`. Se monta con `tauri::menu::{Menu, Submenu, MenuItem, PredefinedMenuItem}`
+    en un módulo dedicado, registrado en `.setup()` con `app.handle().set_menu(menu)?` — no en `.plugin()` ni
+    en `Builder::default()` directamente. Los ítems predefinidos (`PredefinedMenuItem::cut/copy/paste/...`)
+    los localiza el propio sistema operativo según su idioma; los ítems propios (p. ej. "Abrir archivo…") no
+    tienen esa magia gratis — hay que localizarlos a mano (`sys-locale` para detectar el idioma del sistema)
+    o quedan en un idioma fijo aunque el resto del menú cambie con el idioma del Mac. Las acciones del menú
+    (`MenuItem::with_id`) llegan al frontend vía `.on_menu_event()` reemitiendo un evento normal
+    (`window.emit("menu-open-file", ())`) que el frontend escucha con `listen()` — no hace falta reimplementar
+    la lógica de esas acciones en Rust, solo avisar a la ventana del clic. Implementación de referencia
+    (`#[cfg(target_os = "macos")] mod macos_menu`, con `sys-locale = "0.3"` como única dependencia extra):
+    `dbv-md-reader/src-tauri/src/lib.rs` (PR externo #4, ver ADR-026 en su `memory.md`).
+
 Para el patrón de CI que compila cada plataforma y las particularidades de cada tienda de apps, ver
 [`NATIVE_APPS_RELEASE_CI.md`](./NATIVE_APPS_RELEASE_CI.md) y [`MARKETPLACE_PUBLISHING.md`](./MARKETPLACE_PUBLISHING.md).
