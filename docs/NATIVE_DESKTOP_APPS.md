@@ -239,9 +239,8 @@ silencio o con un error que no apunta a la causa real.
     o quedan en un idioma fijo aunque el resto del menú cambie con el idioma del Mac. Las acciones del menú
     (`MenuItem::with_id`) llegan al frontend vía `.on_menu_event()` reemitiendo un evento normal
     (`window.emit("menu-open-file", ())`) que el frontend escucha con `listen()` — no hace falta reimplementar
-    la lógica de esas acciones en Rust, solo avisar a la ventana del clic. Implementación de referencia
-    (`#[cfg(target_os = "macos")] mod macos_menu`, con `sys-locale = "0.3"` como única dependencia extra):
-    `dbv-md-reader/src-tauri/src/lib.rs` (PR externo #4, ver ADR-026 en su `memory.md`).
+    la lógica de esas acciones en Rust, solo avisar a la ventana del clic. Patrón de referencia:
+    modularizar el menú bajo `#[cfg(target_os = "macos")] mod macos_menu` en `src-tauri/src/lib.rs`, con `sys-locale = "0.3"` como dependencia ligera para detectar el idioma del sistema.
 
 11. **Tauri v2 desactiva el zoom del WebView por defecto.** `Ctrl`+rueda y `Ctrl`+`+`/`-` no hacen nada en
     una app recién generada, aunque funcionen perfectamente con el mismo frontend en un navegador. No es un

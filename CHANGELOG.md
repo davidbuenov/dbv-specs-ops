@@ -13,10 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [2.7.0] — 2026-08-28
 
-Cosecha de lecciones de las tres primeras apps publicadas en tienda con este framework
-(`dbv-md-reader`, `dbv-teleprompter`, `eer-studio`). Ninguna decisión nueva de proceso: todo lo que sigue
-son gotchas reales pagados en horas de depuración que hasta ahora vivían solo en el `memory.md` de un
-proyecto concreto.
+Consolidación de lecciones, patrones y trampas técnicas contrastadas en múltiples aplicaciones nativas publicadas en tiendas oficiales de distribución (Microsoft Store, Apple App Store, Uptodown, etc.). Todo lo que sigue surge de horas de depuración en entornos reales de producción y pruebas multiplataforma.
 
 ### Added
 - **`docs/NATIVE_DESKTOP_APPS.md` §7 — Definición de Hecho (DoD) de Experiencia de Escritorio.** Una app
@@ -79,8 +76,7 @@ proyecto concreto.
   no se sabe buscar. Añadida además la técnica de depuración: registrar `window.onerror` /
   `unhandledrejection` en un `<script>` inline sin `defer` en el `<head>`, antes de cualquier script
   externo — un capturador definido dentro del fichero que falla nunca llega a registrarse.
-- **`docs/WEB_TO_DESKTOP_MIGRATION.md` — dos gotchas reales encontrados en la primera migración completa
-  llevada a publicación en tiendas (`dbv-teleprompter`)**:
+- **`docs/WEB_TO_DESKTOP_MIGRATION.md` — dos gotchas reales contrastados en migraciones completas a producción:**
   - **§1 (Arquetipo A), aviso sobre `frontendDist`:** "apunta a la carpeta y ya" deja de ser cierto si
     `src-tauri/` vive dentro de esa misma carpeta (migración in-place, típico cuando la raíz del repo ya la
     publica GitHub Pages). Tauri embebe entonces recursivamente `src-tauri/target/...`: build roto por lock
@@ -381,7 +377,8 @@ Initial public release of the **dbv-specs-ops** SDD framework.
 
 ---
 
-[Sin publicar]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.6.0...HEAD
+[Sin publicar]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.7.0...HEAD
+[2.7.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.6.0...v2.7.0
 [2.6.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.5.1...v2.6.0
 [2.5.1]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.5.0...v2.5.1
 [2.5.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.4.0...v2.5.0

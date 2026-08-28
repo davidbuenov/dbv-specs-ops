@@ -341,11 +341,11 @@ Si el proyecto contiene implementaciones antiguas de habilidades (ej: carpetas `
 
 Cuando todos los cambios estén aplicados:
 
-1. Actualiza el campo `Framework Version` en `project.config.md` a `2.5.1`.
+1. Actualiza el campo `Framework Version` en `project.config.md` a `2.7.0`.
 2. Muestra al usuario un resumen claro:
  
 ```
-✅ Framework actualizado de vX.X.X → v2.5.1
+✅ Framework actualizado de vX.X.X → v2.7.0
 
 Ficheros actualizados:
   • [lista de ficheros modificados/añadidos]
@@ -362,7 +362,7 @@ Próximos pasos:
   [Si se creó AGENTIC_ENGINEERING.md] → Lee docs/AGENTIC_ENGINEERING.md para entender la metodología v2.0.0.
   [Si se creó DESIGN_ENRICHMENT.md] → Lee docs/DESIGN_ENRICHMENT.md para ver cómo auditar y pulir tu UI con Impeccable y SkillUI.
   [Si se creó AGENT_PLUGINS.md] → Lee docs/AGENT_PLUGINS.md para ver cómo estructurar tus herramientas y skills bajo el estándar Agent Plugins 1.0.0.
-  [Si se creó NATIVE_DESKTOP_APPS.md / NATIVE_APPS_RELEASE_CI.md / MARKETPLACE_PUBLISHING.md] → Lee estas guías si tu proyecto es una app de escritorio nativa compilada (Tauri/Electron).
+  [Si se creó WEB_TO_DESKTOP_MIGRATION.md / NATIVE_DESKTOP_APPS.md / NATIVE_APPS_RELEASE_CI.md / MARKETPLACE_PUBLISHING.md] → Lee estas guías si tu proyecto es una app de escritorio nativa compilada o migrada (Tauri/Electron).
   → Continúa con tu proyecto normalmente. El framework ya está al día.
 ```
 </closing_phase>

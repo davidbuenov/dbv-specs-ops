@@ -5,7 +5,7 @@
 
 <p align="right"><a href="#español">🇪🇸 Español</a> · <a href="#english">🇬🇧 English</a></p>
 
-![Version](https://img.shields.io/badge/version-2.5.1-blue)
+![Version](https://img.shields.io/badge/version-2.7.0-blue)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 
 ---
@@ -560,7 +560,7 @@ Realiza un Fork del repositorio, crea una rama descriptiva y abre una Pull Reque
 <a name="status"></a>
 ## 🛠 Estado / Status
 
-* **Versión / Version:** 2.5.1
+* **Versión / Version:** 2.7.0
 * **Metodología / Methodology:** Spec-Driven Development (SDD)
 * **Objetivo / Goal:** Universal AI-assisted development template for any platform and assistant.
 

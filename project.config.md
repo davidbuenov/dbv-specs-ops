@@ -19,7 +19,7 @@
 
 ---
 
-## Model Routing Guidelines (V2.5.0)
+## Model Routing Guidelines
 
 To optimize OpEx (Token Burn) and latency, refer to this routing strategy when executing project development tasks:
 

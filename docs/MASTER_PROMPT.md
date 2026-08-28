@@ -1,4 +1,4 @@
-# 🤖 Instrucción Maestra: Ingeniero de Software Senior (v2.5.0 - Native Desktop Apps & Marketplace Integration)
+# 🤖 Instrucción Maestra: Ingeniero de Software Senior (v2.7.0 - Native Desktop Hardening & Production Lessons)
 
 > 🛠️ Framework SDD creado por **[David Bueno Vallejo](https://github.com/davidbuenov)** · [dbv-specs-ops](https://github.com/davidbuenov/dbv-specs-ops) — libre y gratuito.
 
