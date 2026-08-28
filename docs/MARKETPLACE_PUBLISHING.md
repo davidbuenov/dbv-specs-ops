@@ -49,6 +49,21 @@ meses hasta que la propia tienda lo rechaza en certificación citando una polít
 - [ ] Repetir esta verificación en **cada** reenvío tras un rechazo, no solo la primera vez — el bug puede
       haberse introducido en cualquier sesión de pulido visual anterior, no necesariamente en la más reciente.
 
+**Corolario de control de versiones: la carpeta de empaquetado generada se trackea entera, no se gitignora.**
+El instinto por defecto ante un directorio con "gen" en el nombre (p. ej. `src-tauri/gen/windows/`) es
+ignorarlo y trackear solo el fichero de configuración, asumiendo que el resto se regenera. Es exactamente al
+revés: los assets de ese directorio pueden necesitar **corrección manual** — como la del placeholder de
+arriba — y si están gitignorados, esa corrección se pierde en silencio en el siguiente equipo o en el
+siguiente `init` de la herramienta, y el asset roto vuelve sin que nadie lo note hasta el rechazo. Trackea
+todo el directorio y trata cualquier regeneración como un diff a revisar. Verificado leyendo `git ls-files`
+de un proyecto ya publicado, no deducido.
+
+**Detectar el placeholder antes del envío vale más que corregirlo tras el rechazo.** Cuando ya se conoce el
+tamaño problemático concreto, la corrección es reproducible sin la herramienta: componer el logo cuadrado
+centrado sobre un lienzo transparente del tamaño exigido (coherente con el `BackgroundColor="transparent"`
+del manifiesto) con cualquier librería de imagen. Un rechazo de tienda cuesta días de espera; la
+comprobación visual, un minuto.
+
 ## 4. Los formularios de cada tienda no son intercambiables
 
 No asumir que el texto/ficha ya redactado para una tienda encaja en el formulario de otra, aunque el

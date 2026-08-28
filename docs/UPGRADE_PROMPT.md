@@ -40,9 +40,9 @@ Lee el fichero `project.config.md`:
 - Si **no existe** ese campo → pregunta al usuario:
   > *"¿Qué versión de dbv-specs-ops estás usando? Puedes encontrarla buscando en tu `CHANGELOG.md` el primer commit del proyecto, o mirando qué ficheros de plataforma tienes (`.windsurfrules` fue añadido en v1.1.0, `project.config.md` en v1.2.0)."*
 
-La versión más reciente del framework es: **2.6.0**
+La versión más reciente del framework es: **2.7.0**
  
-Si el usuario ya tiene la **v2.6.0**, informa de que el proyecto está al día. No hay nada que hacer.
+Si el usuario ya tiene la **v2.7.0**, informa de que el proyecto está al día. No hay nada que hacer.
 </version_detection_phase>
 
 ---
@@ -218,6 +218,17 @@ Usa esta tabla para calcular qué hay que actualizar según la versión actual d
 | MODIFICADO | `project.config.md` | Versión incrementada a `2.6.0`. |
 | MODIFICADO | `CHANGELOG.md` | Entrada v2.6.0 añadida. |
 | MODIFICADO | `docs/UPGRADE_PROMPT.md` | Este archivo actualizado con la versión v2.6.0. |
+
+### v2.7.0 (cambios desde v2.6.0)
+| Acción | Fichero | Nota |
+|---|---|---|
+| MODIFICADO | `docs/NATIVE_DESKTOP_APPS.md` | Nueva **§7 "Definición de Hecho (DoD) de Experiencia de Escritorio"**: los 6 criterios de aceptación que separan "una web en un marco" de una app de escritorio (diálogos nativos, iconografía desde `app-icon.svg`, atajos universales que funcionen con foco en inputs, menú nativo de macOS, scrollbars/layout, tooltips de atajos), más las reglas de verificación (lanzar el ejecutable real; versión sincronizada en 4 ficheros) y la nota de rendimiento de WebView2 frente a un navegador. §6 ampliada con 4 trampas nuevas (10→14): `zoomHotkeysEnabled` desactivado por defecto, `Finished` sin `Compiling` = assets embebidos obsoletos, `document.title` no es sonda válida de ejecución de JS, y la caché de Cargo que no reincrusta un icono cambiado. §4 punto 4: la clave de firma del updater la genera el usuario en su terminal, nunca la IA, y su password va a un gestor de contraseñas, no a un fichero junto a la clave. Incluye también §6 punto 10 (menú nativo de macOS), que no llegó a registrarse en el manifiesto de v2.6.0. |
+| MODIFICADO | `docs/WEB_TO_DESKTOP_MIGRATION.md` | Nueva **§9 "Si la app usa un framework con bundler (React/Vue/Svelte + Vite)"**: closures obsoletas al suscribir listeners nativos desde un `useEffect` con dependencias vacías, exclusión de `src-tauri/` del linter y código muerto de detección de entorno. §8: checklist ampliada con la DoD de escritorio, la verificación sobre el ejecutable real y la sincronización de versión en 4 ficheros. |
+| MODIFICADO | `docs/MARKETPLACE_PUBLISHING.md` | §3 ampliada: la carpeta de empaquetado generada (`src-tauri/gen/windows/`) se trackea **entera** en git en vez de gitignorarse, porque sus assets pueden necesitar corrección manual que de otro modo se pierde en silencio y devuelve el asset roto; más cómo reproducir la corrección del tile problemático sin la herramienta. |
+| MODIFICADO | `docs/NATIVE_APPS_RELEASE_CI.md` | §6 ampliada con la variante local del mismo fallo: encadenar `tauri build && <paso>` con `&&` hace que el paso siguiente nunca se ejecute en builds sin variables de firma; usar un orquestador `spawnSync` que combine ambos códigos de salida. Nueva §6bis: los nombres de input de una Action de terceros cambian entre versiones y un input inválido **no** rompe el build (solo avisa) — verificar contra el aviso `Unexpected input(s)` del primer run real, no contra la documentación. |
+| MODIFICADO | `project.config.md` | Versión incrementada a `2.7.0`. |
+| MODIFICADO | `CHANGELOG.md` | Entrada v2.7.0 añadida. |
+| MODIFICADO | `docs/UPGRADE_PROMPT.md` | Este archivo actualizado con la versión v2.7.0. |
 </upgrade_manifest_phase>
 
 ---

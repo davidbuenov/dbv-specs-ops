@@ -110,6 +110,26 @@ de actualización para esa plataforma hasta que se resuelva la firma cross-máqu
     includeUpdaterJson: false
 ```
 
+Este mismo fallo aparece antes en local que en CI, y ahí es más engañoso: encadenar
+`tauri build && <paso siguiente>` en un script de `package.json` hace que el paso siguiente (renombrar el
+instalador, copiarlo, etc.) **nunca se ejecute** en cualquier build local sin las variables de firma —
+sin ningún error que lo explique, porque el instalador sí se generó. Cuando el comando previo puede
+"fallar" por un motivo secundario ajeno al artefacto que de verdad importa, usa un orquestador
+(`spawnSync` en un `scripts/build.mjs`) que ejecute siempre ambos pasos y decida el código de salida final
+combinando los dos resultados, en vez de `&&`.
+
+## 6bis. Los nombres de input de una Action de terceros cambian entre versiones — y un input inválido no rompe el build
+
+`tauri-apps/tauri-action` renombró inputs entre versiones sin que `@v0` deje de aceptar los antiguos en
+silencio: se configuró `uploadUpdaterJson: false` siguiendo documentación previa cuando el input real de la
+versión que de verdad corría era `includeUpdaterJson`. GitHub Actions **no falla** ante un input
+desconocido, solo emite un aviso — así que la opción quedó sin efecto y pasó desapercibida.
+
+**Regla:** para acciones de terceros con alta velocidad de cambio, un `WebFetch` puntual de la documentación
+no es verificación suficiente. Tras el **primer run real**, abre el log completo y lee el aviso
+`Unexpected input(s) ...` de la propia Action — enumera los inputs válidos exactos de la versión que se
+ejecutó, que es la única fuente fiable. Corrige contra esa lista, no contra la documentación.
+
 ## 7. Deuda técnica aceptable: firma cross-máquina no resuelta
 
 Si el par de claves de firma del actualizador se usa hoy solo en la máquina local donde se firma el build

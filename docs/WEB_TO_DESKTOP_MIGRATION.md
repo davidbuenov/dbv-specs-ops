@@ -284,5 +284,30 @@ Por cada app, en orden:
 - [ ] Si hay sidecar: estrategia de instalación elegida (§5) y proceso hijo con cierre explícito verificado.
 - [ ] `tauri.conf.json`: `productName`, `identifier` e iconos propios de la app (no los de la plantilla).
 - [ ] Modo web verificado **después** de la migración: sigue arrancando y funcionando (§3).
+- [ ] **DoD de Experiencia de Escritorio cumplida** — los 6 criterios de `NATIVE_DESKTOP_APPS.md` §7
+      (diálogos nativos, iconografía propia, atajos, menú de macOS, scrollbars/layout, tooltips de atajos).
+      Son criterios de aceptación, no pulido posterior.
+- [ ] **El ejecutable real lanzado y usado**, no solo compilado — "el bundle se generó" no es "la app
+      funciona".
+- [ ] Versión sincronizada en `package.json`, `tauri.conf.json`, `Cargo.toml` y el "Acerca de" de la UI.
 - [ ] Build local en las tres plataformas o, en su defecto, primer tag `vX.Y.Z` con los 3 workflows en verde.
 - [ ] `SPECIFICATIONS.md` actualizado: el escritorio es un requisito nuevo, no un detalle de despliegue.
+
+---
+
+## 9. Si la app usa un framework con bundler (React/Vue/Svelte + Vite)
+
+El patrón sin bundler de `NATIVE_DESKTOP_APPS.md` §3 no aplica: aquí `beforeDevCommand`/`beforeBuildCommand`
+invocan el build del bundler y `frontendDist` apunta a su salida (`dist/`). Tres cosas que solo aparecen en
+esta ruta:
+
+- **Los listeners de eventos nativos son una fuente clásica de closures obsoletas.** Suscribir
+  `listen('menu-open-file', ...)` o `onCloseRequested` dentro de un `useEffect` con array de dependencias
+  vacío captura la primera versión de unos handlers que sí cambian de referencia entre renders — el menú
+  nativo acaba guardando contenido antiguo, y el bug es intermitente y difícil de atribuir al menú. Guarda
+  el handler vivo en un `ref` actualizado en cada render y suscríbete una sola vez leyendo ese `ref`.
+- **Excluye `src-tauri/` del linter.** ESLint (u otro) recorrerá alegremente el JavaScript generado por
+  Cargo dentro de `src-tauri/target/` y llenará el informe de ruido ajeno al proyecto.
+- **Código muerto de detección de entorno.** Es habitual acabar con un `utils/platform.ts::isTauri()` sin
+  ninguna referencia, porque la detección real vive en la capa de adaptación de §3.1. Una sola fuente de
+  verdad para "¿estamos en escritorio?" — la de `api.js` — y el resto se borra.

@@ -11,6 +11,59 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [2.7.0] — 2026-08-28
+
+Cosecha de lecciones de las tres primeras apps publicadas en tienda con este framework
+(`dbv-md-reader`, `dbv-teleprompter`, `eer-studio`). Ninguna decisión nueva de proceso: todo lo que sigue
+son gotchas reales pagados en horas de depuración que hasta ahora vivían solo en el `memory.md` de un
+proyecto concreto.
+
+### Added
+- **`docs/NATIVE_DESKTOP_APPS.md` §7 — Definición de Hecho (DoD) de Experiencia de Escritorio.** Una app
+  compilada con Tauri todavía no es una app de escritorio: es una web dentro de un marco. La diferencia son
+  siempre los mismos seis detalles (diálogos de archivo nativos, iconografía completa generada desde un
+  único `app-icon.svg`, atajos universales que funcionen **también con el foco dentro de un input**, menú
+  nativo en macOS, scrollbars tematizadas y layout fluido, tooltips que anuncian los atajos), y se elevan a
+  criterios de aceptación en vez de pulido opcional. Incluye dos reglas de verificación: lanzar el
+  ejecutable real (no dar por buena una compilación) y mantener la versión sincronizada en `package.json`,
+  `tauri.conf.json`, `Cargo.toml` y el "Acerca de" de la UI. **Esta sección se dio por escrita en un ADR de
+  proyecto en agosto y nunca llegó al framework** — el mismo fallo de backport que ya se corrigió con el
+  menú de macOS.
+- **`docs/WEB_TO_DESKTOP_MIGRATION.md` §9 — la ruta con bundler (React/Vue/Svelte + Vite).** El patrón sin
+  bundler de `NATIVE_DESKTOP_APPS.md` §3 no aplica ahí, y aparecen tres problemas propios: listeners de
+  eventos nativos suscritos en un `useEffect` con dependencias vacías que capturan handlers obsoletos (el
+  menú nativo acaba guardando contenido antiguo), el linter recorriendo el JS generado por Cargo dentro de
+  `src-tauri/target/`, y código muerto de detección de entorno duplicando la capa de adaptación de §3.1.
+- **`docs/NATIVE_APPS_RELEASE_CI.md` §6bis — los inputs de una Action de terceros cambian entre versiones y
+  un input inválido no rompe el build.** GitHub Actions solo avisa, así que una opción mal nombrada queda
+  sin efecto en silencio. La fuente fiable es el aviso `Unexpected input(s)` del primer run real, que
+  enumera los inputs válidos de la versión que de verdad se ejecutó — no la documentación.
+
+### Changed
+- **`docs/NATIVE_DESKTOP_APPS.md` §6 — cuatro trampas nuevas** (de 10 a 14): `zoomHotkeysEnabled` viene
+  desactivado por defecto en Tauri v2 (`Ctrl`+rueda no hace nada aunque funcione en el navegador); un build
+  que dice `Finished` sin haber dicho `Compiling` conserva los assets del frontend anteriores, porque
+  `generate_context!` los embebe en tiempo de compilación; `document.title` **no** sirve como sonda para
+  saber si el JS se ejecuta (el título de la ventana nativa lo fija `tauri.conf.json`), y la sonda que sí
+  funciona es un `window.addEventListener('error', ...)` inline en el `<head>`; y cambiar solo un recurso
+  incrustado (un `.ico`) no invalida la caché de Cargo, hace falta `cargo clean -p <crate> --release`.
+- **`docs/NATIVE_DESKTOP_APPS.md` §4 punto 4 — quién genera la clave de firma del updater.** El comando
+  `tauri signer generate` lo ejecuta el usuario en su propia terminal, nunca la IA, para que la password no
+  pase por el contexto ni por los logs del agente; y esa password va a un gestor de contraseñas, nunca a un
+  fichero junto a la clave.
+- **`docs/MARKETPLACE_PUBLISHING.md` §3 — la carpeta de empaquetado generada se trackea entera.** El
+  instinto de gitignorar `src-tauri/gen/windows/` y conservar solo la configuración es justo el error: sus
+  assets pueden necesitar corrección manual (el placeholder negro que provocó un rechazo real de Microsoft),
+  y gitignorados esa corrección se pierde en silencio y el asset roto vuelve.
+- **`docs/NATIVE_APPS_RELEASE_CI.md` §6 — la variante local del fallo de firma.** Encadenar
+  `tauri build && <paso siguiente>` hace que el paso siguiente nunca se ejecute en un build sin variables de
+  firma, sin ningún error que lo explique porque el instalador sí se generó. Un orquestador `spawnSync` que
+  ejecute siempre ambos pasos y combine los códigos de salida es más fiable que `&&`.
+- **`docs/WEB_TO_DESKTOP_MIGRATION.md` §8 — checklist de migración** ampliada con la DoD de escritorio, la
+  verificación sobre el ejecutable real y la sincronización de versión en los cuatro ficheros.
+
+---
+
 ## [2.6.0] — 2026-08-22
 
 ### Added
