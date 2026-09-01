@@ -40,9 +40,9 @@ Lee el fichero `project.config.md`:
 - Si **no existe** ese campo → pregunta al usuario:
   > *"¿Qué versión de dbv-specs-ops estás usando? Puedes encontrarla buscando en tu `CHANGELOG.md` el primer commit del proyecto, o mirando qué ficheros de plataforma tienes (`.windsurfrules` fue añadido en v1.1.0, `project.config.md` en v1.2.0)."*
 
-La versión más reciente del framework es: **2.7.0**
+La versión más reciente del framework es: **2.8.0**
  
-Si el usuario ya tiene la **v2.7.0**, informa de que el proyecto está al día. No hay nada que hacer.
+Si el usuario ya tiene la **v2.8.0**, informa de que el proyecto está al día. No hay nada que hacer.
 </version_detection_phase>
 
 ---
@@ -229,6 +229,25 @@ Usa esta tabla para calcular qué hay que actualizar según la versión actual d
 | MODIFICADO | `project.config.md` | Versión incrementada a `2.7.0`. |
 | MODIFICADO | `CHANGELOG.md` | Entrada v2.7.0 añadida. |
 | MODIFICADO | `docs/UPGRADE_PROMPT.md` | Este archivo actualizado con la versión v2.7.0. |
+
+### v2.8.0 (cambios desde v2.7.0)
+| Acción | Fichero | Nota |
+|---|---|---|
+| NUEVO | `docs/MAINTAIN.md` | Fase 7 opcional — cierre autónomo del loop (detección determinista + redacción de hallazgo en `SPECIFICATIONS.md`), inspirada en el *AI-Native SDLC Playbook* de Anthropic. Desactivada por defecto. |
+| NUEVO | `docs/REVIEW.md` | Tres pases de revisión con severidad (Bugs/Seguridad/Cumplimiento) enganchados a `/code-simplify`; lo Crítico bloquea `/ship`. |
+| NUEVO | `docs/GUARDRAILS.md` | Distingue reglas advisory (`MASTER_PROMPT.md`) de guardarraíles deterministas (git hooks/CI). |
+| NUEVO | `docs/PARALLEL_WORK.md` | Formaliza el Modo Orquestador con mecánica concreta de `git worktree`. |
+| NUEVO | `docs/SOURCE_OF_TRUTH.md` | Patrón de convivencia con Jira/ServiceNow/etc. |
+| NUEVO | `docs/METRICS.md` | Indicadores leading/lagging por fase, opcional. |
+| NUEVO | `evals/README.md`, `evals/example-spec-eval.json` | Suite de regresión opcional para la propia configuración del agente. |
+| NUEVO | `scripts/run-evals.sh` | Runner de la suite de evals anterior. |
+| NUEVO | `.claude/commands/{spec,plan,build,test,code-simplify,ship,maintain}.md` | Comandos nativos de Claude Code para cada fase — corrige que un `/build` escueto no llevara instrucción adjunta. |
+| MODIFICADO | `docs/MASTER_PROMPT.md` | Regla de interpretación de comandos de fase escuetos (cascada de fases previas); enganches a los 6 docs nuevos en `<workflow>`, `<boundaries>` y `<context_management>`; Fase 7 documentada al final de `<workflow>`. |
+| MODIFICADO | `docs/README.md` | Tabla e índice de flujo con los 6 documentos nuevos. |
+| MODIFICADO | `README.md` | Badge de versión, Key Features, Origin & Inspiration (cita al *AI-Native SDLC Playbook*), tabla de fases con recuadro de Fase 7 opcional, tabla de ficheros de `docs/`, mención de `evals/`/`scripts/` y nota de `.claude/commands/` para Claude Code. |
+| MODIFICADO | `project.config.md` | Versión incrementada a `2.8.0`. |
+| MODIFICADO | `CHANGELOG.md` | Entrada v2.8.0 añadida. |
+| MODIFICADO | `docs/UPGRADE_PROMPT.md` | Este archivo actualizado con la versión v2.8.0. |
 </upgrade_manifest_phase>
 
 ---
@@ -260,6 +279,22 @@ Para cada fichero marcado como NUEVO o MODIFICADO, descarga el contenido desde e
 | `docs/NATIVE_DESKTOP_APPS.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/NATIVE_DESKTOP_APPS.md` *(NUEVO)* |
 | `docs/NATIVE_APPS_RELEASE_CI.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/NATIVE_APPS_RELEASE_CI.md` *(NUEVO)* |
 | `docs/MARKETPLACE_PUBLISHING.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/MARKETPLACE_PUBLISHING.md` *(NUEVO)* |
+| `docs/MAINTAIN.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/MAINTAIN.md` *(NUEVO v2.8.0)* |
+| `docs/REVIEW.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/REVIEW.md` *(NUEVO v2.8.0)* |
+| `docs/GUARDRAILS.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/GUARDRAILS.md` *(NUEVO v2.8.0)* |
+| `docs/PARALLEL_WORK.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/PARALLEL_WORK.md` *(NUEVO v2.8.0)* |
+| `docs/SOURCE_OF_TRUTH.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/SOURCE_OF_TRUTH.md` *(NUEVO v2.8.0)* |
+| `docs/METRICS.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/METRICS.md` *(NUEVO v2.8.0)* |
+| `evals/README.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/evals/README.md` *(NUEVO v2.8.0)* |
+| `evals/example-spec-eval.json` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/evals/example-spec-eval.json` *(NUEVO v2.8.0)* |
+| `scripts/run-evals.sh` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/scripts/run-evals.sh` *(NUEVO v2.8.0)* |
+| `.claude/commands/spec.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/.claude/commands/spec.md` *(NUEVO v2.8.0, opcional Claude Code)* |
+| `.claude/commands/plan.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/.claude/commands/plan.md` *(NUEVO v2.8.0, opcional Claude Code)* |
+| `.claude/commands/build.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/.claude/commands/build.md` *(NUEVO v2.8.0, opcional Claude Code)* |
+| `.claude/commands/test.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/.claude/commands/test.md` *(NUEVO v2.8.0, opcional Claude Code)* |
+| `.claude/commands/code-simplify.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/.claude/commands/code-simplify.md` *(NUEVO v2.8.0, opcional Claude Code)* |
+| `.claude/commands/ship.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/.claude/commands/ship.md` *(NUEVO v2.8.0, opcional Claude Code)* |
+| `.claude/commands/maintain.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/.claude/commands/maintain.md` *(NUEVO v2.8.0, opcional Claude Code)* |
 
 > **Nota:** Si alguna descarga falla, muestra el link al usuario para que lo descargue manualmente.
 
@@ -341,11 +376,11 @@ Si el proyecto contiene implementaciones antiguas de habilidades (ej: carpetas `
 
 Cuando todos los cambios estén aplicados:
 
-1. Actualiza el campo `Framework Version` en `project.config.md` a `2.7.0`.
+1. Actualiza el campo `Framework Version` en `project.config.md` a `2.8.0`.
 2. Muestra al usuario un resumen claro:
  
 ```
-✅ Framework actualizado de vX.X.X → v2.7.0
+✅ Framework actualizado de vX.X.X → v2.8.0
 
 Ficheros actualizados:
   • [lista de ficheros modificados/añadidos]
@@ -363,6 +398,9 @@ Próximos pasos:
   [Si se creó DESIGN_ENRICHMENT.md] → Lee docs/DESIGN_ENRICHMENT.md para ver cómo auditar y pulir tu UI con Impeccable y SkillUI.
   [Si se creó AGENT_PLUGINS.md] → Lee docs/AGENT_PLUGINS.md para ver cómo estructurar tus herramientas y skills bajo el estándar Agent Plugins 1.0.0.
   [Si se creó WEB_TO_DESKTOP_MIGRATION.md / NATIVE_DESKTOP_APPS.md / NATIVE_APPS_RELEASE_CI.md / MARKETPLACE_PUBLISHING.md] → Lee estas guías si tu proyecto es una app de escritorio nativa compilada o migrada (Tauri/Electron).
+  [Si se creó .claude/commands/] → Si usas Claude Code, ya tienes /spec /plan /build /test /code-simplify /ship /maintain como comandos nativos con autocompletado.
+  [Si quieres activar la Fase 7] → Lee docs/MAINTAIN.md y añade el bloque "Maintain (Fase 7)" a project.config.md. Sigue desactivada por defecto.
+  [Si quieres guardarraíles deterministas] → Lee docs/GUARDRAILS.md (pre-commit hooks, branch protection).
   → Continúa con tu proyecto normalmente. El framework ya está al día.
 ```
 </closing_phase>

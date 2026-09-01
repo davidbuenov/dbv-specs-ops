@@ -11,6 +11,59 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [2.8.0] — 2026-09-01
+
+Integración curada del [AI-Native SDLC Playbook (Anthropic)](https://claude.com/blog/the-ai-native-sdlc-playbook): cierre autónomo del loop, revisión de código por pases con severidad y guardarraíles deterministas — todo agnóstico de proveedor y opcional salvo el gate de revisión que ya existía. Incluye además un fix de usabilidad reportado en el uso real del framework: los comandos de fase (`/build`, etc.) escritos sin texto adicional no se interpretaban de forma fiable.
+
+### Added
+- **`docs/MAINTAIN.md` — Fase 7 (opcional, desactivada por defecto).** Cierra el ciclo Spec→Ship sin
+  disparo humano: un detector determinista (CI/cron sobre una métrica) invoca a la IA en modo solo lectura
+  para diagnosticar una desviación y redactarla como entrada `[Detectado automáticamente]` en
+  `SPECIFICATIONS.md`, que reentra el ciclo por `/plan`. Nunca despliega ni hace merge por sí sola.
+- **`docs/REVIEW.md`.** Tres pases de revisión con severidad (Bugs / Seguridad / Cumplimiento,
+  Crítico/Importante/Nit) enganchados a `/code-simplify`; lo Crítico bloquea `/ship`. El pase Cumplimiento
+  audita explícitamente, función por función, los `<coding_standards>` de `MASTER_PROMPT.md` (un solo
+  `return` + guard clauses, patrón Result, tipado estricto) — hasta ahora esa regla estaba declarada
+  "obligatoria" pero ningún paso de revisión la comprobaba, y en la práctica se seguía viendo código con
+  varios `return` dispersos.
+- **`docs/GUARDRAILS.md`.** Distingue instrucciones *advisory* (`MASTER_PROMPT.md`) de guardarraíles
+  deterministas a nivel de git/CI (pre-commit, branch protection) que se mantienen aunque el modelo olvide
+  una regla. Incluye un ejemplo concreto de heurística pre-commit para la regla de un solo `return`.
+- **`docs/PARALLEL_WORK.md`.** Formaliza el Modo Orquestador ya existente con mecánica concreta de
+  `git worktree` para 2-3 sesiones de IA independientes en paralelo.
+- **`docs/SOURCE_OF_TRUTH.md`.** Patrón de convivencia cuando el proyecto ya usa Jira/ServiceNow/etc.
+  antes de adoptar dbv-specs-ops.
+- **`docs/METRICS.md`.** Indicadores leading/lagging opcionales por fase, legibles solo desde git.
+- **`evals/` + `scripts/run-evals.sh`.** Suite de regresión opcional para la propia configuración del
+  agente (`MASTER_PROMPT.md`, ficheros de activación) — no valida el código del proyecto, valida que el
+  proceso se sigue produciendo igual tras un cambio de configuración.
+- **`.claude/commands/{spec,plan,build,test,code-simplify,ship,maintain}.md`.** Comandos nativos de
+  Claude Code (con autocompletado) para cada fase del ciclo.
+
+### Fixed
+- **Comandos de fase escuetos mal interpretados.** Escribir solo `/build` (sin texto adicional) podía
+  responderse como si el código no existiera, obligando a reformular como frase completa. Corregido con una
+  regla explícita en `docs/MASTER_PROMPT.md` (`<workflow>`): un comando de fase escueto siempre significa
+  "ejecuta ya esa fase", cascadeando automáticamente por las fases previas que falten en vez de rechazar la
+  petición; reforzado en Claude Code con comandos nativos reales (`.claude/commands/`).
+
+### Changed
+- **`docs/MASTER_PROMPT.md`** — enganches a los 6 documentos nuevos en `<workflow>` (`/plan` Modo
+  Orquestador → `PARALLEL_WORK.md`; `/code-simplify` → `REVIEW.md`; `/ship` → gate de hallazgos Crítico;
+  Fase 7 documentada al final), `<boundaries>` (→ `GUARDRAILS.md`) y `<context_management>` (→
+  `SOURCE_OF_TRUTH.md`).
+- **`README.md` dividido en dos ficheros independientes de un solo idioma** — `README.md` (español,
+  principal) y `README.en.md` (inglés), en vez de un único fichero bilingüe con secciones EN/ES mezcladas.
+  Cada uno incluye: badge de versión, Key Features, Origin & Inspiration (nueva entrada citando el playbook
+  de Anthropic), diagrama `mermaid` de flujo actualizado con el nodo opcional de Maintain (Fase 7) y el
+  pase de revisión por capas en Simplify, tabla de fases con recuadro de Fase 7 opcional, tabla de ficheros
+  de `docs/`, mención de `evals/`/`scripts/`, nota de `.claude/commands/` para usuarios de Claude Code, y un
+  enlace cruzado de cambio de idioma en la cabecera de cada fichero.
+- **`docs/README.md`** — tabla e índice de flujo con los 6 documentos nuevos.
+- **`docs/UPGRADE_PROMPT.md`** — manifest v2.8.0, nuevas URLs de descarga y mensaje de cierre actualizado.
+
+---
+
 ## [2.7.0] — 2026-08-28
 
 Consolidación de lecciones, patrones y trampas técnicas contrastadas en múltiples aplicaciones nativas publicadas en tiendas oficiales de distribución (Microsoft Store, Apple App Store, Uptodown, etc.). Todo lo que sigue surge de horas de depuración en entornos reales de producción y pruebas multiplataforma.
@@ -377,7 +430,8 @@ Initial public release of the **dbv-specs-ops** SDD framework.
 
 ---
 
-[Sin publicar]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.7.0...HEAD
+[Sin publicar]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.8.0...HEAD
+[2.8.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.7.0...v2.8.0
 [2.7.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.6.0...v2.7.0
 [2.6.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.5.1...v2.6.0
 [2.5.1]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.5.0...v2.5.1
