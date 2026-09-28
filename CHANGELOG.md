@@ -18,6 +18,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
   guarda GitHub). Detectado en producción en dos apps derivadas el 2026-09-28.
 
 ### Added
+- **`docs/NATIVE_APPS_RELEASE_CI.md` §6quater — actualizaciones incrementales del AppImage (`.zsync`).**
+  `appimagetool -u "gh-releases-zsync|…"` incrusta la información de actualización y genera el
+  `.zsync`, que se publica junto al AppImage (AppImageUpdate descarga solo lo que cambia; el test de
+  AppImageHub lo pide). Tres trampas comprobadas: sin `zsyncmake` se salta el `.zsync` sin fallar; la
+  URL del `.zsync` es el nombre del fichero de salida (hay que usar ya el nombre con puntos de GitHub);
+  y con `APPIMAGE_EXTRACT_AND_RUN=1` el AppImage no atiende `--appimage-updateinformation` y arranca
+  la app entera (la cadena se lee de `.upd_info` con `objcopy`). La plantilla `release-linux.yml` de
+  §9 lo incorpora con las tres verificaciones. Origen: DBV Typst Editor 0.12.0 (RF-84), probado en WSL.
 - **`docs/MARKETPLACE_PUBLISHING.md` §1 — AppImageHub** como canal: su bot abre el PR de alta en el
   catálogo sin que se pida y comenta el resultado del test mencionando al autor.
 

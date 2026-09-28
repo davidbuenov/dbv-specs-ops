@@ -162,6 +162,37 @@ El paso completo está en la plantilla `release-linux.yml` de §9. Para una Rele
 relanzar el workflow con `draft: false`; si un Cask de Homebrew referencia el AppImage, hay que
 recalcular su sha256 (cambia al reempaquetar).
 
+## 6quater. Actualizaciones incrementales del AppImage (`.zsync`) — y tres trampas
+
+Un AppImage puede llevar **información de actualización** incrustada: AppImageUpdate y las
+herramientas compatibles descargan entonces solo los bloques que cambian entre versiones, usando un
+fichero `.zsync` publicado junto al AppImage. El test de AppImageHub avisa (sin bloquear) si falta.
+Se añade en el mismo paso de reempaquetado de §6ter, con `appimagetool -u`:
+
+```
+gh-releases-zsync|<dueño>|<repo>|latest|<Nombre>_*_amd64.AppImage.zsync
+```
+
+No choca con el auto-actualizador de Tauri: en Linux está desactivado (§7). Trampas, comprobadas en
+el código de `appimagetool` y en WSL sobre un AppImage publicado (2026-09-28, DBV Typst Editor 0.12.0):
+
+1. **`appimagetool` no genera el `.zsync` por sí mismo:** llama a `zsyncmake`, y si no está **se lo
+   salta sin fallar**. Hay que instalar el paquete `zsync` y comprobar que el `.zsync` existe.
+2. **La URL del `.zsync` es el nombre del fichero de salida.** Si se reempaqueta con el nombre local
+   (con espacios) y GitHub lo publica con puntos, el `.zsync` apunta a un fichero que no existe. Se
+   reempaqueta directamente con el nombre que tendrá en GitHub y se comprueba la cabecera `URL:`.
+3. **Con `APPIMAGE_EXTRACT_AND_RUN=1` (obligatorio en el runner, sin FUSE) el AppImage no atiende
+   `--appimage-updateinformation`: arranca la aplicación entera y se queda esperando**, así que el
+   paso se colgaría hasta el límite del job. La cadena se lee de la sección `.upd_info` del ELF:
+   `objcopy -O binary --only-section=.upd_info App.AppImage out && tr -d '\000' < out`.
+
+Además, si la Release ya estaba **publicada** cuando se sustituye el AppImage (relanzar el workflow
+con `draft: false`), cualquier automatización que calculara su sha256 al publicarse (un Cask de
+Homebrew) queda desfasada: hay que relanzarla después (`gh workflow run …`, permiso `actions: write`).
+
+Para probarlo en local sin `sudo` en WSL: `apt-get download zsync && dpkg -x zsync_*.deb zs` y añadir
+`zs/usr/bin` al `PATH`. El paso completo está en la plantilla `release-linux.yml` de §9.
+
 ## 7. Deuda técnica aceptable: firma cross-máquina no resuelta
 
 Si el par de claves de firma del actualizador se usa hoy solo en la máquina local donde se firma el build
@@ -306,7 +337,7 @@ jobs:
       - name: Instalar dependencias del sistema (WebKitGTK)
         run: |
           sudo apt-get update
-          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf xdg-utils
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf xdg-utils zsync
 
       - name: Instalar Rust
         uses: dtolnay/rust-toolchain@stable
@@ -338,7 +369,7 @@ jobs:
       # extrae, se normalizan los permisos, se reempaqueta con el mismo nombre y
       # se sustituye el asset que tauri-action ya había subido. El .deb no se
       # toca. Ver dbv-specs-ops/docs/NATIVE_APPS_RELEASE_CI.md §6ter.
-      - name: Normalizar permisos del AppImage y resubirlo
+      - name: Normalizar permisos del AppImage, añadir el .zsync y resubirlo
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           APPIMAGE_EXTRACT_AND_RUN: "1"
@@ -355,11 +386,39 @@ jobs:
           wget -q -O "$work/appimagetool" \
             https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage
           chmod +x "$work/appimagetool"
-          "$work/appimagetool" -n "$work/squashfs-root" "$appimage"
+          # GitHub cambia los espacios del nombre por puntos al subir el asset:
+          # se reempaqueta YA con ese nombre, para que --clobber lo sustituya y la
+          # URL del .zsync (appimagetool escribe el nombre del fichero de salida)
+          # apunte a un asset real. Con `-u`, AppImageUpdate descarga solo lo que
+          # cambia entre versiones (NATIVE_APPS_RELEASE_CI.md §6quater).
+          asset=$(basename "$appimage" | tr ' ' '.')
+          update_info="gh-releases-zsync|${GITHUB_REPOSITORY_OWNER}|${GITHUB_REPOSITORY#*/}|latest|${asset%%_*}_*_amd64.AppImage.zsync"
+          out="$work/out"
+          mkdir -p "$out"
+          (cd "$out" && "$work/appimagetool" -n -u "$update_info" "$work/squashfs-root" "$asset")
 
-          # Verificación sobre el AppImage ya reempaquetado, no sobre el directorio.
+          # Sin `zsyncmake`, appimagetool se salta el .zsync SIN FALLAR: se exige.
+          if [ ! -f "$out/$asset.zsync" ]; then
+            echo "::error::appimagetool no generó $asset.zsync (¿falta el paquete zsync?)"
+            exit 1
+          fi
+          url=$(grep -a -m1 '^URL: ' "$out/$asset.zsync" | cut -d' ' -f2-)
+          if [ "$url" != "$asset" ]; then
+            echo "::error::La URL del .zsync es '$url' y el asset se llama '$asset'"
+            exit 1
+          fi
+          # Se lee la sección `.upd_info` del ELF: con APPIMAGE_EXTRACT_AND_RUN=1 el
+          # runtime no atiende `--appimage-updateinformation` y arranca la app.
+          objcopy -O binary --only-section=.upd_info "$out/$asset" "$work/upd_info"
+          embedded=$(tr -d '\000' < "$work/upd_info")
+          if [ "$embedded" != "$update_info" ]; then
+            echo "::error::Información de actualización incrustada inesperada: '$embedded'"
+            exit 1
+          fi
+
+          # Permisos: verificación sobre el AppImage ya reempaquetado, no sobre el directorio.
           check=$(mktemp -d)
-          (cd "$check" && "$OLDPWD/$appimage" --appimage-extract >/dev/null)
+          (cd "$check" && "$out/$asset" --appimage-extract >/dev/null)
           ls -l "$check/squashfs-root/AppRun" "$check/squashfs-root/AppRun.wrapped" "$check/squashfs-root/usr/bin/"
           bad=$(find "$check/squashfs-root" -type f \( ! -perm -o+r -o -perm -o+w \))
           if [ -n "$bad" ] || [ ! -x "$check/squashfs-root/AppRun.wrapped" ] \
@@ -369,11 +428,7 @@ jobs:
             exit 1
           fi
 
-          # GitHub cambia los espacios del nombre por puntos al subir el asset;
-          # --clobber solo reemplaza si el nombre local ya coincide con ese.
-          upload="$work/$(basename "$appimage" | tr ' ' '.')"
-          cp "$appimage" "$upload"
-          gh release upload "${{ steps.version.outputs.tag }}" "$upload" --clobber
+          gh release upload "${{ steps.version.outputs.tag }}" "$out/$asset" "$out/$asset.zsync" --clobber
 ```
 
 ### `release-macos.yml`
