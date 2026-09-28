@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Sin publicar] / [Unreleased]
 
+### Fixed
+- **`docs/NATIVE_APPS_RELEASE_CI.md` §6ter — el `.AppImage` de Tauri no arrancaba bajo otro usuario.**
+  linuxdeploy deja `AppRun.wrapped` en `0770` dentro de un squashfs de root; firejail y el test de
+  AppImageHub fallan con `Permission denied`. Nueva sección con el diagnóstico (WSL + `unsquashfs`), y
+  la plantilla `release-linux.yml` de §9 añade el paso que extrae, normaliza permisos, reempaqueta con
+  `appimagetool`, verifica y sustituye el asset con `--clobber` (con el nombre pasado a puntos, como lo
+  guarda GitHub). Detectado en producción en dos apps derivadas el 2026-09-28.
+
+### Added
+- **`docs/MARKETPLACE_PUBLISHING.md` §1 — AppImageHub** como canal: su bot abre el PR de alta en el
+  catálogo sin que se pida y comenta el resultado del test mencionando al autor.
+
 ---
 
 ## [2.8.0] — 2026-09-01

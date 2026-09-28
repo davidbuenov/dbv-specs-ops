@@ -130,6 +130,38 @@ no es verificación suficiente. Tras el **primer run real**, abre el log complet
 `Unexpected input(s) ...` de la propia Action — enumera los inputs válidos exactos de la versión que se
 ejecutó, que es la única fuente fiable. Corrige contra esa lista, no contra la documentación.
 
+## 6ter. Gotcha real — el AppImage de Tauri no arranca si lo ejecuta otro usuario
+
+linuxdeploy (el empaquetador que usa `tauri build` para el `.AppImage`) deja `AppRun.wrapped` con
+permisos `0770`, y dentro del squashfs todo pertenece a `root`. En un escritorio normal **no se nota**:
+el runtime FUSE monta los ficheros con el uid del usuario que lo ejecuta. Pero cualquier entorno que
+lo ejecute como "otros" —firejail, algunos sandboxes, y en concreto el test automático del catálogo
+[AppImageHub](https://appimage.github.io)— falla con
+`AppRun: line 12: .../AppRun.wrapped: Permission denied` y la app no llega a abrir ventana.
+
+Detectado en producción (2026-09-28) en dos apps a la vez: el workflow `discover-apps.yml` de
+AppImageHub abre **por su cuenta** un PR de alta en el catálogo para cualquier repo que publique
+AppImages, lo prueba y comenta el fallo mencionando al autor. Ver `MARKETPLACE_PUBLISHING.md` §1.
+
+**Cómo diagnosticarlo** sin Linux nativo (WSL basta): el offset del squashfs lo da el propio runtime,
+`APPIMAGE_EXTRACT_AND_RUN=1 ./App.AppImage --appimage-offset`, y luego
+`unsquashfs -o <offset> -lls App.AppImage | grep AppRun`. Si `AppRun.wrapped` sale `-rwxrwx---`,
+es este problema.
+
+**Regla:** tras `tauri-action`, un paso que extraiga el AppImage (`--appimage-extract`, no necesita
+FUSE), normalice permisos con `chmod -R u+rwX,go+rX,go-w`, reempaquete con `appimagetool`, **verifique
+sobre el AppImage ya reempaquetado** (no sobre el directorio) y sustituya el asset con
+`gh release upload --clobber`. Dos trampas del propio paso:
+
+- `appimagetool` es a su vez un AppImage: en el runner, `APPIMAGE_EXTRACT_AND_RUN=1` evita depender de FUSE.
+- GitHub **cambia los espacios del nombre del asset por puntos** (`My App_1.0.0_amd64.AppImage` →
+  `My.App_1.0.0_amd64.AppImage`). `--clobber` compara con el nombre local, así que hay que subir una
+  copia ya renombrada con puntos o fallará con "asset already exists".
+
+El paso completo está en la plantilla `release-linux.yml` de §9. Para una Release ya publicada, basta
+relanzar el workflow con `draft: false`; si un Cask de Homebrew referencia el AppImage, hay que
+recalcular su sha256 (cambia al reempaquetar).
+
 ## 7. Deuda técnica aceptable: firma cross-máquina no resuelta
 
 Si el par de claves de firma del actualizador se usa hoy solo en la máquina local donde se firma el build
@@ -297,6 +329,51 @@ jobs:
           releaseDraft: ${{ steps.draft.outputs.value }}
           prerelease: false
           includeUpdaterJson: false
+
+      # linuxdeploy (dentro de `tauri build`) deja `AppRun.wrapped` con permisos
+      # 0770 y todo el squashfs pertenece a root. En un escritorio no se nota
+      # porque el runtime FUSE monta los ficheros con el uid del usuario, pero
+      # quien lo ejecuta como "otros" (p. ej. el test con firejail del catálogo
+      # de AppImageHub) recibe "Permission denied" y la app no arranca. Se
+      # extrae, se normalizan los permisos, se reempaqueta con el mismo nombre y
+      # se sustituye el asset que tauri-action ya había subido. El .deb no se
+      # toca. Ver dbv-specs-ops/docs/NATIVE_APPS_RELEASE_CI.md §6ter.
+      - name: Normalizar permisos del AppImage y resubirlo
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          APPIMAGE_EXTRACT_AND_RUN: "1"
+          ARCH: x86_64
+        run: |
+          set -euo pipefail
+          appimage=$(ls src-tauri/target/release/bundle/appimage/*.AppImage)
+          work=$(mktemp -d)
+          cp "$appimage" "$work/original.AppImage"
+          chmod +x "$work/original.AppImage"
+          (cd "$work" && ./original.AppImage --appimage-extract >/dev/null)
+          chmod -R u+rwX,go+rX,go-w "$work/squashfs-root"
+
+          wget -q -O "$work/appimagetool" \
+            https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage
+          chmod +x "$work/appimagetool"
+          "$work/appimagetool" -n "$work/squashfs-root" "$appimage"
+
+          # Verificación sobre el AppImage ya reempaquetado, no sobre el directorio.
+          check=$(mktemp -d)
+          (cd "$check" && "$OLDPWD/$appimage" --appimage-extract >/dev/null)
+          ls -l "$check/squashfs-root/AppRun" "$check/squashfs-root/AppRun.wrapped" "$check/squashfs-root/usr/bin/"
+          bad=$(find "$check/squashfs-root" -type f \( ! -perm -o+r -o -perm -o+w \))
+          if [ -n "$bad" ] || [ ! -x "$check/squashfs-root/AppRun.wrapped" ] \
+             || find "$check/squashfs-root/AppRun.wrapped" ! -perm -o+x | grep -q .; then
+            echo "::error::El AppImage reempaquetado sigue con permisos incorrectos:"
+            echo "$bad"
+            exit 1
+          fi
+
+          # GitHub cambia los espacios del nombre por puntos al subir el asset;
+          # --clobber solo reemplaza si el nombre local ya coincide con ese.
+          upload="$work/$(basename "$appimage" | tr ' ' '.')"
+          cp "$appimage" "$upload"
+          gh release upload "${{ steps.version.outputs.tag }}" "$upload" --clobber
 ```
 
 ### `release-macos.yml`

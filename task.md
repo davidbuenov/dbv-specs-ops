@@ -35,6 +35,12 @@
   - [x] Actualizar el pie de comparación de `CHANGELOG.md` (`[Sin publicar]` → `v2.8.0...HEAD`, nuevo `[2.8.0]: v2.7.0...v2.8.0`).
   - [x] Commit `Version 2.8.0` (`7c33e42`) y push a `origin/master`.
 
+- [ ] **Sin publicar (2026-09-28): lección AppImage + AppImageHub**, pendiente de incluir en la próxima versión.
+  - [x] `docs/NATIVE_APPS_RELEASE_CI.md` §6ter y paso nuevo en la plantilla `release-linux.yml` de §9.
+  - [x] `docs/MARKETPLACE_PUBLISHING.md` §1: fila de AppImageHub.
+  - [x] `CHANGELOG.md` → `[Sin publicar]`.
+  - [ ] Versionar (probablemente 2.8.1, solo documentación) y sincronizar los proyectos que usan el framework.
+
 ---
 
 ## 🔄 Context Snapshot / Snapshot de Contexto
