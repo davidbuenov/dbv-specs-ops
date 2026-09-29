@@ -10,6 +10,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ## [Sin publicar] / [Unreleased]
 
 ### Fixed
+- **`docs/NATIVE_APPS_RELEASE_CI.md` §6quinquies — el Cask de Homebrew y Homebrew 7.** Los bloques
+  Ruby `preflight`/`postflight` están obsoletos en taps de terceros y cada usuario ve el aviso al
+  instalar o actualizar. Nueva sección: `command_wrapper` para los comandos de consola (sustituye a
+  `preflight` + `binary`), `generated_script` y los `preflight_steps` declarativos para lo demás. Trampa
+  en Linux: `app_image` ahora **mueve** el AppImage a `~/Applications`, así que un comando que apunte a
+  `staged_path` queda roto sin error. El CI del tap debe fallar ante un aviso «deprecated» al instalar
+  y comprobar que existe lo que ejecuta el comando. Detectado por un usuario de DBV Typst Editor el
+  2026-09-29.
 - **`docs/NATIVE_APPS_RELEASE_CI.md` §6ter — el `.AppImage` de Tauri no arrancaba bajo otro usuario.**
   linuxdeploy deja `AppRun.wrapped` en `0770` dentro de un squashfs de root; firejail y el test de
   AppImageHub fallan con `Permission denied`. Nueva sección con el diagnóstico (WSL + `unsquashfs`), y

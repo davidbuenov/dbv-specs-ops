@@ -193,6 +193,70 @@ Homebrew) queda desfasada: hay que relanzarla después (`gh workflow run …`, p
 Para probarlo en local sin `sudo` en WSL: `apt-get download zsync && dpkg -x zsync_*.deb zs` y añadir
 `zs/usr/bin` al `PATH`. El paso completo está en la plantilla `release-linux.yml` de §9.
 
+## 6quinquies. Cask de Homebrew: sin bloques Ruby `preflight`/`postflight` (Homebrew 7) — y el AppImage ya no está en `staged_path`
+
+Homebrew 7 (septiembre de 2026) declara obsoletos los bloques Ruby `preflight do … end` y
+`postflight do … end` en los taps de terceros (en los oficiales ya se rechazan). Todavía funcionan,
+pero **cada usuario ve en cada `brew install` o `brew upgrade`** el aviso
+`Calling preflight is deprecated! Use preflight_steps instead`, que le pide reportarlo al tap. Así lo
+detectó un usuario de macOS de DBV Typst Editor el 2026-09-29, el día de publicar la 0.12.0.
+
+Alternativas (referencia: `docs/Cask-Cookbook.md` de `Homebrew/brew`):
+
+- **Un comando de consola** (el caso típico: `typs`, `mdr`…): `command_wrapper`. Escribe el script en
+  el `staged_path` y lo enlaza como un `binary`, en un solo paso; sustituye al par `preflight` +
+  `binary`. Con `executable:` (más `args:` y `env:`) para un envoltorio simple, o con `content:` para
+  un script completo.
+- **Un script que no se enlaza** (lo usa un `installer` o un paso posterior): `generated_script`.
+- **Cualquier otra preparación**: `preflight_steps do … end`, declarativo, con pasos como
+  `write_file`, `set_permissions`, `move`, `symlink` o `run` y los tokens `{{staged_path}}`,
+  `{{version}}` o `{{appdir}}`, que se expanden al instalar. No admite Ruby arbitrario.
+
+```ruby
+on_macos do
+  app "Mi App.app"
+  command_wrapper "miapp", content: <<~SH
+    #!/bin/sh
+    exec open -a "Mi App" "$@"
+  SH
+end
+```
+
+**Trampa en Linux:** desde Homebrew 7, `app_image` **mueve** el AppImage a `appimagedir`
+(`~/Applications` por defecto, configurable con `--appimagedir`) y le da permiso de ejecución él
+mismo. En `staged_path` ya no queda nada. Un comando que apunte al AppImage en `staged_path` queda
+**roto sin ningún error al instalar**: en DBV Typst Editor estuvo así desde el cambio de Homebrew
+hasta que se revisó por el aviso. El DSL no expone `appimagedir` (`Cask::Config` es interno), así que
+el script usa la ruta por defecto y avisa si no la encuentra:
+
+```ruby
+on_linux do
+  app_image "Mi.App_#{version}_amd64.AppImage", target: "Mi-App.AppImage"
+  command_wrapper "miapp", content: <<~SH
+    #!/bin/sh
+    APPIMAGE="$HOME/Applications/Mi-App.AppImage"
+    if [ ! -x "$APPIMAGE" ]; then
+      echo "miapp: $APPIMAGE not found (installed with a custom --appimagedir?)" >&2
+      exit 1
+    fi
+    nohup "$APPIMAGE" "$@" >/dev/null 2>&1 &
+  SH
+end
+```
+
+**El CI del tap tiene que ver lo mismo que el usuario.** Homebrew no se puede ejecutar en Windows, así
+que el tap necesita un workflow que instale el Cask de verdad en `macos-latest` y `ubuntu-latest`, con
+dos comprobaciones que antes faltaban:
+
+1. **Fallar ante cualquier aviso de obsolescencia**:
+   `brew install --cask <tap>/<cask> 2>&1 | tee install.log` y después
+   `if grep -qi deprecated install.log; then exit 1; fi`.
+2. **Comprobar que existe lo que ejecuta el comando**, no solo el texto del script. Un `grep` sobre el
+   contenido del script dejó pasar el fallo de Linux: en su lugar, `test -x "$HOME/Applications/<target>"`.
+
+El workflow de la app que actualiza el tap (`update-homebrew-tap.yml`) solo cambia `version` y los
+`sha256` con `sed`, así que no se ve afectado por el cambio de sintaxis.
+
 ## 7. Deuda técnica aceptable: firma cross-máquina no resuelta
 
 Si el par de claves de firma del actualizador se usa hoy solo en la máquina local donde se firma el build
