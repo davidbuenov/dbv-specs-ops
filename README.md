@@ -4,7 +4,7 @@
 
 <p align="right">🇪🇸 Español · <a href="./README.en.md">🇬🇧 Read in English</a></p>
 
-![Version](https://img.shields.io/badge/version-2.8.0-blue)
+![Version](https://img.shields.io/badge/version-2.9.0-blue)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 
 ---
@@ -126,8 +126,10 @@ Todos los archivos de control del framework residen dentro de la subcarpeta `dbv
 | [`DESIGN_ENRICHMENT.md`](./dbv-specs-ops/docs/DESIGN_ENRICHMENT.md) | Guía para auditorías visuales e ingeniería inversa de tokens de diseño (Impeccable y SkillUI). |
 | [`WEB_TO_DESKTOP_MIGRATION.md`](./dbv-specs-ops/docs/WEB_TO_DESKTOP_MIGRATION.md) | Decisiones estratégicas para convertir una app web existente en app de escritorio nativa. Se lee **antes** que `NATIVE_DESKTOP_APPS.md`. *(Solo si el código ya existe como app web)* |
 | [`NATIVE_DESKTOP_APPS.md`](./dbv-specs-ops/docs/NATIVE_DESKTOP_APPS.md) | Arquitectura de apps de escritorio (Tauri v2) y 8 lecciones. *(Opcional para proyectos web)* |
+| [`AI_DESKTOP_ARCHITECTURE.md`](./dbv-specs-ops/docs/AI_DESKTOP_ARCHITECTURE.md) | Arquitectura de IA híbrida (Local, Nube y Agentes ACP con suscripción). Custodia segura en llavero nativo del SO. |
 | [`NATIVE_APPS_RELEASE_CI.md`](./dbv-specs-ops/docs/NATIVE_APPS_RELEASE_CI.md) | CI/CD multiplataforma con GitHub Actions para binarios nativos. *(Opcional para proyectos web)* |
 | [`MARKETPLACE_PUBLISHING.md`](./dbv-specs-ops/docs/MARKETPLACE_PUBLISHING.md) | Guía de publicación en tiendas de apps y checklist (Microsoft Store, Uptodown, etc.). *(Opcional para proyectos web)* |
+| [`templates/`](./dbv-specs-ops/docs/templates/) | Plantillas de especificaciones de IA (`AI_SPECIFICATIONS.template.md`) y guías de usuario bilingües (`IA.template.md`, `IA.en.template.md`). |
 | [`REVIEW.md`](./dbv-specs-ops/docs/REVIEW.md) | Pases de revisión y severidades (Bugs / Seguridad / Cumplimiento, incluye `<coding_standards>`) usados por `/code-simplify`. |
 | [`GUARDRAILS.md`](./dbv-specs-ops/docs/GUARDRAILS.md) | Guardarraíles deterministas (git/CI) que respaldan las reglas advisory del prompt. *(Opcional)* |
 | [`PARALLEL_WORK.md`](./dbv-specs-ops/docs/PARALLEL_WORK.md) | Mecánica con `git worktree` para ejecutar sesiones de IA independientes en paralelo (Modo Orquestador). |
@@ -317,7 +319,7 @@ Realiza un Fork del repositorio, crea una rama descriptiva y abre una Pull Reque
 <a name="status"></a>
 ## 🛠 Estado
 
-* **Versión:** 2.8.0
+* **Versión:** 2.9.0
 * **Metodología:** Spec-Driven Development (SDD)
 * **Objetivo:** Plantilla universal de desarrollo asistido por IA para cualquier plataforma y asistente.
 

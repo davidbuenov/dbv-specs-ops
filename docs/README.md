@@ -11,6 +11,7 @@ Este directorio contiene los documentos operativos que guían el desarrollo asis
 | [`DESIGN.md`](./DESIGN.md) | Visual design system: color tokens, typography and UI components | Fill in during **Phase 0 (Spec)** if the project has a UI. Optional otherwise. |
 | [`WEB_TO_DESKTOP_MIGRATION.md`](./WEB_TO_DESKTOP_MIGRATION.md) | Strategic decisions for turning an **existing web app** into a native desktop app | Consult **before** `NATIVE_DESKTOP_APPS.md` whenever the code already exists as a web app |
 | [`NATIVE_DESKTOP_APPS.md`](./NATIVE_DESKTOP_APPS.md) | Desktop app architecture (Tauri v2) & 8 design lessons | Fill in/consult only if the project is a compiled native desktop app |
+| [`AI_DESKTOP_ARCHITECTURE.md`](./AI_DESKTOP_ARCHITECTURE.md) | Hybrid AI assistant integration (Local, Cloud & ACP Agents) | Consult when embedding AI assistants or agent tools in native apps |
 | [`NATIVE_APPS_RELEASE_CI.md`](./NATIVE_APPS_RELEASE_CI.md) | Cross-platform GitHub Actions CI/CD for native desktop binaries | Consult when setting up CI/CD for compiled multi-platform desktop apps |
 | [`MARKETPLACE_PUBLISHING.md`](./MARKETPLACE_PUBLISHING.md) | App marketplace submission guide & checklist (Microsoft Store, Uptodown, etc.) | Consult before distributing compiled desktop apps to marketplaces |
 | [`ADOPTION_PROMPT.md`](./ADOPTION_PROMPT.md) | Onboarding SDD onto an existing project | Use instead of Phase 0 if you already have code but no SDD docs |
@@ -31,6 +32,7 @@ ARCHITECTURE           →  defines WITH WHAT and HOW we build it
 DESIGN                 →  defines HOW IT LOOKS (UI projects only)
 WEB_TO_DESKTOP_MIGR.   →  defines WHETHER and HOW to migrate (existing web apps only)
 NATIVE_DESKTOP_APPS    →  defines Desktop Architecture (Tauri/native apps only)
+AI_DESKTOP_ARCHITECTURE → defines Hybrid AI Integration (Desktop AI Assistants & ACP)
 NATIVE_APPS_RELEASE_CI →  defines Multi-platform CI (compiled desktop apps only)
 MARKETPLACE_PUBLISHING →  defines Store Checklist (store distributed desktop apps only)
 REVIEW                 →  defines Review Passes & Severities (used by /code-simplify)

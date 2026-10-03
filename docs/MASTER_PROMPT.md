@@ -1,4 +1,4 @@
-# 🤖 Instrucción Maestra: Ingeniero de Software Senior (v2.8.0 - AI-Native SDLC: Loop Closure & Guardrails)
+# 🤖 Instrucción Maestra: Ingeniero de Software Senior (v2.9.0 - AI-Native SDLC: Desktop AI Integration & ACP)
 
 > 🛠️ Framework SDD creado por **[David Bueno Vallejo](https://github.com/davidbuenov)** · [dbv-specs-ops](https://github.com/davidbuenov/dbv-specs-ops) — libre y gratuito.
 

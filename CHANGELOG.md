@@ -9,6 +9,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Sin publicar] / [Unreleased]
 
+---
+
+## [2.9.0] — 2026-10-03
+
+Arquitectura canónica de IA generativa para aplicaciones de escritorio (híbrida local / nube con API keys / agentes de suscripción vía ACP), catálogo estándar de requisitos de IA para SDD y plantillas bilingües de documentación para el usuario final, acompañadas de la implementación de referencia completa en `dbv-tauri-starter` v0.2.0. Incluye además correcciones críticas de CI/CD para empaquetado AppImage y Homebrew Cask en escritorio nativo.
+
+### Added
+- **`docs/AI_DESKTOP_ARCHITECTURE.md` — Arquitectura canónica de IA de escritorio (3 niveles).**
+  Guía técnica exhaustiva que formaliza el patrón híbrido de IA generativa de escritorio:
+  1. *Nivel 1 — Modelos locales*: Ollama y LM Studio sobre `localhost`, sin clave ni coste de tokens, con autodetección de puertos y modelos descargados.
+  2. *Nivel 2 — Modelos en la nube con API key*: Anthropic, OpenAI, DeepSeek, Google Gemini y OpenRouter. Claves custodiadas exclusivamente en el llavero seguro nativo del sistema operativo (Windows Credential Manager, macOS Keychain, Linux Secret Service/Freedesktop) a través de Rust (`keyring`), nunca en texto plano ni `localStorage`.
+  3. *Nivel 3 — Agentes de suscripción vía ACP (Agent Client Protocol)*: aprovecha herramientas CLI ya autenticadas en la máquina (Claude Code, ChatGPT CLI, Gemini CLI) mediante transporte JSON-RPC por `stdin`/`stdout`, permitiendo al usuario final usar su suscripción de pago existente sin incurrir en costes por tokens de API.
+  Incluye el ciclo de interacción atómico (propuesta de diffs unificados + revisión humana antes de aplicar), carga perezosa de zero-footprint (el módulo no consume recursos hasta que el usuario lo abre) y gestión de cancelación reactiva vía `AbortController`.
+- **`docs/templates/AI_SPECIFICATIONS.template.md`.**
+  Plantilla modular de requisitos para proyectos con IA:
+  - *RNF-IA.1 a RNF-IA.4*: Custodia segura de credenciales en llavero nativo, modo offline/local garantizado, privacidad estricta y zero-footprint en reposo.
+  - *RF-IA-01 a RF-IA-04*: Asistente conversacional con contexto de documento, panel de conexiones con wizard guiado, aplicación atómica de propuestas con diff review y soporte ACP.
+- **`docs/templates/IA.template.md` & `docs/templates/IA.en.template.md`.**
+  Plantillas bilingües de cara al usuario final para incluir en la ayuda de cualquier aplicación de escritorio, explicando con claridad la diferencia entre suscripciones (ACP), claves API y modelos locales gratuitos, garantizando transparencia sobre privacidad y costes.
+- **Implementación de referencia en `dbv-tauri-starter` (v0.2.0).**
+  Backend Rust modular (`src-tauri/src/ai/`), frontend vanilla JS (`src/ai/`) y suite de 40 tests unitarios y de integración (incluyendo simulación mock de transporte ACP y streaming SSE).
+- **`docs/NATIVE_APPS_RELEASE_CI.md` §6quater — actualizaciones incrementales del AppImage (`.zsync`).**
+  `appimagetool -u "gh-releases-zsync|…"` incrusta la información de actualización y genera el
+  `.zsync`, que se publica junto al AppImage (AppImageUpdate descarga solo lo que cambia; el test de
+  AppImageHub lo pide). Tres trampas comprobadas: sin `zsyncmake` se salta el `.zsync` sin fallar; la
+  URL del `.zsync` es el nombre del fichero de salida (hay que usar ya el nombre con puntos de GitHub);
+  y con `APPIMAGE_EXTRACT_AND_RUN=1` el AppImage no atiende `--appimage-updateinformation` y arranca
+  la app entera (la cadena se lee de `.upd_info` con `objcopy`). La plantilla `release-linux.yml` de
+  §9 lo incorpora con las tres verificaciones. Origen: DBV Typst Editor 0.12.0 (RF-84), probado en WSL.
+- **`docs/MARKETPLACE_PUBLISHING.md` §1 — AppImageHub** como canal: su bot abre el PR de alta en el
+  catálogo sin que se pida y comenta el resultado del test mencionando al autor.
+
 ### Fixed
 - **`docs/NATIVE_APPS_RELEASE_CI.md` §6quinquies — el Cask de Homebrew y Homebrew 7.** Los bloques
   Ruby `preflight`/`postflight` están obsoletos en taps de terceros y cada usuario ve el aviso al
@@ -24,18 +56,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
   la plantilla `release-linux.yml` de §9 añade el paso que extrae, normaliza permisos, reempaqueta con
   `appimagetool`, verifica y sustituye el asset con `--clobber` (con el nombre pasado a puntos, como lo
   guarda GitHub). Detectado en producción en dos apps derivadas el 2026-09-28.
-
-### Added
-- **`docs/NATIVE_APPS_RELEASE_CI.md` §6quater — actualizaciones incrementales del AppImage (`.zsync`).**
-  `appimagetool -u "gh-releases-zsync|…"` incrusta la información de actualización y genera el
-  `.zsync`, que se publica junto al AppImage (AppImageUpdate descarga solo lo que cambia; el test de
-  AppImageHub lo pide). Tres trampas comprobadas: sin `zsyncmake` se salta el `.zsync` sin fallar; la
-  URL del `.zsync` es el nombre del fichero de salida (hay que usar ya el nombre con puntos de GitHub);
-  y con `APPIMAGE_EXTRACT_AND_RUN=1` el AppImage no atiende `--appimage-updateinformation` y arranca
-  la app entera (la cadena se lee de `.upd_info` con `objcopy`). La plantilla `release-linux.yml` de
-  §9 lo incorpora con las tres verificaciones. Origen: DBV Typst Editor 0.12.0 (RF-84), probado en WSL.
-- **`docs/MARKETPLACE_PUBLISHING.md` §1 — AppImageHub** como canal: su bot abre el PR de alta en el
-  catálogo sin que se pida y comenta el resultado del test mencionando al autor.
 
 ---
 
@@ -458,7 +478,8 @@ Initial public release of the **dbv-specs-ops** SDD framework.
 
 ---
 
-[Sin publicar]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.8.0...HEAD
+[Sin publicar]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.9.0...HEAD
+[2.9.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.8.0...v2.9.0
 [2.8.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.7.0...v2.8.0
 [2.7.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.6.0...v2.7.0
 [2.6.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.5.1...v2.6.0

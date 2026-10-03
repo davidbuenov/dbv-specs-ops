@@ -4,7 +4,7 @@
 
 <p align="right">🇬🇧 English · <a href="./README.md">🇪🇸 Leer en español</a></p>
 
-![Version](https://img.shields.io/badge/version-2.8.0-blue)
+![Version](https://img.shields.io/badge/version-2.9.0-blue)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 
 ---
@@ -125,8 +125,10 @@ All control files of the framework reside inside the `dbv-specs-ops/` folder:
 | [`DESIGN_ENRICHMENT.md`](./dbv-specs-ops/docs/DESIGN_ENRICHMENT.md) | Optional guide for visual audits and reverse-engineering design tokens (Impeccable & SkillUI). |
 | [`WEB_TO_DESKTOP_MIGRATION.md`](./dbv-specs-ops/docs/WEB_TO_DESKTOP_MIGRATION.md) | Strategic decisions for turning an existing web app into a native desktop app. Read **before** `NATIVE_DESKTOP_APPS.md`. *(Only when the code already exists as a web app)* |
 | [`NATIVE_DESKTOP_APPS.md`](./dbv-specs-ops/docs/NATIVE_DESKTOP_APPS.md) | Desktop app architecture (Tauri v2) & 8 design lessons. *(Optional for web projects)* |
+| [`AI_DESKTOP_ARCHITECTURE.md`](./dbv-specs-ops/docs/AI_DESKTOP_ARCHITECTURE.md) | Hybrid AI assistant integration (Local, Cloud & ACP Agents with subscription). Secure OS keyring secrets. |
 | [`NATIVE_APPS_RELEASE_CI.md`](./dbv-specs-ops/docs/NATIVE_APPS_RELEASE_CI.md) | Cross-platform GitHub Actions CI/CD for native desktop binaries. *(Optional for web projects)* |
 | [`MARKETPLACE_PUBLISHING.md`](./dbv-specs-ops/docs/MARKETPLACE_PUBLISHING.md) | App marketplace submission guide & checklist (Microsoft Store, Uptodown, etc.). *(Optional for web projects)* |
+| [`templates/`](./dbv-specs-ops/docs/templates/) | AI specification templates (`AI_SPECIFICATIONS.template.md`) and bilingual user guide templates (`IA.template.md`, `IA.en.template.md`). |
 | [`REVIEW.md`](./dbv-specs-ops/docs/REVIEW.md) | Review passes and severities (Bugs / Security / Compliance, including `<coding_standards>`) used by `/code-simplify`. |
 | [`GUARDRAILS.md`](./dbv-specs-ops/docs/GUARDRAILS.md) | Deterministic guardrails (git/CI) that back up advisory prompt rules. *(Optional)* |
 | [`PARALLEL_WORK.md`](./dbv-specs-ops/docs/PARALLEL_WORK.md) | `git worktree` mechanics for running independent AI sessions in parallel (Orchestrator Mode). |
@@ -316,7 +318,7 @@ Fork, create a descriptive branch, and open a Pull Request. See the Contributing
 <a name="status"></a>
 ## 🛠 Status
 
-* **Version:** 2.8.0
+* **Version:** 2.9.0
 * **Methodology:** Spec-Driven Development (SDD)
 * **Goal:** Universal AI-assisted development template for any platform and assistant.
 

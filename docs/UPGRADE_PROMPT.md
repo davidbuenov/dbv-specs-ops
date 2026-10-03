@@ -40,9 +40,9 @@ Lee el fichero `project.config.md`:
 - Si **no existe** ese campo → pregunta al usuario:
   > *"¿Qué versión de dbv-specs-ops estás usando? Puedes encontrarla buscando en tu `CHANGELOG.md` el primer commit del proyecto, o mirando qué ficheros de plataforma tienes (`.windsurfrules` fue añadido en v1.1.0, `project.config.md` en v1.2.0)."*
 
-La versión más reciente del framework es: **2.8.0**
+La versión más reciente del framework es: **2.9.0**
  
-Si el usuario ya tiene la **v2.8.0**, informa de que el proyecto está al día. No hay nada que hacer.
+Si el usuario ya tiene la **v2.9.0**, informa de que el proyecto está al día. No hay nada que hacer.
 </version_detection_phase>
 
 ---
@@ -248,6 +248,20 @@ Usa esta tabla para calcular qué hay que actualizar según la versión actual d
 | MODIFICADO | `project.config.md` | Versión incrementada a `2.8.0`. |
 | MODIFICADO | `CHANGELOG.md` | Entrada v2.8.0 añadida. |
 | MODIFICADO | `docs/UPGRADE_PROMPT.md` | Este archivo actualizado con la versión v2.8.0. |
+
+### v2.9.0 (cambios desde v2.8.0)
+| Acción | Fichero | Nota |
+|---|---|---|
+| NUEVO | `docs/AI_DESKTOP_ARCHITECTURE.md` | Arquitectura canónica de IA híbrida (Local, Nube con API key y Agentes de suscripción vía ACP). Custodia segura de secretos en llavero nativo del SO (keyring), zero-footprint lazy loading y ciclo atómico de propuestas con diffs y revisión. |
+| NUEVO | `docs/templates/AI_SPECIFICATIONS.template.md` | Catálogo estándar de Requisitos No Funcionales (RNF-IA.1 a RNF-IA.4) y Funcionales (RF-IA-01 a RF-IA-04) para proyectos con IA. |
+| NUEVO | `docs/templates/IA.template.md` | Plantilla española de ayuda/documentación de cara al usuario final para apps con IA (diferencia suscripción vs API key, local, privacidad). |
+| NUEVO | `docs/templates/IA.en.template.md` | Plantilla inglesa de ayuda/documentación de cara al usuario final para apps con IA. |
+| MODIFICADO | `docs/AI_DESKTOP_ARCHITECTURE.md` | Añadido al índice de documentos y al diagrama de flujo de arquitectura. |
+| MODIFICADO | `docs/MASTER_PROMPT.md` | Cabecera v2.9.0. |
+| MODIFICADO | `README.md` / `README.en.md` | Badge v2.9.0, referencias a la arquitectura de IA y catálogo de plantillas. |
+| MODIFICADO | `project.config.md` | Versión incrementada a `2.9.0`. |
+| MODIFICADO | `CHANGELOG.md` | Entrada v2.9.0 añadida. |
+| MODIFICADO | `docs/UPGRADE_PROMPT.md` | Este archivo actualizado con la versión v2.9.0. |
 </upgrade_manifest_phase>
 
 ---
@@ -295,6 +309,10 @@ Para cada fichero marcado como NUEVO o MODIFICADO, descarga el contenido desde e
 | `.claude/commands/code-simplify.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/.claude/commands/code-simplify.md` *(NUEVO v2.8.0, opcional Claude Code)* |
 | `.claude/commands/ship.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/.claude/commands/ship.md` *(NUEVO v2.8.0, opcional Claude Code)* |
 | `.claude/commands/maintain.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/.claude/commands/maintain.md` *(NUEVO v2.8.0, opcional Claude Code)* |
+| `docs/AI_DESKTOP_ARCHITECTURE.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/AI_DESKTOP_ARCHITECTURE.md` *(NUEVO v2.9.0)* |
+| `docs/templates/AI_SPECIFICATIONS.template.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/templates/AI_SPECIFICATIONS.template.md` *(NUEVO v2.9.0)* |
+| `docs/templates/IA.template.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/templates/IA.template.md` *(NUEVO v2.9.0)* |
+| `docs/templates/IA.en.template.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/templates/IA.en.template.md` *(NUEVO v2.9.0)* |
 
 > **Nota:** Si alguna descarga falla, muestra el link al usuario para que lo descargue manualmente.
 
@@ -376,11 +394,11 @@ Si el proyecto contiene implementaciones antiguas de habilidades (ej: carpetas `
 
 Cuando todos los cambios estén aplicados:
 
-1. Actualiza el campo `Framework Version` en `project.config.md` a `2.8.0`.
+1. Actualiza el campo `Framework Version` en `project.config.md` a `2.9.0`.
 2. Muestra al usuario un resumen claro:
  
 ```
-✅ Framework actualizado de vX.X.X → v2.8.0
+✅ Framework actualizado de vX.X.X → v2.9.0
 
 Ficheros actualizados:
   • [lista de ficheros modificados/añadidos]
@@ -398,6 +416,7 @@ Próximos pasos:
   [Si se creó DESIGN_ENRICHMENT.md] → Lee docs/DESIGN_ENRICHMENT.md para ver cómo auditar y pulir tu UI con Impeccable y SkillUI.
   [Si se creó AGENT_PLUGINS.md] → Lee docs/AGENT_PLUGINS.md para ver cómo estructurar tus herramientas y skills bajo el estándar Agent Plugins 1.0.0.
   [Si se creó WEB_TO_DESKTOP_MIGRATION.md / NATIVE_DESKTOP_APPS.md / NATIVE_APPS_RELEASE_CI.md / MARKETPLACE_PUBLISHING.md] → Lee estas guías si tu proyecto es una app de escritorio nativa compilada o migrada (Tauri/Electron).
+  [Si se creó AI_DESKTOP_ARCHITECTURE.md / plantillas de IA] → Consulta docs/AI_DESKTOP_ARCHITECTURE.md y docs/templates/ para integrar un subsistema de IA generativa (Ollama/LM Studio, claves API en llavero seguro, suscripciones Claude/ChatGPT vía ACP).
   [Si se creó .claude/commands/] → Si usas Claude Code, ya tienes /spec /plan /build /test /code-simplify /ship /maintain como comandos nativos con autocompletado.
   [Si quieres activar la Fase 7] → Lee docs/MAINTAIN.md y añade el bloque "Maintain (Fase 7)" a project.config.md. Sigue desactivada por defecto.
   [Si quieres guardarraíles deterministas] → Lee docs/GUARDRAILS.md (pre-commit hooks, branch protection).
