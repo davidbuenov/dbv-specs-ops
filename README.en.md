@@ -4,7 +4,7 @@
 
 <p align="right">🇬🇧 English · <a href="./README.md">🇪🇸 Leer en español</a></p>
 
-![Version](https://img.shields.io/badge/version-2.9.0-blue)
+![Version](https://img.shields.io/badge/version-3.0.0-blue)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 
 ---
@@ -52,6 +52,13 @@ This repository acts as a **master blueprint** that transforms your AI assistant
 *   **Formalized Parallel Work (`docs/PARALLEL_WORK.md`)**: Concrete `git worktree` mechanics for running 2-3 independent AI sessions in parallel, plus a portable pattern for scoped read-only subtasks.
 *   **Optional Maintain Phase — Loop Closure (`docs/MAINTAIN.md`)**: A deterministic monitor can trigger a read-only AI diagnosis that writes a new `[Detected]` entry into `SPECIFICATIONS.md`, re-entering the cycle at `/plan` — disabled by default, never deploys or merges on its own.
 *   **Native Claude Code Commands (`.claude/commands/`)**: `/spec /plan /build /test /code-simplify /ship /maintain` ship as real slash commands with autocomplete, not just chat text.
+*   **Open `AGENTS.md` Standard Compatible**: A thin `AGENTS.md` pointer (read by Codex, Cursor, Copilot, Windsurf, Jules, Zed and others) carries the same rules as `CLAUDE.md` and `GEMINI.md` without duplicating content: everything lives in `MASTER_PROMPT.md`.
+*   **Spec-to-Test Traceability (`REQ-NN` ↔ `@spec`)**: Every new requirement gets a unique ID in `SPECIFICATIONS.md`; code and tests cite it with `@spec REQ-NN`, and the linter reports requirements that are untagged, untested or duplicated. It is optional and backward-compatible: requirements without an ID in earlier projects keep working unchanged.
+*   **Deterministic Linter (`scripts/dbv-lint.py`)**: Python standard library only (3.8+). It checks the single-`return` rule with Guard Clauses through the AST, the `implementation_plan.md` Frontmatter and traceability. With `--changed` or `--staged` (pre-commit) it only looks at what you touch, so a legacy codebase is not flooded with warnings.
+*   **Adversarial Review with Evidence and Confidence**: The `<builder>` vs `<adversary>` debate in `/plan` must cite its source (`<evidence>`) and self-assess confidence on three axes (`<confidence_score>`: edge cases, security, concurrency). A `low` axis forces a stop and a request for validation.
+*   **Hot/Warm/Cold Context Compression**: A protocol that keeps `memory.md` from degrading the AI's attention in long-lived projects (recent ADRs in full, older ones in one line, history in `memory.archive.md`).
+*   **Subagent Contracts (Scope Lock)**: Each parallel session declares which files it may touch and which requirement-ID range it reserves, to avoid collisions between branches (`docs/PARALLEL_WORK.md`).
+*   **Native Desktop (Tauri v2) & Hybrid AI**: Production guides for desktop apps and a three-tier AI engine (local models, cloud with the key in the OS-native keyring, subscription agents via ACP), with Rust-specific standards (`Result` in IPC commands, no `.unwrap()` at runtime) and bundler-less frontend standards (IIFE).
 
 ---
 
@@ -94,10 +101,10 @@ Each phase has a **trigger command** you can type in the chat at any time. The A
 
 | # | Phase | Command | What the AI does | What you do | Output |
 |---|---|---|---|---|---|
-| 1 | **Spec** | `/spec` | Reviews if the requirement is defined in `SPECIFICATIONS.md`. If not, asks clarifying questions before acting. | Describe the feature or change you need. | Updated `SPECIFICATIONS.md` |
+| 1 | **Spec** | `/spec` | Reviews if the requirement is defined in `SPECIFICATIONS.md`. If not, asks clarifying questions before acting. Gives every new requirement an ID (`REQ-NN`). | Describe the feature or change you need. | Updated `SPECIFICATIONS.md` |
 | 2 | **Plan** | `/plan` | **Architect Review:** Validates specs for edge cases first. If valid, breaks the work into atomic steps. For complex tasks, creates `implementation_plan.md` and waits for explicit approval. | Review and approve the plan. | `task.md` + `implementation_plan.md` |
-| 3 | **Build** | `/build` | Implements logic incrementally. Adds file headers, sets up `venv` for Python, generates startup scripts, updates `CHANGELOG.md [Unreleased]`. | Sit back. Review the code if you wish. | Source code + `CHANGELOG.md` updated |
-| 4 | **Test** | `/test` | Creates and runs unit or integration tests. A task is **not marked as done** without a passing test. Fixes found bugs and logs them in `CHANGELOG.md`. | Run the tests if you want to confirm locally. | Test files + `CHANGELOG.md` updated |
+| 3 | **Build** | `/build` | Implements logic incrementally. Adds file headers, sets up the virtual environment for Python (with `uv` when available), tags code that implements a requirement with `@spec REQ-NN`, generates startup scripts for servers and APIs, updates `CHANGELOG.md [Unreleased]`. | Sit back. Review the code if you wish. | Source code + `CHANGELOG.md` updated |
+| 4 | **Test** | `/test` | Creates and runs unit or integration tests, citing in each one the requirement it validates (`@spec REQ-NN`). A task is **not marked as done** without a passing test. Fixes found bugs and logs them in `CHANGELOG.md`. | Run the tests if you want to confirm locally. | Test files + `CHANGELOG.md` updated |
 | 5 | **Simplify** | `/code-simplify` | Runs the layered review (`docs/REVIEW.md`: Bugs / Security / Compliance) then refactors for clarity. No new features — only polish and Critical fixes. "Clarity over cleverness." | Optional: review and validate the refactor. | Cleaner, simpler code |
 | 6 | **Ship** | `/ship` | Blocks if Critical review findings remain. Updates `README.md`, completes `walkthrough.md`, asks for version type (Patch / Minor / Major), publishes `CHANGELOG.md`, proposes git commit + tag. | Choose the version type and confirm. | Versioned release 🚀 |
 
@@ -106,7 +113,7 @@ Each phase has a **trigger command** you can type in the chat at any time. The A
 > **Optional Phase 7 — Maintain (`/maintain`):** Closes the loop without a human trigger. A deterministic
 > monitor (CI/cron watching a metric) can invoke the AI read-only to diagnose a deviation and write it as a
 > new `[Detected]` entry in `SPECIFICATIONS.md`, which then re-enters the cycle at `/plan` like any other
-> requirement. Disabled by default — enable it in `project.config.md`. See [`docs/MAINTAIN.md`](./dbv-specs-ops/docs/MAINTAIN.md).
+> requirement. Disabled by default — enable it in `project.config.md`. See [`docs/MAINTAIN.md`](./docs/MAINTAIN.md).
 
 ---
 
@@ -118,34 +125,35 @@ All control files of the framework reside inside the `dbv-specs-ops/` folder:
 #### `/dbv-specs-ops/docs` folder:
 | File | Purpose |
 |---|---|
-| [`MASTER_PROMPT.md`](./dbv-specs-ops/docs/MASTER_PROMPT.md) | The brain of the system. Rules, workflow and constraints the AI must follow. |
-| [`SPECIFICATIONS.md`](./dbv-specs-ops/docs/SPECIFICATIONS.md) | The "What" and "Why". Problem, objectives and acceptance criteria. |
-| [`ARCHITECTURE.md`](./dbv-specs-ops/docs/ARCHITECTURE.md) | The "How". Tech stack, design decisions and system structure. |
-| [`DESIGN.md`](./dbv-specs-ops/docs/DESIGN.md) | The "Look". Visual design system: color tokens, typography, spacing and UI components. *(Optional for projects without UI)* |
-| [`DESIGN_ENRICHMENT.md`](./dbv-specs-ops/docs/DESIGN_ENRICHMENT.md) | Optional guide for visual audits and reverse-engineering design tokens (Impeccable & SkillUI). |
-| [`WEB_TO_DESKTOP_MIGRATION.md`](./dbv-specs-ops/docs/WEB_TO_DESKTOP_MIGRATION.md) | Strategic decisions for turning an existing web app into a native desktop app. Read **before** `NATIVE_DESKTOP_APPS.md`. *(Only when the code already exists as a web app)* |
-| [`NATIVE_DESKTOP_APPS.md`](./dbv-specs-ops/docs/NATIVE_DESKTOP_APPS.md) | Desktop app architecture (Tauri v2) & 8 design lessons. *(Optional for web projects)* |
-| [`AI_DESKTOP_ARCHITECTURE.md`](./dbv-specs-ops/docs/AI_DESKTOP_ARCHITECTURE.md) | Hybrid AI assistant integration (Local, Cloud & ACP Agents with subscription). Secure OS keyring secrets. |
-| [`NATIVE_APPS_RELEASE_CI.md`](./dbv-specs-ops/docs/NATIVE_APPS_RELEASE_CI.md) | Cross-platform GitHub Actions CI/CD for native desktop binaries. *(Optional for web projects)* |
-| [`MARKETPLACE_PUBLISHING.md`](./dbv-specs-ops/docs/MARKETPLACE_PUBLISHING.md) | App marketplace submission guide & checklist (Microsoft Store, Uptodown, etc.). *(Optional for web projects)* |
-| [`templates/`](./dbv-specs-ops/docs/templates/) | AI specification templates (`AI_SPECIFICATIONS.template.md`) and bilingual user guide templates (`IA.template.md`, `IA.en.template.md`). |
-| [`REVIEW.md`](./dbv-specs-ops/docs/REVIEW.md) | Review passes and severities (Bugs / Security / Compliance, including `<coding_standards>`) used by `/code-simplify`. |
-| [`GUARDRAILS.md`](./dbv-specs-ops/docs/GUARDRAILS.md) | Deterministic guardrails (git/CI) that back up advisory prompt rules. *(Optional)* |
-| [`PARALLEL_WORK.md`](./dbv-specs-ops/docs/PARALLEL_WORK.md) | `git worktree` mechanics for running independent AI sessions in parallel (Orchestrator Mode). |
-| [`SOURCE_OF_TRUTH.md`](./dbv-specs-ops/docs/SOURCE_OF_TRUTH.md) | How to coexist with an external system (Jira, ServiceNow, etc.). *(Optional)* |
-| [`METRICS.md`](./dbv-specs-ops/docs/METRICS.md) | Leading/lagging indicators per phase, readable from git history alone. *(Optional)* |
-| [`MAINTAIN.md`](./dbv-specs-ops/docs/MAINTAIN.md) | Optional Phase 7 — autonomous loop closure. See callout above. |
+| [`MASTER_PROMPT.md`](./docs/MASTER_PROMPT.md) | The brain of the system. Rules, workflow and constraints the AI must follow. |
+| [`SPECIFICATIONS.md`](./docs/SPECIFICATIONS.md) | The "What" and "Why". Problem, objectives and acceptance criteria. |
+| [`ARCHITECTURE.md`](./docs/ARCHITECTURE.md) | The "How". Tech stack, design decisions and system structure. |
+| [`DESIGN.md`](./docs/DESIGN.md) | The "Look". Visual design system: color tokens, typography, spacing and UI components. *(Optional for projects without UI)* |
+| [`DESIGN_ENRICHMENT.md`](./docs/DESIGN_ENRICHMENT.md) | Optional guide for visual audits and reverse-engineering design tokens (Impeccable & SkillUI). |
+| [`WEB_TO_DESKTOP_MIGRATION.md`](./docs/WEB_TO_DESKTOP_MIGRATION.md) | Strategic decisions for turning an existing web app into a native desktop app. Read **before** `NATIVE_DESKTOP_APPS.md`. *(Only when the code already exists as a web app)* |
+| [`NATIVE_DESKTOP_APPS.md`](./docs/NATIVE_DESKTOP_APPS.md) | Desktop app architecture (Tauri v2) & 8 design lessons. *(Optional for web projects)* |
+| [`AI_DESKTOP_ARCHITECTURE.md`](./docs/AI_DESKTOP_ARCHITECTURE.md) | Hybrid AI assistant integration (Local, Cloud & ACP Agents with subscription). Secure OS keyring secrets. |
+| [`NATIVE_APPS_RELEASE_CI.md`](./docs/NATIVE_APPS_RELEASE_CI.md) | Cross-platform GitHub Actions CI/CD for native desktop binaries. *(Optional for web projects)* |
+| [`MARKETPLACE_PUBLISHING.md`](./docs/MARKETPLACE_PUBLISHING.md) | App marketplace submission guide & checklist (Microsoft Store, Uptodown, etc.). *(Optional for web projects)* |
+| [`templates/`](./docs/templates/) | AI specification templates (`AI_SPECIFICATIONS.template.md`), bilingual user guide templates (`IA.template.md`, `IA.en.template.md`) and clean `task.md` / `memory.md` templates (`task.template.md`, `memory.template.md`). |
+| [`REVIEW.md`](./docs/REVIEW.md) | Review passes and severities (Bugs / Security / Compliance, including `<coding_standards>`) used by `/code-simplify`. |
+| [`GUARDRAILS.md`](./docs/GUARDRAILS.md) | Deterministic guardrails (git/CI) that back up advisory prompt rules. *(Optional)* |
+| [`PARALLEL_WORK.md`](./docs/PARALLEL_WORK.md) | `git worktree` mechanics for running independent AI sessions in parallel (Orchestrator Mode). |
+| [`SOURCE_OF_TRUTH.md`](./docs/SOURCE_OF_TRUTH.md) | How to coexist with an external system (Jira, ServiceNow, etc.). *(Optional)* |
+| [`METRICS.md`](./docs/METRICS.md) | Leading/lagging indicators per phase, readable from git history alone. *(Optional)* |
+| [`MAINTAIN.md`](./docs/MAINTAIN.md) | Optional Phase 7 — autonomous loop closure. See callout above. |
 
 #### `/dbv-specs-ops/` (Framework Root):
 | File | Purpose |
 |---|---|
-| [`project.config.md`](./dbv-specs-ops/project.config.md) | Project identity: name, author, license and file header template. Filled by the AI during the bootstrap interview. |
-| [`CHANGELOG.md`](./dbv-specs-ops/CHANGELOG.md) | Version history. The AI updates the `[Unreleased]` section during `/build` and `/test`, and publishes it on each `/ship`. |
-| [`task.md`](./dbv-specs-ops/task.md) | The logbook. Quantitative progress (checklist), backlog, and **Context Snapshots**. |
-| [`evals/`](./dbv-specs-ops/evals/) + [`scripts/run-evals.sh`](./dbv-specs-ops/scripts/run-evals.sh) | *(Optional)* Regression suite for the agent's own configuration (`MASTER_PROMPT.md` and activation files) — not for your project's code. See `evals/README.md`. |
-| [`memory.md`](./dbv-specs-ops/memory.md) | **Context and Decisions.** Qualitative knowledge: active context, technical decisions (ADRs), lessons learned, and relations map. AI must consult it at session start. |
-| [`implementation_plan.md`](./dbv-specs-ops/implementation_plan.md) | Created at the `/plan` phase. Detailed technical plan for the AI to fill in and get approved before building. |
-| [`walkthrough.md`](./dbv-specs-ops/walkthrough.md) | Created at the `/ship` phase. Summary of what was built, tested and delivered. |
+| [`project.config.md`](./project.config.md) | Project identity: name, author, license and file header template. Filled by the AI during the bootstrap interview. |
+| [`CHANGELOG.md`](./CHANGELOG.md) | Version history. The AI updates the `[Unreleased]` section during `/build` and `/test`, and publishes it on each `/ship`. |
+| [`task.md`](./task.md) | The logbook. Quantitative progress (checklist), backlog, and **Context Snapshots**. |
+| [`evals/`](./evals/) + [`scripts/run-evals.sh`](./scripts/run-evals.sh) | *(Optional)* Regression suite for the agent's own configuration (`MASTER_PROMPT.md` and activation files) — not for your project's code. See `evals/README.md`. |
+| [`scripts/dbv-lint.py`](./scripts/dbv-lint.py) | Deterministic linter (Python 3.8+, no dependencies): single-`return` rule through the AST, plan Frontmatter and `@spec` traceability. `python dbv-specs-ops/scripts/dbv-lint.py --help`. |
+| [`memory.md`](./memory.md) | **Context and Decisions.** Qualitative knowledge: active context, technical decisions (ADRs), lessons learned, and relations map. AI must consult it at session start. |
+| `implementation_plan.md` | Created at the `/plan` phase. Detailed technical plan for the AI to fill in and get approved before building. |
+| `walkthrough.md` | Created at the `/ship` phase. Summary of what was built, tested and delivered. |
 
 #### Framework root (this repo):
 | File | Purpose |
@@ -163,11 +171,14 @@ Each AI assistant loads context differently. Use the corresponding file:
 |---|---|---|
 | **Claude Code** (CLI / VS Code / Desktop) | `CLAUDE.md` | Automatic at session start |
 | **GitHub Copilot** (VS Code / JetBrains) | `.github/copilot-instructions.md` | Automatic in the workspace |
-| **Cursor** | `CLAUDE.md` (compatible) | Automatic |
+| **Cursor** | `AGENTS.md` (or `CLAUDE.md`, compatible) | Automatic |
 | **Antigravity** (VS Code · by Google DeepMind) | `GEMINI.md` (auto) + `ANTIGRAVITY.md` (docs & extra setup) | Automatic (+ optional manual KI setup) |
-| **Windsurf** | `.windsurfrules` | Automatic |
+| **Windsurf** | `.windsurfrules` (or `AGENTS.md`) | Automatic |
+| **OpenAI Codex, Jules, Zed, Aider, JetBrains Junie and other agents** ([AGENTS.md open standard](https://agents.md)) | `AGENTS.md` | Automatic |
 | **ChatGPT / Gemini Web** | `docs/MASTER_PROMPT.md` | Manual: attach or paste in the first message |
 | **Gemini CLI** | `GEMINI.md` | Automatic |
+
+> **About `AGENTS.md`:** it is an open standard stewarded by the Agentic AI Foundation (Linux Foundation). This framework ships it as a thin pointer carrying the same rules as `CLAUDE.md` and `GEMINI.md`. Claude Code (≥ 2.1.277) only reads `AGENTS.md` when no `CLAUDE.md` exists, so with both files nothing is loaded twice. Gemini CLI only reads it if you add `"AGENTS.md"` to `context.fileName` in its `settings.json`; by default it uses `GEMINI.md`.
 
 ---
 
@@ -207,6 +218,12 @@ Since AI assistants only load configuration files from the workspace root direct
     Please follow the SDD rules and files located in `dbv-specs-ops/`.
     Master prompt is at `dbv-specs-ops/docs/MASTER_PROMPT.md`.
     ```
+*   **For Codex, Cursor, Jules, Zed, Aider and other compatible agents (`AGENTS.md` in root).** If you already have your own `AGENTS.md`, add these lines at the top instead of overwriting it:
+    ```markdown
+    # AGENTS.md
+    Please follow the SDD rules and files located in `dbv-specs-ops/`.
+    Master prompt is at `dbv-specs-ops/docs/MASTER_PROMPT.md`.
+    ```
 
 #### Step 3 — Open your AI assistant and kick off the session
 Depending on your project state, write the following to your AI assistant:
@@ -229,30 +246,32 @@ Already using dbv-specs-ops and want to get the latest features? You only need *
 
 > **[⬇️ Download UPGRADE_PROMPT.md](https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/UPGRADE_PROMPT.md)**
 >
-> Right-click → Save As → save it as `docs/UPGRADE_PROMPT.md` inside your project.
+> Right-click → Save As → save it as `dbv-specs-ops/docs/UPGRADE_PROMPT.md` inside your project.
 
 #### Step 2 — Tell your AI
 
 ```
-Read docs/UPGRADE_PROMPT.md and upgrade my project.
+Read dbv-specs-ops/docs/UPGRADE_PROMPT.md and upgrade my project.
 ```
 
 That's it. The AI detects your current version, calculates what needs updating, and applies only the framework files.
 
 #### What the AI will do
-- ✅ Detect your current framework version (reads `project.config.md` or asks you)
+- ✅ Detect your current framework version (reads `dbv-specs-ops/project.config.md` or asks you)
 - ✅ Download and update only the framework files that changed since your version
-- ✅ Add new optional files if missing (e.g. `docs/DESIGN.md` for UI projects)
+- ✅ Add new optional files if missing (e.g. `dbv-specs-ops/docs/DESIGN.md` for UI projects)
 - ✅ Show you a full summary of every change applied
+
+> **Upgrading to v3.0.0 breaks nothing you already have.** Your specifications, backlog and code are not touched; requirements without an ID keep working, and `REQ-NN` IDs are only required for what you write from now on.
 
 #### What the AI will NEVER touch
 
 | File | Why it's protected |
 |---|---|
-| `docs/SPECIFICATIONS.md` | Your project requirements |
-| `docs/ARCHITECTURE.md` | Your technical decisions |
-| `task.md` | Your backlog and project state |
-| `CHANGELOG.md` | Your version history |
+| `dbv-specs-ops/docs/SPECIFICATIONS.md` | Your project requirements |
+| `dbv-specs-ops/docs/ARCHITECTURE.md` | Your technical decisions |
+| `dbv-specs-ops/task.md` and `dbv-specs-ops/memory.md` | Your backlog, state and decisions |
+| `dbv-specs-ops/CHANGELOG.md` | Your version history |
 | `README.md` | Your project documentation |
 | All source code | Your application |
 
@@ -318,7 +337,7 @@ Fork, create a descriptive branch, and open a Pull Request. See the Contributing
 <a name="status"></a>
 ## 🛠 Status
 
-* **Version:** 2.9.0
+* **Version:** 3.0.0
 * **Methodology:** Spec-Driven Development (SDD)
 * **Goal:** Universal AI-assisted development template for any platform and assistant.
 
@@ -350,6 +369,7 @@ Fork, create a descriptive branch, and open a Pull Request. See the Contributing
 | **[Claude Code](https://claude.ai/code)** · *Anthropic* | Main agent: document structure design, prompt engineering, platform files, methodology refinement. |
 | **[Antigravity](https://antigravity.google)** · *Google DeepMind* | Antigravity-specific integration, planning artifacts design, compatibility testing. |
 | **[Gemini](https://gemini.google.com)** · *Google* | Methodology validation and adoption flow testing on existing projects. |
+| **[Gemini 4 Argon](https://gemini.google.com)** · *Google* | v3.0.0 design conversation (outside the code): architecture analysis and proposals for Spec-to-Test traceability, deterministic governance and context compression. |
 | **[ChatGPT](https://chatgpt.com)** · *OpenAI* | Manual flow review and `MASTER_PROMPT.md` compatibility with non-auto-loading models. |
 
 > "The vision was human. The methodology was a conversation."

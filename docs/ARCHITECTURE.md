@@ -106,4 +106,20 @@
 
 ---
 
+## 🧩 Subsistema de IA Integrada en Cliente (Desktop 3-Tier Engine)
+
+> Solo si `project.config.md` declara `Desktop AI Assistant: Yes`. Es una funcionalidad **del producto** (un copiloto dentro de la app), no del arnés del agente que desarrolla. Patrón completo en `docs/AI_DESKTOP_ARCHITECTURE.md`; requisitos en `docs/templates/AI_SPECIFICATIONS.template.md`.
+
+| Nivel | Qué conecta | Credenciales / coste |
+| --- | --- | --- |
+| **1. Modelos locales** | Ollama o LM Studio en `localhost` (autodetección de puertos y modelos) | Ninguna; sin coste de tokens |
+| **2. Nube con API key** | Anthropic, OpenAI, Google Gemini, OpenRouter y servidores compatibles con OpenAI | La clave vive **solo** en el llavero nativo del SO (`keyring` en Rust); nunca en el frontend ni en disco |
+| **3. Agentes de suscripción (ACP)** | CLIs ya autenticados en la máquina (Claude Code, Codex CLI, Gemini CLI…) por JSON-RPC sobre `stdin`/`stdout` | La suscripción que el usuario ya paga, sin gasto adicional de tokens |
+
+- **Cero huella:** sin IA configurada, la app arranca igual que una sin IA; el módulo se carga de forma perezosa cuando el usuario lo abre.
+- **Propuestas atómicas:** la IA propone diffs y un humano los revisa antes de aplicarlos; los accesos a ficheros se confinan al espacio de trabajo (rechaza rutas con `..`).
+- **Decisión en este proyecto:** [Ej: niveles habilitados, proveedores soportados, dónde vive el módulo `src-tauri/src/ai/`]
+
+---
+
 **Instrucción para la IA:** Respeta las decisiones y configuraciones del arnés documentadas aquí. Si necesitas desviarte por un motivo técnico o sugerir una nueva herramienta MCP/Skill para el proyecto, regístralo como "Decisión Técnica" en `memory.md` y obtén la aprobación del desarrollador.

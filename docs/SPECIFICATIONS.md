@@ -23,8 +23,11 @@
 ## ✨ 3. Funcionalidades Principales (Requisitos)
 *El "Qué" del sistema. Estas tareas se trasladarán luego a `task.md`.*
 
-- [ ] **Funcionalidad A:** [Descripción breve y criterio de aceptación].
-- [ ] **Funcionalidad B:** [Descripción breve y criterio de aceptación].
+*Cada requisito lleva un ID único e inmutable al inicio de su línea (`REQ-01`, `REQ-02`…; `RNF-01`… para los no funcionales). Se cita en el código y en los tests con la etiqueta `@spec REQ-01`, y `scripts/dbv-lint.py` avisa de los requisitos sin implementar o sin test. Reglas para evitar conflictos: el siguiente ID es el máximo + 1, nunca se renumera ni se reutiliza (un requisito retirado se tacha: `~~REQ-07~~`) y, en trabajo paralelo, cada rama reserva su rango de IDs.*
+
+- [ ] **REQ-01 · Funcionalidad A:** [Descripción breve y criterio de aceptación].
+- [ ] **REQ-02 · Funcionalidad B:** [Descripción breve y criterio de aceptación].
+- [ ] **RNF-01 · Requisito no funcional:** [Ej: tiempo de respuesta, accesibilidad, privacidad].
 
 ## 🏗️ 4. Propuesta de Solución Técnica (Resumen)
 *Enlace directo con `ARCHITECTURE.md`.*
@@ -42,6 +45,12 @@
 - [ ] **Metadatos en `.well-known/`**: Crear `api-catalog`, `oauth-protected-resource`, `oauth-authorization-server` y `http-message-signatures-directory`.
 - [ ] **Agent Plugin**: Crear el paquete universal de herramientas y habilidades en `.well-known/agent-plugin/` (con manifiesto `plugin.json` y config `mcp.json` válidos según el estándar 1.0.0).
 - [ ] **Negociación de Markdown y Links**: Configurar el enrutamiento para retornar texto plano Markdown con la cabecera `Accept: text/markdown` y definir la cabecera HTTP `Link` apuntando al plugin (`Link: </.well-known/agent-plugin/plugin.json>; rel="agent-plugin"; type="application/json"`).
+
+### 4.2. Subsistema de IA Generativa de Escritorio (Proyectos Nativos / Híbridos)
+*Solo si `project.config.md` declara `Desktop AI Assistant: Yes` (app de escritorio o híbrida con un copiloto de IA integrado). Si el campo no existe, se asume `No`.*
+- [ ] **Arquitectura**: Adoptar el motor de 3 niveles (modelos locales, nube con clave en el llavero nativo del SO y agentes de suscripción vía ACP) descrito en `docs/AI_DESKTOP_ARCHITECTURE.md`.
+- [ ] **Requisitos**: Incorporar a este documento el catálogo `RNF-IA.1..4` y `RF-IA-01..04` de `docs/templates/AI_SPECIFICATIONS.template.md` y adaptarlo al producto.
+- [ ] **Ayuda al usuario**: Generar `docs/IA.md` y `docs/IA.en.md` a partir de `docs/templates/IA.template.md` e `IA.en.template.md` (en `/ship`).
 
 ## 🚫 5. Fuera de Alcance (Out of Scope)
 *Vital para evitar el "scope creep" (crecimiento descontrolado del proyecto).*

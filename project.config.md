@@ -14,7 +14,8 @@
 - **Languages:** [e.g. Python, JavaScript, HTML, CSS]
 - **Technologies / Stack:** [e.g. FastAPI, React, PostgreSQL]
 - **Agent Readiness (Web):** [Yes / No / Not Applicable]
-- **Framework Version:** 2.9.0
+- **Desktop AI Assistant (Local/Cloud/ACP):** [Yes / No / Not Applicable]
+- **Framework Version:** 3.0.0
 
 
 ---
@@ -69,7 +70,7 @@ Use the fields above to generate it. Always include the framework credit line.
 -->
 ```
 
-**Example (Java / C# / Go):**
+**Example (Rust / Java / C# / Go):**
 ```
 // =============================================================================
 // [Project Name] — [Description]
@@ -78,6 +79,23 @@ Use the fields above to generate it. Always include the framework credit line.
 // Built with dbv-specs-ops · https://github.com/davidbuenov/dbv-specs-ops
 // =============================================================================
 ```
+
+---
+
+## Fuente de verdad
+<!-- Opcional — ver docs/SOURCE_OF_TRUTH.md -->
+- Modo: repo
+
+## Guardarraíles activos
+<!-- Opcional — ver docs/GUARDRAILS.md -->
+- Pre-commit: no
+- Linter dbv-lint.py (en /code-simplify): sí
+- Branch protection en CI: no
+
+## Maintain (Fase 7)
+<!-- Opcional, desactivada por defecto — ver docs/MAINTAIN.md -->
+- Habilitado: no
+- CLI no interactivo: <claude -p | gemini -p | otro>
 
 ---
 

@@ -3,7 +3,8 @@ description: Fase Spec del ciclo SDD (dbv-specs-ops) — define el "qué" y el "
 ---
 Ejecuta ahora la fase **Spec** (`/spec`) del ciclo Spec→Plan→Build→Test→Simplify→Ship definido en
 `dbv-specs-ops/docs/MASTER_PROMPT.md` (`<workflow>`, paso 1). Lee primero
-`dbv-specs-ops/project.config.md`, `dbv-specs-ops/docs/SPECIFICATIONS.md` y `dbv-specs-ops/task.md`.
-Revisa si el requisito ya está definido en `SPECIFICATIONS.md`; si no, pregunta antes de asumir nada.
+`dbv-specs-ops/project.config.md`, `dbv-specs-ops/docs/SPECIFICATIONS.md`, `dbv-specs-ops/memory.md` y
+`dbv-specs-ops/task.md`. Revisa si el requisito ya está definido en `SPECIFICATIONS.md`; si no, pregunta
+antes de asumir nada. Todo requisito nuevo lleva un ID único (`REQ-NN`).
 
 $ARGUMENTS

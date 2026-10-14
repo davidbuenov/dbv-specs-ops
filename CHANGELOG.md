@@ -11,6 +11,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [3.0.0] — 2026-10-14
+
+Trazabilidad Spec-to-Test, gobernanza determinista y coherencia de rutas. **Retrocompatible:** un proyecto anterior a v3.0.0 se actualiza sin tocar sus especificaciones, su backlog ni su código; los IDs de requisito solo son obligatorios para lo que se escriba a partir de ahora.
+
+### Added
+- **`AGENTS.md` — activador del estándar abierto** (Agentic AI Foundation / Linux Foundation; lo leen Codex, Cursor, Copilot, Windsurf, Jules, Zed, Aider y otros). Puntero fino, con las mismas reglas y nota de rutas que `CLAUDE.md`/`GEMINI.md`. Claude Code (≥ 2.1.277) solo lo lee si no hay `CLAUDE.md` (verificado con el CLI real: solo `AGENTS.md` → lo lee; ambos → manda `CLAUDE.md`), por lo que no se carga dos veces; Gemini CLI solo lo lee si se añade a `context.fileName`. El bootstrap y `UPGRADE_PROMPT` nunca sobrescriben un `AGENTS.md` propio del proyecto: solo añaden las líneas de redirección.
+- **Trazabilidad Spec-to-Test (`REQ-NN` ↔ `@spec`).** Todo requisito *nuevo o modificado* de `SPECIFICATIONS.md` lleva un ID único e inmutable al inicio de su línea (`REQ-01`, `RNF-01`…; el formato exacto da igual si el prefijo es `REQ`/`RF`/`RNF`). Reglas anti-conflicto: siguiente ID = máximo + 1, nunca se renumera ni se reutiliza (retirado = `~~REQ-07~~`) y cada rama paralela reserva un rango. El código y los tests citan el ID con `@spec REQ-NN` (`/build`, `/test`). Los requisitos sin ID de proyectos anteriores quedan fuera de la regla.
+- **`scripts/dbv-lint.py` — linter determinista.** Solo librería estándar (Python 3.8+). Comprueba (1) la regla de un solo `return` por AST, con Guard Clauses iniciales (también tras una asignación o con `elif`) y sin falsos positivos con funciones anidadas o generadores; (2) el Frontmatter YAML de `implementation_plan.md`; (3) la trazabilidad: requisitos sin etiqueta, solo en código (sin test), duplicados y etiquetas a IDs inexistentes. Modos `--changed` (solo lo tocado) y `--staged` (pre-commit) para no inundar de avisos una base de código heredada, `--strict` para CI y `--root`. En un repo git analiza solo lo versionado más lo nuevo no ignorado (respeta el `.gitignore`: entornos virtuales, builds, runtimes empaquetados; sin git poda carpetas conocidas y cualquier venv con `pyvenv.cfg`) — sobre un repo real con 9.299 `.py` pasó de 19 s y 14.580 falsos hallazgos a 2 s y 55 reales. Si `SPECIFICATIONS.md` no usa IDs, la trazabilidad se omite sin avisos.
+- **Architect Review con evidencia y confianza.** `<architect_review>` incorpora `<evidence>` (cita de la spec/arquitectura/ruta donde está la fricción) y `<confidence_score edge_cases security concurrency>`; un eje `low` obliga a parar y pedir validación antes de `/build`.
+- **Política de compresión de contexto Hot/Warm/Cold** para `memory.md` en `<context_management>` (alineada con la Política de Mantenimiento existente de ~200 líneas).
+- **Contratos de subagente (`scope_contract`)** en `docs/PARALLEL_WORK.md`: ficheros permitidos/prohibidos, rango de IDs de requisito y presupuesto de llamadas por sesión paralela.
+- **Plantillas limpias `docs/templates/task.template.md` y `memory.template.md`**, usadas por el bootstrap para restablecer `task.md`/`memory.md` cuando contienen el historial del propio framework (con confirmación explícita del usuario).
+- **Pregunta #8 del bootstrap y campo `Desktop AI Assistant`** en `project.config.md`; enganche de `/spec` y `/ship` con `AI_DESKTOP_ARCHITECTURE.md`, `AI_SPECIFICATIONS.template.md` e `IA.template.md`; sección «Subsistema de IA Integrada en Cliente (Desktop 3-Tier Engine)» en `ARCHITECTURE.md` y apartado 4.2 en `SPECIFICATIONS.md`.
+- **Estándares de Rust/Tauri e IIFE** en `<coding_standards>`: `Result` en comandos `#[tauri::command]`, sin `.unwrap()`/`.expect()` en IPC ni runtime (permitidos en arranque y tests; refuerzo con `clippy::unwrap_used`/`expect_used`) y excepción de frontend sin bundler (IIFE, `withGlobalTauri`).
+- **Bloques opcionales de gobernanza en `project.config.md`** (`Fuente de verdad`, `Guardarraíles activos`, `Maintain (Fase 7)`), con los mismos nombres que usan sus guías.
+- **`docs/REVIEW.md`:** auditoría de custodia de claves en `keyring`, confinamiento de rutas (`..`), trampas de Tauri v2, aislamiento en `api.js` (`runningInTauri`), etiquetas `@spec` y ejecución de `dbv-lint.py --changed`. **`docs/GUARDRAILS.md`:** hook pre-commit con `dbv-lint.py --staged` (Python), `clippy` (Rust) y la heurística bash solo para JS/TS.
+- **Detección de proyectos Tauri y creación de `memory.md`** en `docs/ADOPTION_PROMPT.md` (la adopción ahora genera cuatro ficheros) y asignación de IDs a los requisitos documentados.
+
+### Changed
+- **`MASTER_PROMPT.md`:** cabecera v3.0.0; la regla de un solo `return` define con precisión qué es una Guard Clause (la misma definición que verifica el linter); `uv` prioritario en Python (`.venv/` y `venv/` en `.gitignore`); los scripts `start`/`stop` se generan solo para servidores, APIs y servicios residentes (las apps de escritorio, librerías y CLIs documentan sus comandos nativos); `/code-simplify` ejecuta `dbv-lint.py --changed` si hay Python.
+- **Excepción explícita del repo fuente:** si `docs/MASTER_PROMPT.md` está en la raíz del workspace, el bootstrap, el restablecimiento de `task.md`/`memory.md` y el ciclo de fases no se ejecutan sobre el propio framework (formaliza la lección registrada en `memory.md`).
+- **Activadores** (`CLAUDE.md`, `GEMINI.md`, `ANTIGRAVITY.md`, `.windsurfrules`, `.github/copilot-instructions.md`): nota de rutas para proyectos con el framework en `dbv-specs-ops/`; `ANTIGRAVITY.md` añade `project.config.md`; los artefactos de planificación de Antigravity van a `dbv-specs-ops/`.
+- **`.claude/commands/`:** rutas con prefijo `dbv-specs-ops/`, `memory.md` en `/spec` y referencias a IDs, `@spec` y `dbv-lint.py`.
+- **`README.template.md`:** instalación con `uv`, secciones Rust/Tauri v2, árbol con la subcarpeta `dbv-specs-ops/` y enlace a `dbv-specs-ops/CHANGELOG.md`.
+- **`docs/UPGRADE_PROMPT.md`:** manifiesto v3.0.0, URLs de descarga, nota de rutas y activadores, `memory.md` como fichero protegido, `SPECIFICATIONS.md`/`ARCHITECTURE.md` marcados como plantilla (no se sobrescriben) y la versión actual definida en un único sitio (Fase 1).
+- **Higiene del repo:** retirados de git `docs/actualizacion_dbv_specs_ops.md`, `docs/dbv-improvedesign.md` y `linkedin_post.md` (ya integrados en v2.5.0/v2.3.0, sin valor para quien clone el framework; el historial los conserva) y `old/` añadido a `.gitignore`.
+
+### Fixed
+- **Enlaces 404 en `README.md` y `README.en.md`:** 25 enlaces por fichero apuntaban a `./dbv-specs-ops/…`, ruta que no existe en este repo; además se retiran dos enlaces a ficheros que no se versionan (`implementation_plan.md`, `walkthrough.md`). Las instrucciones de actualización indican ahora `dbv-specs-ops/docs/UPGRADE_PROMPT.md`.
+- **`docs/UPGRADE_PROMPT.md`:** la Fase 4 escribía `Framework Version: 1.4.0` en `project.config.md`; la tabla del v2.9.0 listaba dos veces `AI_DESKTOP_ARCHITECTURE.md` en lugar de `docs/README.md`.
+- **`scripts/run-evals.sh`:** resuelve su ruta con `SCRIPT_DIR`/`FRAMEWORK_DIR` (funciona en el repo del framework y desde `dbv-specs-ops/`) y busca `check_target` también dentro de la carpeta del framework; el CLI de IA solo se acepta si es `claude|gemini|copilot|cursor… -p` completo (antes aceptaba sufijos con metacaracteres de shell que acababan en un `eval`); avisa si falta `jq`, usa un fichero temporal propio y marca como `INCONCLUSO` un eval cuyo patrón ya estaba en el fichero antes de ejecutar el CLI (pasaría aunque la IA no hiciera nada; `EVALS_ALLOW_STALE=1` lo ignora). El eval de ejemplo deja de ser vacuo (su patrón `[Oo]lvid` no está en la plantilla). `evals/README.md` documenta el formato real de los evals.
+- **Alcance de `docs/GUARDRAILS.md`:** el ejemplo de pre-commit ya no cuenta `return` de Python con `grep` (daba falsos positivos); ahora usa el AST de `dbv-lint.py`.
+
+---
+
 ## [2.9.0] — 2026-10-03
 
 Arquitectura canónica de IA generativa para aplicaciones de escritorio (híbrida local / nube con API keys / agentes de suscripción vía ACP), catálogo estándar de requisitos de IA para SDD y plantillas bilingües de documentación para el usuario final, acompañadas de la implementación de referencia completa en `dbv-tauri-starter` v0.2.0. Incluye además correcciones críticas de CI/CD para empaquetado AppImage y Homebrew Cask en escritorio nativo.
@@ -478,7 +513,8 @@ Initial public release of the **dbv-specs-ops** SDD framework.
 
 ---
 
-[Sin publicar]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.9.0...HEAD
+[Sin publicar]: https://github.com/davidbuenov/dbv-specs-ops/compare/v3.0.0...HEAD
+[3.0.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.9.0...v3.0.0
 [2.9.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.8.0...v2.9.0
 [2.8.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.7.0...v2.8.0
 [2.7.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.6.0...v2.7.0

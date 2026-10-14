@@ -60,9 +60,22 @@
 
 <!-- Step-by-step instructions to get the project running for the first time. -->
 
-### 🐍 Python (pip)
+### 🐍 Python
 
 #### Local Installation / Instalación Local (Development / Desarrollo)
+
+**Recommended / Recomendado — [uv](https://docs.astral.sh/uv/):**
+```bash
+# 1. Create the virtual environment / Crear el entorno virtual (.venv)
+uv venv
+.venv\Scripts\activate     # Windows
+source .venv/bin/activate  # macOS / Linux
+
+# 2. Install the project in editable mode / Instalar el proyecto en modo editable
+uv pip install -e .
+```
+
+**Alternative / Alternativa — pip:**
 ```bash
 # 1. Create and activate virtual environment / Crear y activar entorno virtual
 python -m venv venv
@@ -91,6 +104,20 @@ npm install
 npm install git+https://github.com/USUARIO/REPO.git
 ```
 
+### 🦀 Rust / Tauri v2 (Desktop App)
+
+<!-- AI: keep this section only if the project is a native desktop app (Tauri). Delete it otherwise. -->
+
+#### Requirements / Requisitos
+- [Rust](https://rustup.rs) (stable) and the Tauri v2 system dependencies (WebView2 on Windows, WebKitGTK on Linux; nothing extra on macOS).
+- Node.js 20+ if the frontend uses npm.
+
+#### Development / Desarrollo
+```bash
+npm install            # frontend dependencies, if any / dependencias del frontend, si las hay
+npm run tauri dev      # or / o: cargo tauri dev
+```
+
 ---
 
 <a name="publishing"></a>
@@ -116,10 +143,24 @@ npm login
 npm publish
 ```
 
+### 🦀 Rust / Tauri v2 (Desktop App)
+
+<!-- AI: keep only for native desktop apps. Store/marketplace submission: see dbv-specs-ops/docs/MARKETPLACE_PUBLISHING.md -->
+
+```bash
+# Build the installers / Generar los instaladores
+npm run tauri build    # or / o: cargo tauri build
+# Output / Resultado: src-tauri/target/release/bundle/
+```
+
 ---
 
 <a name="usage"></a>
 ## ▶️ How to run / Cómo ejecutar
+
+<!-- AI: web servers, APIs and resident services use the start/stop scripts below.
+     Native desktop apps (Tauri), libraries and CLIs have no daemon: replace this section with the
+     native commands (e.g. `npm run tauri dev`) and delete the "How to stop" section and its TOC entry. -->
 
 Use the startup scripts included in the project root:
 
@@ -163,13 +204,15 @@ stop.cmd
 /
 ├── src/              # Application source code
 ├── tests/            # Unit and integration tests
-├── docs/             # Project documentation (SDD files)
-├── start.cmd         # Windows startup script
-├── start.sh          # macOS/Linux startup script
-├── stop.cmd          # Windows stop script
-├── stop.sh           # macOS/Linux stop script
-├── project.config.md # Project identity and file header config
-├── CHANGELOG.md      # Version history
+├── docs/             # User-facing documentation of the project
+├── dbv-specs-ops/    # SDD files: specs, architecture, task.md, memory.md, CHANGELOG.md...
+│   ├── docs/         #   SPECIFICATIONS.md, ARCHITECTURE.md, MASTER_PROMPT.md...
+│   ├── project.config.md  # Project identity and file header config
+│   └── CHANGELOG.md  #   Version history
+├── start.cmd         # Windows startup script (servers / APIs only)
+├── start.sh          # macOS/Linux startup script (servers / APIs only)
+├── stop.cmd          # Windows stop script (servers / APIs only)
+├── stop.sh           # macOS/Linux stop script (servers / APIs only)
 └── README.md         # This file
 ```
 
@@ -178,7 +221,7 @@ stop.cmd
 <a name="changelog"></a>
 ## 📋 Changelog
 
-See [CHANGELOG.md](./CHANGELOG.md) for the full version history.
+See [CHANGELOG.md](./dbv-specs-ops/CHANGELOG.md) for the full version history.
 
 ---
 

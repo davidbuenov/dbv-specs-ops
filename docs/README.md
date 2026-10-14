@@ -14,6 +14,7 @@ Este directorio contiene los documentos operativos que guían el desarrollo asis
 | [`AI_DESKTOP_ARCHITECTURE.md`](./AI_DESKTOP_ARCHITECTURE.md) | Hybrid AI assistant integration (Local, Cloud & ACP Agents) | Consult when embedding AI assistants or agent tools in native apps |
 | [`NATIVE_APPS_RELEASE_CI.md`](./NATIVE_APPS_RELEASE_CI.md) | Cross-platform GitHub Actions CI/CD for native desktop binaries | Consult when setting up CI/CD for compiled multi-platform desktop apps |
 | [`MARKETPLACE_PUBLISHING.md`](./MARKETPLACE_PUBLISHING.md) | App marketplace submission guide & checklist (Microsoft Store, Uptodown, etc.) | Consult before distributing compiled desktop apps to marketplaces |
+| [`templates/`](./templates/) | AI specification catalog (`AI_SPECIFICATIONS.template.md`), bilingual end-user AI help (`IA.template.md`, `IA.en.template.md`) and clean `task.template.md` / `memory.template.md` | Used by `/spec`, `/ship` and the bootstrap (when `task.md`/`memory.md` still hold the framework's own history) |
 | [`ADOPTION_PROMPT.md`](./ADOPTION_PROMPT.md) | Onboarding SDD onto an existing project | Use instead of Phase 0 if you already have code but no SDD docs |
 | [`UPGRADE_PROMPT.md`](./UPGRADE_PROMPT.md) | Upgrading an existing SDD project to the latest framework version | Download this single file and tell your AI: *"Read docs/UPGRADE_PROMPT.md and upgrade my project"* |
 | [`REVIEW.md`](./REVIEW.md) | Review passes and severities (Bugs / Security / Compliance) | Used by `/code-simplify` — Critical findings block `/ship` |
@@ -41,6 +42,7 @@ PARALLEL_WORK          →  defines Parallel Sessions (git worktree, Orchestrato
 SOURCE_OF_TRUTH        →  defines Who Owns State (optional, external ticket systems)
 METRICS                →  defines Per-Phase Indicators (optional)
 MAINTAIN               →  defines Autonomous Loop Closure (optional Phase 7)
+scripts/dbv-lint.py    →  checks the rules deterministically (single-return AST rule, plan frontmatter, @spec traceability)
 task.md (root)         →  records state and ensures continuity between sessions
 
 ADOPTION_PROMPT        →  used once, to adopt SDD on a project that has no SDD docs
