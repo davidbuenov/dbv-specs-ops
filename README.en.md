@@ -9,15 +9,57 @@
 
 ---
 
+**dbv-specs-ops** is a lightweight engineering system designed to maximize software quality and context persistence in AI-assisted development.
+
+This repository acts as a **master blueprint** that transforms your AI assistant from a simple code generator into a Senior Software Engineer that follows rigorous processes.
+
+---
+
+<a name="start"></a>
+## 🚀 Get Started in a Minute
+
+Open your AI assistant (Claude Code, Codex, Gemini CLI, Copilot, Cursor, Windsurf…) in the folder where you want your project and write:
+
+> **I want to create a project using the dbv-specs-ops framework you can find at github.com/davidbuenov**
+
+The AI downloads the framework into the `dbv-specs-ops/` subfolder, sets up your assistant's activation files and proposes the initial configuration (name, license, stack…) for you to confirm in one go. After that you work in phases: `/spec`, `/plan`, `/build`, `/test`, `/code-simplify` and `/ship`.
+
+| I want to… | Tell the AI |
+|---|---|
+| **Create a new project** | *I want to create a project using the dbv-specs-ops framework you can find at github.com/davidbuenov* |
+| **Add it to a project that already has code** | *I want to adopt the dbv-specs-ops framework (github.com/davidbuenov/dbv-specs-ops) in this existing project* |
+| **Upgrade a project that already uses it** | Save [`UPGRADE_PROMPT.md`](https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/UPGRADE_PROMPT.md) as `dbv-specs-ops/docs/UPGRADE_PROMPT.md` and write: *Read dbv-specs-ops/docs/UPGRADE_PROMPT.md and upgrade my project* ([details](#upgrade)) |
+
+Prefer to do it yourself? See the [manual installation](#manual).
+
+<details>
+<summary>🤖 <b>Instructions for the AI</b> (if a user asked you to use this framework)</summary>
+
+1. **Install the framework in the project's `dbv-specs-ops/` subfolder** (create it if needed), without git history: `git clone --depth 1 https://github.com/davidbuenov/dbv-specs-ops.git dbv-specs-ops`, then delete the `dbv-specs-ops/.git` folder. If `dbv-specs-ops/` already exists, the project already uses the framework: offer to upgrade it with `dbv-specs-ops/docs/UPGRADE_PROMPT.md` instead of reinstalling.
+2. **Create the activation files in the project root** that redirect to that subfolder. At least `CLAUDE.md` and `AGENTS.md`, with this content (if they already exist with the user's own content, add these lines at the top and delete nothing):
+
+   ```markdown
+   Please read and follow the master instructions in dbv-specs-ops/docs/MASTER_PROMPT.md. All specs, tasks, and memory logs are located inside the dbv-specs-ops/ folder.
+   ```
+
+   If the user works with Claude Code, also copy `dbv-specs-ops/.claude/commands/` to `.claude/commands/` in the root. The Bootstrap will complete the remaining activation files.
+3. **Read `dbv-specs-ops/docs/MASTER_PROMPT.md` and follow its workflow.** The Bootstrap has you propose the initial configuration for the user to confirm in a single message. If the project already has code, follow `dbv-specs-ops/docs/ADOPTION_PROMPT.md`.
+4. Do not run `git init` or delete/reset any file without the user's explicit confirmation.
+
+</details>
+
+---
+
 ## 📑 Table of Contents
 
+- [Get Started in a Minute](#start)
 - [Key Features](#features)
 - [Origin & Inspiration](#origin)
 - [Visual Workflow](#workflow)
 - [The 6 Development Phases](#phases)
 - [File Structure](#structure)
 - [Platform Activation](#platforms)
-- [Quick Start](#quickstart)
+- [Manual Installation](#manual)
 - [Adopting an Existing Project](#adoption)
 - [Upgrading an Existing Project](#upgrade)
 - [Example Usage](#example)
@@ -26,12 +68,6 @@
 - [Status](#status)
 - [Authors & Credits](#credits)
 - [Inspiration & References](#references)
-
----
-
-**dbv-specs-ops** is a lightweight engineering system designed to maximize software quality and context persistence in AI-assisted development.
-
-This repository acts as a **master blueprint** that transforms your AI assistant from a simple code generator into a Senior Software Engineer that follows rigorous processes.
 
 ---
 
@@ -182,8 +218,10 @@ Each AI assistant loads context differently. Use the corresponding file:
 
 ---
 
-<a name="quickstart"></a>
-## 🚀 Quick Start & Integration (Subfolder Isolation)
+<a name="manual"></a><a name="quickstart"></a>
+## 🛠️ Manual Installation (Subfolder Isolation)
+
+> These are the steps the AI follows for you in [Get Started in a Minute](#start). Use them if you prefer to install it by hand.
 
 This framework is designed to live in a dedicated subdirectory (`dbv-specs-ops/`) inside your project's workspace. This keeps your root folder clean, avoids overwriting project files, and keeps SDD metadata isolated.
 
@@ -225,15 +263,19 @@ Since AI assistants only load configuration files from the workspace root direct
     Master prompt is at `dbv-specs-ops/docs/MASTER_PROMPT.md`.
     ```
 
-#### Step 3 — Open your AI assistant and kick off the session
-Depending on your project state, write the following to your AI assistant:
+#### Step 3 — Kick off the session
+Simply write `/spec` (or paste `dbv-specs-ops/docs/MASTER_PROMPT.md` if using a manual interface like ChatGPT web). The AI will start the Engineering Interview to define the application requirements, filling out `dbv-specs-ops/docs/SPECIFICATIONS.md`.
 
-*   **For New Projects (Quick Start):**
-    Simply write `/spec` (or paste `dbv-specs-ops/docs/MASTER_PROMPT.md` if using a manual interface like ChatGPT web). The AI will start the Engineering Interview to define the application requirements, filling out `dbv-specs-ops/docs/SPECIFICATIONS.md`.
-*   <a name="adoption"></a>**For Existing Projects (Adoption):**
-    Type the following message:
-    > "Adapt this project to the SDD methodology using the framework configuration inside the `dbv-specs-ops` folder. Refer to `dbv-specs-ops/docs/ADOPTION_PROMPT.md` for instructions."
-    The AI will analyze your existing files and run the interview to populate the SDD files under `dbv-specs-ops/`.
+---
+
+<a name="adoption"></a>
+## 🔍 Adopting an Existing Project
+
+If your project already has code, install the framework (with the message from [Get Started in a Minute](#start) or the [manual installation](#manual)) and write to your AI assistant:
+
+> "Adapt this project to the SDD methodology using the framework configuration inside the `dbv-specs-ops` folder. Refer to `dbv-specs-ops/docs/ADOPTION_PROMPT.md` for instructions."
+
+The AI will analyze your existing files and run the interview to populate the SDD files under `dbv-specs-ops/`.
 
 ---
 

@@ -9,15 +9,57 @@
 
 ---
 
+**dbv-specs-ops** es un motor de ingeniería simplificado diseñado para maximizar la calidad del software y la persistencia del contexto en el desarrollo asistido por Inteligencia Artificial.
+
+Este repositorio actúa como un "Blueprint" o plano maestro que transforma a la IA de un simple generador de código en un Ingeniero de Software Senior que sigue procesos rigurosos.
+
+---
+
+<a name="start"></a>
+## 🚀 Empezar en un minuto
+
+Abre tu asistente de IA (Claude Code, Codex, Gemini CLI, Copilot, Cursor, Windsurf…) en la carpeta donde quieras tu proyecto y escribe:
+
+> **Quiero crear un proyecto utilizando el framework dbv-specs-ops que puedes encontrar en github.com/davidbuenov**
+
+La IA descarga el framework en la subcarpeta `dbv-specs-ops/`, prepara los ficheros de activación de tu asistente y te propone la configuración inicial (nombre, licencia, stack…) para que la confirmes de una sola vez. Después trabajas por fases: `/spec`, `/plan`, `/build`, `/test`, `/code-simplify` y `/ship`.
+
+| Quiero… | Dile a la IA |
+|---|---|
+| **Crear un proyecto nuevo** | *Quiero crear un proyecto utilizando el framework dbv-specs-ops que puedes encontrar en github.com/davidbuenov* |
+| **Añadirlo a un proyecto que ya tiene código** | *Quiero incorporar el framework dbv-specs-ops (github.com/davidbuenov/dbv-specs-ops) a este proyecto, que ya existe* |
+| **Actualizar un proyecto que ya lo usa** | Guarda [`UPGRADE_PROMPT.md`](https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/UPGRADE_PROMPT.md) como `dbv-specs-ops/docs/UPGRADE_PROMPT.md` y escribe: *Lee dbv-specs-ops/docs/UPGRADE_PROMPT.md y actualiza mi proyecto* ([detalles](#upgrade)) |
+
+¿Prefieres hacerlo tú? Consulta la [instalación manual](#manual).
+
+<details>
+<summary>🤖 <b>Instrucciones para la IA</b> (si un usuario te ha pedido usar este framework)</summary>
+
+1. **Instala el framework en la subcarpeta `dbv-specs-ops/` del proyecto** (créala si hace falta), sin historial git: `git clone --depth 1 https://github.com/davidbuenov/dbv-specs-ops.git dbv-specs-ops` y borra después la carpeta `dbv-specs-ops/.git`. Si `dbv-specs-ops/` ya existe, el proyecto ya usa el framework: ofrece actualizarlo con `dbv-specs-ops/docs/UPGRADE_PROMPT.md` en lugar de reinstalarlo.
+2. **Crea en la raíz del proyecto los ficheros de activación** que redirigen a esa subcarpeta. Como mínimo `CLAUDE.md` y `AGENTS.md`, con este contenido (si ya existen con contenido propio, añade estas líneas al principio sin borrar nada):
+
+   ```markdown
+   Please read and follow the master instructions in dbv-specs-ops/docs/MASTER_PROMPT.md. All specs, tasks, and memory logs are located inside the dbv-specs-ops/ folder.
+   ```
+
+   Si el usuario usa Claude Code, copia también `dbv-specs-ops/.claude/commands/` a `.claude/commands/` en la raíz. El Bootstrap completará el resto de activadores.
+3. **Lee `dbv-specs-ops/docs/MASTER_PROMPT.md` y sigue su flujo.** El Bootstrap te hará proponer la configuración inicial para que el usuario la confirme en un solo mensaje. Si el proyecto ya tiene código, sigue `dbv-specs-ops/docs/ADOPTION_PROMPT.md`.
+4. No ejecutes `git init` ni borres o restablezcas ficheros sin la confirmación explícita del usuario.
+
+</details>
+
+---
+
 ## 📑 Índice
 
+- [Empezar en un minuto](#start)
 - [Características Principales](#features)
 - [Origen e Inspiración](#origin)
 - [Flujo de Trabajo Visual](#workflow)
 - [Las 6 Fases de Desarrollo](#phases)
 - [Estructura de Archivos](#structure)
 - [Activación por Plataforma](#platforms)
-- [Cómo usar (Quick Start)](#quickstart)
+- [Instalación Manual](#manual)
 - [Incorporar a un Proyecto Existente](#adoption)
 - [Actualizar el Framework](#upgrade)
 - [Ejemplo de Uso](#example)
@@ -26,12 +68,6 @@
 - [Estado](#status)
 - [Autores y Créditos](#credits)
 - [Inspiración y Referencias](#references)
-
----
-
-**dbv-specs-ops** es un motor de ingeniería simplificado diseñado para maximizar la calidad del software y la persistencia del contexto en el desarrollo asistido por Inteligencia Artificial.
-
-Este repositorio actúa como un "Blueprint" o plano maestro que transforma a la IA de un simple generador de código en un Ingeniero de Software Senior que sigue procesos rigurosos.
 
 ---
 
@@ -183,8 +219,10 @@ Cada asistente de IA carga el contexto de forma distinta. Usa el fichero corresp
 
 ---
 
-<a name="quickstart"></a>
-## 🚀 Integración y Cómo Usar (Aislamiento en Subcarpeta)
+<a name="manual"></a><a name="quickstart"></a>
+## 🛠️ Instalación Manual (Aislamiento en Subcarpeta)
+
+> Estos son los pasos que la IA sigue por ti en [Empezar en un minuto](#start). Úsalos si prefieres instalarlo a mano.
 
 Este framework está diseñado para vivir dentro de un subdirectorio dedicado (`dbv-specs-ops/`) en tu espacio de trabajo. Esto mantiene limpia la raíz de tu proyecto, evita sobreescrituras accidentales de tus archivos y aísla los registros de SDD.
 
@@ -226,15 +264,19 @@ Debido a que los asistentes de IA solo leen archivos de configuración desde la 
     Master prompt is at `dbv-specs-ops/docs/MASTER_PROMPT.md`.
     ```
 
-#### Paso 3 — Abre tu asistente de IA y arranca la sesión
-Según el estado de tu proyecto, escribe a tu asistente de IA:
+#### Paso 3 — Arranca la sesión
+Escribe `/spec` (o pega el contenido de `dbv-specs-ops/docs/MASTER_PROMPT.md` si usas una interfaz manual como la web de ChatGPT). La IA iniciará la Entrevista de Ingeniería para definir la aplicación, rellenando `dbv-specs-ops/docs/SPECIFICATIONS.md`.
 
-*   **Para Proyectos Nuevos (Quick Start):**
-    Escribe `/spec` (o pega el contenido de `dbv-specs-ops/docs/MASTER_PROMPT.md` si usas una interfaz manual como la web de ChatGPT). La IA iniciará la Entrevista de Ingeniería para definir la aplicación, rellenando `dbv-specs-ops/docs/SPECIFICATIONS.md`.
-*   <a name="adoption"></a>**Para Incorporar a Proyectos Existentes (Adopción):**
-    Escribe el siguiente mensaje:
-    > "Sigue las instrucciones de `dbv-specs-ops/docs/ADOPTION_PROMPT.md` para analizar este proyecto e incorporarlo a la metodología SDD utilizando la configuración dentro de la carpeta `dbv-specs-ops`."
-    La IA analizará el código existente y rellenará las especificaciones e historial dentro del subdirectorio `dbv-specs-ops/`.
+---
+
+<a name="adoption"></a>
+## 🔍 Incorporar a un Proyecto Existente
+
+Si tu proyecto ya tiene código, instala el framework (con el mensaje de [Empezar en un minuto](#start) o con la [instalación manual](#manual)) y escribe a tu asistente de IA:
+
+> "Sigue las instrucciones de `dbv-specs-ops/docs/ADOPTION_PROMPT.md` para analizar este proyecto e incorporarlo a la metodología SDD utilizando la configuración dentro de la carpeta `dbv-specs-ops`."
+
+La IA analizará el código existente y rellenará las especificaciones e historial dentro del subdirectorio `dbv-specs-ops/`.
 
 ---
 

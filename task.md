@@ -18,6 +18,7 @@
 - [x] **Fase 8: `docs/UPGRADE_PROMPT.md`** — manifiesto v3.0.0 (verificado contra `git diff v2.9.0`), 42 URLs con fichero local, versión definida solo en la Fase 1, `memory.md` protegido, activadores en la raíz conservando contenido del usuario.
 - [x] **Fase 9: Higiene y cierre** — `old/` (fuera de git), `CHANGELOG.md` `[3.0.0] — 2026-10-14`, `memory.md`, `task.md`, `walkthrough.md`.
 - [x] **Fase 10: Verificación de extremo a extremo** — ver `walkthrough.md`.
+- [x] **Fase 11: Ajustes tras publicar** — `UPGRADE_PROMPT` (fila de evals y copias inertes de activadores, verificado con descargas reales) y README con «Empezar en un minuto». Publicado como 3.0.0 (el tag `v3.0.0` se movió al commit final; nadie había descargado la versión).
 - [ ] **Pendiente (usuario):** `git diff --stat`, commit `Version v.3.0.0`, tag `v3.0.0` y push.
 
 ## Deuda Técnica
