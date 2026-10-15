@@ -63,6 +63,7 @@ La IA descarga el framework en la subcarpeta `dbv-specs-ops/`, prepara los fiche
 
 - [Empezar en un minuto](#start)
 - [Características Principales](#features)
+- [¿En qué se diferencia de otros frameworks SDD?](#comparison)
 - [Origen e Inspiración](#origin)
 - [Flujo de Trabajo Visual](#workflow)
 - [Las 6 Fases de Desarrollo](#phases)
@@ -104,6 +105,36 @@ La IA descarga el framework en la subcarpeta `dbv-specs-ops/`, prepara los fiche
 *   **Compresión de Contexto Hot/Warm/Cold**: Protocolo para que `memory.md` no degrade la atención de la IA en proyectos longevos (ADRs recientes completos, antiguos en una línea, histórico en `memory.archive.md`).
 *   **Contratos de Subagente (Scope Lock)**: Cada sesión paralela declara qué ficheros puede tocar y qué rango de IDs de requisito reserva, para evitar colisiones entre ramas (`docs/PARALLEL_WORK.md`).
 *   **Escritorio Nativo (Tauri v2) e IA Híbrida**: Guías de producción para apps de escritorio y un motor de IA de tres niveles (modelos locales, nube con clave en el llavero nativo del SO, agentes de suscripción vía ACP), con estándares específicos de Rust (`Result` en comandos IPC, sin `.unwrap()` en runtime) y de frontend sin bundler (IIFE).
+
+---
+
+<a name="comparison"></a>
+## 🆚 ¿En qué se diferencia de GitHub Spec Kit, BMAD o Kiro?
+
+Otros frameworks SDD como [Spec Kit](https://github.com/github/spec-kit), [BMAD](https://github.com/bmad-code-org/BMAD-METHOD) o [Kiro](https://kiro.dev/) cubren muy bien el flujo especificar → planificar → implementar. **dbv-specs-ops** comparte ese flujo y añade el resto del ciclo de ingeniería y entrega de producto, con comprobaciones deterministas:
+
+| Capacidad | **dbv-specs-ops (v3.0)** | [**GitHub Spec Kit**](https://github.com/github/spec-kit) | [**BMAD Method**](https://github.com/bmad-code-org/BMAD-METHOD) | [**Kiro (AWS)**](https://kiro.dev/) |
+| :--- | :---: | :---: | :---: | :---: |
+| **Especificar y planificar antes de codificar** | ✅ | ✅ | ✅ | ✅ |
+| **Specs como ficheros del proyecto** | ✅ | ✅ | ✅ | ✅ |
+| **Reglas de proyecto persistentes para la IA** | ✅ | ✅ | ✅ | ✅ |
+| **Arranque en 1 frase (Sin instalar CLI)** | ✅ | ❌ | ❌ | ⚠️ Versión web |
+| **Cabeceras de autor automáticas en código** | ✅ | ❌ | ❌ | ❌ |
+| **Trazabilidad requisito → código y tests (`@spec`)** | ✅ | ⚠️ | ⚠️ | ⚠️ |
+| **Linter determinista propio (0 deps)** | ✅ | ❌ | ❌ | ❌ |
+| **Webs listas para GEO y Agentes (`llms.txt`, MCP)** | ✅ | ➖ | ➖ | ➖ |
+| **Apps Desktop (Win/Mac/Linux) + MS Store / Brew** | ✅ | ➖ | ➖ | ➖ |
+| **Arquitectura AI-Native (Local, Cloud, ACP/MCP)** | ✅ | ➖ | ➖ | ➖ |
+| **Scripts `start` / `stop` multiplataforma autogenerados** | ✅ | ➖ | ➖ | ➖ |
+| **Gestión de Git, Changelog y `/ship`** | ✅ | ⚠️ Parcial | ⚠️ Parcial | ⚠️ Parcial |
+| **Revisión adversarial de planes y código** | ✅ | ⚠️ Puertas de calidad | ⚠️ Lentes adversariales | ⚠️ Análisis previo |
+| **Comunidad y madurez (⭐ en GitHub, 15/10/2026)** | ❌ 29 ⭐ | ✅ 141 k ⭐ | ✅ 54 k ⭐ | ➖ Producto de AWS |
+| **Ecosistema y extensibilidad** | ⚠️ | ✅ | ✅ | ✅ |
+| **IDE / interfaz visual integrada** | ❌ | ❌ | ❌ | ✅ |
+
+✅ Sí · ⚠️ Parcial o con otro enfoque · ❌ No consta en su documentación oficial · ➖ Fuera de su alcance. Contrastado con las webs oficiales de [Spec Kit](https://github.com/github/spec-kit), [BMAD](https://github.com/bmad-code-org/BMAD-METHOD) y [Kiro](https://kiro.dev/) el 15/10/2026. Y sí: en estrellas, **dbv-specs-ops es el último de los tres proyectos de código abierto**. La comparativa completa también explica sus limitaciones.
+
+👉 **[Ver la comparativa técnica completa y detallada en `docs/COMPARISON.md`](docs/COMPARISON.md)**
 
 ---
 

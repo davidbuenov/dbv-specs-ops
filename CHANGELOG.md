@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Sin publicar] / [Unreleased]
 
+### Added
+- **`docs/COMPARISON.md` / `docs/COMPARISON.en.md`:** comparativa técnica bilingüe de `dbv-specs-ops` frente a GitHub Spec Kit, BMAD Method y Kiro, contrastada con sus webs oficiales (15/10/2026) e incluyendo una sección de limitaciones propias (documentación solo para GitHub, no la usa la IA). `README.md` y `README.en.md` incorporan la sección «¿En qué se diferencia de GitHub Spec Kit, BMAD o Kiro?» / «How Does It Differ…» (tabla resumida y enlace a la comparativa completa) y su entrada en el índice.
+
 ---
 
 ## [3.0.0] — 2026-10-14
