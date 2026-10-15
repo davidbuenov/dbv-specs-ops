@@ -35,14 +35,23 @@ Prefer to do it yourself? See the [manual installation](#manual).
 <details>
 <summary>🤖 <b>Instructions for the AI</b> (if a user asked you to use this framework)</summary>
 
-1. **Install the framework in the project's `dbv-specs-ops/` subfolder** (create it if needed), without git history: `git clone --depth 1 https://github.com/davidbuenov/dbv-specs-ops.git dbv-specs-ops`, then delete the `dbv-specs-ops/.git` folder. If `dbv-specs-ops/` already exists, the project already uses the framework: offer to upgrade it with `dbv-specs-ops/docs/UPGRADE_PROMPT.md` instead of reinstalling.
+1. **Install the framework in the project's `dbv-specs-ops/` subfolder**, without git history (so there is nothing to delete): create the folder, download the archive and extract it stripping the top-level directory.
+
+   ```bash
+   mkdir dbv-specs-ops
+   curl -L -o dbv-specs-ops.tar.gz https://github.com/davidbuenov/dbv-specs-ops/archive/refs/heads/master.tar.gz
+   tar -xzf dbv-specs-ops.tar.gz --strip-components=1 -C dbv-specs-ops
+   rm dbv-specs-ops.tar.gz
+   ```
+
+   It works the same on macOS, Linux and Windows 10+ (in PowerShell use `curl.exe`). **Do not use `git clone`** unless you cannot download the archive: it would leave a nested `.git` that would have to be deleted. If `dbv-specs-ops/` already exists, the project already uses the framework: offer to upgrade it with `dbv-specs-ops/docs/UPGRADE_PROMPT.md` instead of reinstalling.
 2. **Create the activation files in the project root** that redirect to that subfolder. At least `CLAUDE.md` and `AGENTS.md`, with this content (if they already exist with the user's own content, add these lines at the top and delete nothing):
 
    ```markdown
    Please read and follow the master instructions in dbv-specs-ops/docs/MASTER_PROMPT.md. All specs, tasks, and memory logs are located inside the dbv-specs-ops/ folder.
    ```
 
-   If the user works with Claude Code, also copy `dbv-specs-ops/.claude/commands/` to `.claude/commands/` in the root. The Bootstrap will complete the remaining activation files.
+   If the user works with Claude Code, also copy `dbv-specs-ops/.claude/commands/` to `.claude/commands/` in the root; if your environment protects the `.claude/` folder and you cannot write there, do not insist: ask the user to copy it. The Bootstrap will complete the remaining activation files.
 3. **Read `dbv-specs-ops/docs/MASTER_PROMPT.md` and follow its workflow.** The Bootstrap has you propose the initial configuration for the user to confirm in a single message. If the project already has code, follow `dbv-specs-ops/docs/ADOPTION_PROMPT.md`.
 4. Do not run `git init` or delete/reset any file without the user's explicit confirmation.
 

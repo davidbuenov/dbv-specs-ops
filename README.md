@@ -35,14 +35,23 @@ La IA descarga el framework en la subcarpeta `dbv-specs-ops/`, prepara los fiche
 <details>
 <summary>🤖 <b>Instrucciones para la IA</b> (si un usuario te ha pedido usar este framework)</summary>
 
-1. **Instala el framework en la subcarpeta `dbv-specs-ops/` del proyecto** (créala si hace falta), sin historial git: `git clone --depth 1 https://github.com/davidbuenov/dbv-specs-ops.git dbv-specs-ops` y borra después la carpeta `dbv-specs-ops/.git`. Si `dbv-specs-ops/` ya existe, el proyecto ya usa el framework: ofrece actualizarlo con `dbv-specs-ops/docs/UPGRADE_PROMPT.md` en lugar de reinstalarlo.
+1. **Instala el framework en la subcarpeta `dbv-specs-ops/` del proyecto**, sin historial git (así no hay nada que borrar): crea la carpeta, descarga el archivo y descomprímelo quitando el nivel superior.
+
+   ```bash
+   mkdir dbv-specs-ops
+   curl -L -o dbv-specs-ops.tar.gz https://github.com/davidbuenov/dbv-specs-ops/archive/refs/heads/master.tar.gz
+   tar -xzf dbv-specs-ops.tar.gz --strip-components=1 -C dbv-specs-ops
+   rm dbv-specs-ops.tar.gz
+   ```
+
+   Funciona igual en macOS, Linux y Windows 10+ (en PowerShell usa `curl.exe`). **No uses `git clone`** salvo que no puedas descargar el archivo: dejaría un `.git` anidado que habría que borrar. Si `dbv-specs-ops/` ya existe, el proyecto ya usa el framework: ofrece actualizarlo con `dbv-specs-ops/docs/UPGRADE_PROMPT.md` en lugar de reinstalarlo.
 2. **Crea en la raíz del proyecto los ficheros de activación** que redirigen a esa subcarpeta. Como mínimo `CLAUDE.md` y `AGENTS.md`, con este contenido (si ya existen con contenido propio, añade estas líneas al principio sin borrar nada):
 
    ```markdown
    Please read and follow the master instructions in dbv-specs-ops/docs/MASTER_PROMPT.md. All specs, tasks, and memory logs are located inside the dbv-specs-ops/ folder.
    ```
 
-   Si el usuario usa Claude Code, copia también `dbv-specs-ops/.claude/commands/` a `.claude/commands/` en la raíz. El Bootstrap completará el resto de activadores.
+   Si el usuario usa Claude Code, copia también `dbv-specs-ops/.claude/commands/` a `.claude/commands/` en la raíz; si tu entorno protege la carpeta `.claude/` y no puedes escribir en ella, no insistas: pide al usuario que la copie él. El Bootstrap completará el resto de activadores.
 3. **Lee `dbv-specs-ops/docs/MASTER_PROMPT.md` y sigue su flujo.** El Bootstrap te hará proponer la configuración inicial para que el usuario la confirme en un solo mensaje. Si el proyecto ya tiene código, sigue `dbv-specs-ops/docs/ADOPTION_PROMPT.md`.
 4. No ejecutes `git init` ni borres o restablezcas ficheros sin la confirmación explícita del usuario.
 
