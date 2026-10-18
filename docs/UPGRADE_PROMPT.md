@@ -45,11 +45,11 @@ Lee el fichero `project.config.md`:
 - Si **no existe** ese campo → pregunta al usuario:
   > *"¿Qué versión de dbv-specs-ops estás usando? Puedes encontrarla buscando en tu `CHANGELOG.md` el primer commit del proyecto, o mirando qué ficheros de plataforma tienes (`.windsurfrules` fue añadido en v1.1.0, `project.config.md` en v1.2.0)."*
 
-La versión más reciente del framework es: **3.0.0**
+La versión más reciente del framework es: **3.1.0**
 
 > Esta es la **única** línea de este documento donde se escribe la versión actual. Las Fases 4 y 6 se refieren a ella como «la versión más reciente de la Fase 1» — no copies el número en otros sitios.
 
-Si el usuario ya tiene la **v3.0.0**, informa de que el proyecto está al día. No hay nada que hacer.
+Si el usuario ya tiene la **v3.1.0**, informa de que el proyecto está al día. No hay nada que hacer.
 </version_detection_phase>
 
 ---
@@ -286,6 +286,22 @@ Usa esta tabla para calcular qué hay que actualizar según la versión actual d
 | MODIFICADO | `docs/UPGRADE_PROMPT.md` | Este archivo actualizado con la versión v3.0.0. |
 | CAMPO AÑADIDO | `project.config.md` | ⚠️ No sobrescribir. Ver Fase 4: solo `Framework Version` y, si el proyecto es de escritorio, `Desktop AI Assistant`. |
 | PLANTILLA (no sobrescribir) | `docs/SPECIFICATIONS.md`, `docs/ARCHITECTURE.md` | La plantilla incorpora IDs `REQ-NN` y los apartados de IA de escritorio, pero **el proyecto del usuario conserva los suyos intactos**. No los descargues; si el usuario lo pide, enséñale el apartado nuevo para que decida si lo copia. |
+### v3.1.0 (cambios desde v3.0.0)
+| Acción | Fichero | Nota |
+|---|---|---|
+| NUEVO | `docs/PROCEDURAL_GRAPH.json` | Grafo de fases: el ciclo SDD como transiciones con `condition`, `guidance` y `pitfalls`. Es la fuente de los bloques de `.claude/commands/`. |
+| NUEVO | `docs/PROCEDURAL_GRAPHS.md` | Guía del grafo de fases y de la Rejection Memory (inspirada en *Procedural Graphs*, arXiv:2609.09153). |
+| NUEVO | `scripts/pg-guide.py` | Valida el grafo, imprime el contexto de una fase y regenera los bloques de los comandos (Python 3.8+, sin dependencias). |
+| MODIFICADO | `docs/MASTER_PROMPT.md` | Bloque `<procedural_graph>` (grafo de fases y Rejection Memory) y disparadores de Rejection Memory en `/plan`, `/test`, `/code-simplify` y Maintain. |
+| MODIFICADO | `scripts/dbv-lint.py` | Comprueba también el grafo de fases y que los comandos estén sincronizados con él. |
+| MODIFICADO | `scripts/run-evals.sh`, `evals/README.md` | **Actualízalos siempre** (son del framework). Resumen `📊 Resultado: P/T pasan` y regla de no regresión. Los `.json` que el usuario haya añadido a `evals/` son suyos: no los toques. |
+| MODIFICADO | `docs/MAINTAIN.md`, `docs/AGENTIC_ENGINEERING.md`, `docs/README.md`, `docs/GUARDRAILS.md` | Truncado de logs por la cola y Rejection Memory en Maintain; sección 6 (memoria procedimental); índice; `dbv-lint.py` también comprueba el grafo. |
+| MODIFICADO | `docs/templates/memory.template.md` | Sección `🚫 Rejection Memory`. Solo se usa al crear un `memory.md` nuevo. |
+| MODIFICADO | `.claude/commands/{spec,plan,build,test,code-simplify,ship,maintain}.md` | Cada comando lleva el contexto de su fase entre `<!-- pg-guide:begin` y `<!-- pg-guide:end -->`. Viven en `.claude/commands/` de la **raíz**. |
+| EXCEPCIÓN | `.claude/commands/*.md` de la raíz con texto propio del usuario | No los sobrescribas: conserva su texto y sustituye o añade solo el bloque entre los marcadores. Puedes hacerlo con `python dbv-specs-ops/scripts/pg-guide.py --write-commands --commands-dir .claude/commands`, que no toca lo que hay fuera de los marcadores. |
+| SIN CAMBIOS (protegido) | `memory.md` | **No añadas la sección `🚫 Rejection Memory` durante la actualización.** La IA la crea en el trabajo normal la primera vez que tenga algo que registrar (`<procedural_graph>` de `MASTER_PROMPT.md`). |
+| MODIFICADO | `docs/UPGRADE_PROMPT.md` | Este archivo actualizado con la versión v3.1.0. |
+| CAMPO AÑADIDO | `project.config.md` | ⚠️ No sobrescribir. Ver Fase 4: solo `Framework Version`. |
 </upgrade_manifest_phase>
 
 ---
@@ -297,7 +313,7 @@ Usa esta tabla para calcular qué hay que actualizar según la versión actual d
 > - Los ficheros del framework (`docs/…`, `scripts/…`, `evals/…`, `README.template.md`) se guardan **dentro de `dbv-specs-ops/`**: p. ej. `dbv-specs-ops/docs/MASTER_PROMPT.md`.
 > - Los **activadores** (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, `ANTIGRAVITY.md`, `.windsurfrules`, `.github/copilot-instructions.md`) y `.claude/commands/*.md` se actualizan en la **raíz** del proyecto. Si el usuario ha añadido contenido propio a un activador, **conserva ese contenido**: basta con que el activador apunte a `dbv-specs-ops/docs/MASTER_PROMPT.md` o incluya la «nota de rutas» de la versión nueva.
 > - Si el usuario copió el repositorio completo a `dbv-specs-ops/` (lo que indica el README), dentro de esa carpeta hay además **copias inertes** de los activadores (`CLAUDE.md`, `GEMINI.md`, `ANTIGRAVITY.md`, `.windsurfrules`, `.github/copilot-instructions.md`) y de `.claude/commands/`: ningún asistente las lee. No es una instalación rara: actualízalas como cualquier otro fichero del framework. Las que cuentan son las de la **raíz** (se actualizan conservando el contenido del usuario). Si el usuario usa Claude Code y no tiene `.claude/commands/` en la raíz, dilo en el resumen final.
-> - En macOS/Linux, tras descargar los scripts ejecuta `chmod +x dbv-specs-ops/scripts/dbv-lint.py dbv-specs-ops/scripts/run-evals.sh`.
+> - En macOS/Linux, tras descargar los scripts ejecuta `chmod +x dbv-specs-ops/scripts/dbv-lint.py dbv-specs-ops/scripts/pg-guide.py dbv-specs-ops/scripts/run-evals.sh`.
 
 ### Opción A: Descarga automática (si tienes acceso a red)
 
@@ -347,6 +363,9 @@ Para cada fichero marcado como NUEVO o MODIFICADO, descarga el contenido desde e
 | `scripts/dbv-lint.py` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/scripts/dbv-lint.py` *(NUEVO v3.0.0)* |
 | `docs/templates/task.template.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/templates/task.template.md` *(NUEVO v3.0.0)* |
 | `docs/templates/memory.template.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/templates/memory.template.md` *(NUEVO v3.0.0)* |
+| `docs/PROCEDURAL_GRAPH.json` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/PROCEDURAL_GRAPH.json` *(NUEVO v3.1.0)* |
+| `docs/PROCEDURAL_GRAPHS.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/PROCEDURAL_GRAPHS.md` *(NUEVO v3.1.0)* |
+| `scripts/pg-guide.py` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/scripts/pg-guide.py` *(NUEVO v3.1.0)* |
 
 > **Nota:** Si alguna descarga falla, muestra el link al usuario para que lo descargue manualmente.
 
@@ -458,6 +477,7 @@ Próximos pasos:
   [Si quieres activar la Fase 7] → Lee docs/MAINTAIN.md y añade el bloque "Maintain (Fase 7)" a project.config.md. Sigue desactivada por defecto.
   [Si quieres guardarraíles deterministas] → Lee docs/GUARDRAILS.md (pre-commit hooks, branch protection).
   [Si se creó scripts/dbv-lint.py] → Puedes validar tu código con `python dbv-specs-ops/scripts/dbv-lint.py --changed` (solo lo que tocas; tu código anterior no se reprocha). Desde ahora los requisitos NUEVOS de SPECIFICATIONS.md llevan un ID (`REQ-01`…) que el código y los tests citan con `@spec REQ-01`; tus requisitos actuales siguen valiendo tal cual (si quieres asignarles IDs, pídemelo).
+  [Si se creó scripts/pg-guide.py] → Los comandos de fase llevan ahora el contexto de su fase (grafo de fases, docs/PROCEDURAL_GRAPHS.md). La IA registrará los enfoques descartados en una sección «🚫 Rejection Memory» de memory.md la primera vez que tenga algo que anotar; tu memory.md actual no se ha tocado.
   → Continúa con tu proyecto normalmente. El framework ya está al día.
 ```
 </closing_phase>

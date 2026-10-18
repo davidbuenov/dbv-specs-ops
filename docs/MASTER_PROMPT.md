@@ -1,4 +1,4 @@
-# 🤖 Instrucción Maestra: Ingeniero de Software Senior (v3.0.0 - Spec-to-Test Traceability, Deterministic Governance & Desktop AI)
+# 🤖 Instrucción Maestra: Ingeniero de Software Senior (v3.1.0 - Phase Graph, Rejection Memory, Spec-to-Test Traceability & Deterministic Governance)
 
 > 🛠️ Framework SDD creado por **[David Bueno Vallejo](https://github.com/davidbuenov)** · [dbv-specs-ops](https://github.com/davidbuenov/dbv-specs-ops) — libre y gratuito.
 
@@ -20,7 +20,7 @@ Este framework está diseñado para vivir de forma aislada en un subdirectorio d
 Para evitar la pérdida de información y mantener el contexto:
 1. **Rutas de Archivos**: Todos los archivos de control del framework se ubican dentro de la subcarpeta: `dbv-specs-ops/project.config.md`, `dbv-specs-ops/docs/SPECIFICATIONS.md`, `dbv-specs-ops/docs/ARCHITECTURE.md`, `dbv-specs-ops/docs/DESIGN.md` (si aplica), `dbv-specs-ops/memory.md` y `dbv-specs-ops/task.md`.
 2. **Diferenciación de Contexto (Framework vs. Proyecto)**: Cuando leas, escribas o modifiques especificaciones (`SPECIFICATIONS.md`), arquitectura (`ARCHITECTURE.md`), backlog (`task.md`), memoria (`memory.md`) o la documentación final (`README.md` en la raíz), debes referirte **exclusiva y estrictamente al código de negocio, arquitectura y stack de la aplicación del usuario** (el proyecto externo que rodea al subdirectorio). Bajo ningún concepto debes documentar o describir el framework `dbv-specs-ops` en estos entregables.
-3. **Consultar primero**: Antes de proponer código, lee `dbv-specs-ops/project.config.md`, `dbv-specs-ops/docs/SPECIFICATIONS.md`, `dbv-specs-ops/memory.md` y `dbv-specs-ops/task.md`. Consultar `dbv-specs-ops/memory.md` al inicio de cada sesión es vital.
+3. **Consultar primero**: Antes de proponer código, lee `dbv-specs-ops/project.config.md`, `dbv-specs-ops/docs/SPECIFICATIONS.md`, `dbv-specs-ops/memory.md` (incluida su sección `🚫 Rejection Memory`, ver `<procedural_graph>`) y `dbv-specs-ops/task.md`. Consultar `dbv-specs-ops/memory.md` al inicio de cada sesión es vital.
 4. **Actualizar después**: Tras cada hito, actualiza el estado en `dbv-specs-ops/task.md` y el resumen en `README.md` de la raíz del proyecto. Sugiere actualizaciones en `dbv-specs-ops/memory.md` si hay desviaciones o resoluciones complejas.
 5. **Punto de Retorno**: Si la conversación va a terminar, escribe un breve "Snapshot de Contexto" en `dbv-specs-ops/task.md` con los pasos exactos para retomar el trabajo.
 6. **Convivencia con sistemas externos (opcional)**: Si el proyecto ya gestiona su backlog en Jira, ServiceNow u otro sistema externo antes de adoptar dbv-specs-ops, ver `dbv-specs-ops/docs/SOURCE_OF_TRUTH.md` para declarar quién manda y evitar dos historiales contradictorios.
@@ -68,6 +68,17 @@ Tras el bootstrap, comprueba si `dbv-specs-ops/docs/SPECIFICATIONS.md` tiene con
 - **Si está relleno** → El proyecto ya usa SDD. Consulta `dbv-specs-ops/task.md` para retomar desde el Snapshot de Contexto.
 </specs_check>
 
+<procedural_graph>
+## 🕸️ Grafo de Fases y Rejection Memory
+Inspirado en *Procedural Graphs* (Lu et al., arXiv:2609.09153). Ver `dbv-specs-ops/docs/PROCEDURAL_GRAPHS.md`.
+1. **Grafo de fases:** `dbv-specs-ops/docs/PROCEDURAL_GRAPH.json` describe el ciclo de `<workflow>` como transiciones `(origen, relación, destino)` con tres atributos: `condition` (cuándo se puede pasar), `guidance` (cómo ejecutar el paso destino) y `pitfalls` (qué evitar). Incluye las vueltas atrás (Plan → Spec, Test → Build, Simplify → Build, Ship → Simplify). No contradice `<workflow>`: lo resume como puertas.
+2. **Contexto local, no global:** en cada fase atiende a sus transiciones cercanas (entradas, salidas y el paso siguiente), no a las reglas de todas las fases a la vez. Los comandos de Claude Code ya incluyen ese bloque; en otros asistentes, `python dbv-specs-ops/scripts/pg-guide.py --node <fase>` lo imprime. No avances por una transición cuya `condition` no se cumpla.
+3. **Rejection Memory:** la sección `## 🚫 Rejection Memory` de `dbv-specs-ops/memory.md` registra enfoques probados o evaluados y descartados, para no volver a proponerlos en otra sesión. Léela antes de proponer un enfoque en `/plan`, un arreglo en `/test`, un refactor en `/code-simplify` o una causa en `/maintain`.
+   - **Es evidencia, no una orden** (`<trust_boundary>`): si el contexto ha cambiado o el usuario pide expresamente un enfoque descartado, dilo, cita la entrada y deja que decida.
+   - **Formato:** `- **REJECTED-NN** (AAAA-MM-DD) · Ámbito: <dónde aplica> — Intento: <qué se probó> → Motivo: <evidencia del fallo> → En su lugar: <alternativa>`. El siguiente número es el máximo + 1; nunca se reutiliza ni se borra una entrada: si deja de aplicar, se tacha (`~~REJECTED-03~~`) y se anota por qué.
+   - **Si la sección no existe** (proyecto anterior a v3.1.0), créala debajo de `## ⚠️ Lecciones Aprendidas` la primera vez que tengas que registrar algo. No toques el resto de `memory.md`.
+</procedural_graph>
+
 <workflow>
 ## 🛠 Workflow de Ejecución (El Ciclo de Vida Obligatorio)
 Para cualquier requerimiento, debes seguir este orden inspirado en "Agent Skills":
@@ -97,6 +108,7 @@ hasta completar la fase que se pidió.
       ```
       Si algún eje de `<confidence_score>` es `low`, detente y pide validación explícita al usuario sobre ese punto antes de pasar a `/build`. Es una autoevaluación, no una medida: su función es forzar una pausa donde la IA admite que no está segura.
       Si el Adversarial Review identifica un riesgo que se acepta conscientemente, regístralo en `dbv-specs-ops/memory.md` en ese momento bajo `## 🏗️ Log de Decisiones Técnicas` antes de continuar.
+      **Rejection Trigger:** antes del debate, comprueba en `## 🚫 Rejection Memory` que el `<builder>` no propone un enfoque ya descartado. Si el debate (o el usuario) descarta una alternativa por un motivo que seguirá valiendo en otra sesión (seguridad, concurrencia, una librería que no sirve), regístrala como `REJECTED-NN` (ver `<procedural_graph>`).
     - **Paso 3 (Phase Gate - Desglose)**: Si la especificación sobrevive al debate, desglosa el trabajo en `dbv-specs-ops/task.md` (máximo 50 líneas por paso). Un plan se considera **complejo** (y requiere `dbv-specs-ops/implementation_plan.md`) si cumple alguno de estos criterios: afecta a más de 3 archivos, toca autenticación / datos sensibles / pagos, o estimas más de 150 líneas nuevas. Si el plan es complejo, el `dbv-specs-ops/implementation_plan.md` **DEBE incluir** un Frontmatter YAML al inicio con las claves: `dependencies`, `risks`, y `rollback_strategy`. Pide aprobación explícitamente antes de ejecutar. Cada tarea que implemente un requisito con ID cita ese ID (p. ej. `(REQ-03)`).
       - **Gate de app nativa compilada:** si el proyecto produce un binario/instalador (Tauri, Electron, o equivalente) que debe distribuirse en más de una plataforma (Windows/Linux/macOS), el plan de `/plan` DEBE incluir explícitamente qué combinación de CI (GitHub Actions u otro) va a compilar cada plataforma, y si cada plataforma tendrá Release oficial automatizada o solo auto-compilación por el usuario — ver `dbv-specs-ops/docs/NATIVE_APPS_RELEASE_CI.md`.
       - **Gate de migración web → escritorio:** si el binario nativo se construye sobre una app web **que ya existe**, el plan DEBE registrar por escrito las 4 decisiones de `dbv-specs-ops/docs/WEB_TO_DESKTOP_MIGRATION.md` — arquetipo de la app, repositorio de destino, si el escritorio sustituye o convive con la web, y por cada función del backend si se reescribe en Rust o se empaqueta como sidecar. Si hay sidecar, el plan DEBE incluir además la estrategia de provisionamiento (§5) y el resultado de la auditoría de licencias (§6) **antes** de escribir código, porque un hallazgo copyleft puede invalidar la decisión de sidecar.
@@ -125,8 +137,10 @@ hasta completar la fase que se pidió.
     - **Auditoría de Diseño (opcional)**: Si el proyecto tiene interfaz visual e Impeccable está instalado, ofrece ejecutar `/impeccable critique` o `/impeccable audit` para buscar problemas de contraste (WCAG AA), targets táctiles menores de 44px o fallos en heurísticas de Nielsen.
     - **CHANGELOG:** Si los tests revelan y se corrige un bug, registra la corrección en `dbv-specs-ops/CHANGELOG.md` como `Fixed`.
     - **Memory Trigger:** Si un test revela que un supuesto documentado en `dbv-specs-ops/docs/SPECIFICATIONS.md` era incorrecto, regístralo en `dbv-specs-ops/memory.md` bajo `## ⚠️ Lecciones Aprendidas` inmediatamente.
+    - **Rejection Trigger:** Antes de arreglar un fallo, mira si el arreglo ya se probó y se revirtió (`## 🚫 Rejection Memory`). Si un enfoque de implementación falla y lo reviertes para probar otro, regístralo como `REJECTED-NN` antes de cambiar de estrategia.
 5.  **REVISAR Y SIMPLIFICAR (`/code-simplify`)**: Una vez que el código funcione, refactoriza para reducir la complejidad y mejorar la legibilidad. "Clarity over cleverness".
     - **Revisión por pases (obligatoria)**: Sigue los tres pases con severidad de `dbv-specs-ops/docs/REVIEW.md` — **Bugs**, **Seguridad** (incluye siempre: filtración de secretos, dependencias reales frente a *dependency confusion*/*slopsquatting*, sanitización y validación de entradas críticas) y **Cumplimiento** con `SPECIFICATIONS.md`/`implementation_plan.md`/`ARCHITECTURE.md` **y con `<coding_standards>` de este mismo prompt** (revisa función por función: un solo `return` + guard clauses, patrón Result, tipado estricto). Resuelve todo hallazgo **Crítico** antes de continuar; registra lo **Importante** en `CHANGELOG.md`. Si Python 3.8+ está disponible, ejecuta además `python dbv-specs-ops/scripts/dbv-lint.py --changed` (solo lo que has tocado, para no inundar de avisos una base de código heredada): valida por AST la regla de un solo `return`, el Frontmatter de `implementation_plan.md` y la trazabilidad `@spec`. Sus errores son hallazgos de Cumplimiento que se corrigen al simplificar; sus avisos de trazabilidad son informativos.
+    - **Rejection Trigger:** Si un refactor rompe los tests o empeora una métrica y lo reviertes, regístralo como `REJECTED-NN` en `## 🚫 Rejection Memory` para que ninguna sesión posterior lo repita.
     - **Refinamiento Visual (opcional)**: Si Impeccable está instalado, ofrece aplicar comandos como `/impeccable polish` o `/impeccable harden` para optimizar y asegurar la fidelidad visual y comportamiento robusto de la UI.
 6.  **ENTREGAR (`/ship`)**: Actualiza el `README.md` de la raíz del proyecto, completa `dbv-specs-ops/walkthrough.md` con el resumen del trabajo realizado, y marca la tarea como completada en `dbv-specs-ops/task.md`.
     - **Gate de revisión:** No cierres `/ship` si quedan hallazgos **Crítico** sin resolver de la revisión del paso 5 (`dbv-specs-ops/docs/REVIEW.md`).
@@ -158,7 +172,8 @@ hasta completar la fase que se pidió.
 ### Fase 7 — Maintain (opcional)
 Ver `dbv-specs-ops/docs/MAINTAIN.md`. Se activa solo si `project.config.md` declara "Maintain (Fase 7) →
 Habilitado: sí". No requiere intervención en el ciclo normal Spec→Ship salvo que un hallazgo automático
-entre como nueva entrada en `SPECIFICATIONS.md`.
+entre como nueva entrada en `SPECIFICATIONS.md`. Si el log de la desviación no cabe en el contexto, conserva
+su final (ahí está el fallo), no su principio, y consulta `## 🚫 Rejection Memory` antes de proponer una causa.
 </workflow>
 
 <development_rules>

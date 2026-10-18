@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # =============================================================================
-# dbv-specs-ops — Deterministic SDD Governance Linter (v3.0.0)
+# dbv-specs-ops — Deterministic SDD Governance Linter (v3.1.0)
 # Copyright (c) 2026 David Bueno Vallejo
 # Licensed under the MIT License. See LICENSE for details.
 # Built with dbv-specs-ops · https://github.com/davidbuenov/dbv-specs-ops
@@ -13,6 +13,8 @@ Qué comprueba:
   2. Frontmatter YAML (`dependencies`, `risks`, `rollback_strategy`) en `implementation_plan.md`.
   3. Trazabilidad Spec-to-Test: los IDs de requisito declarados en `docs/SPECIFICATIONS.md`
      frente a las etiquetas `@spec <ID>` del código y de los tests (ver --help).
+  4. Grafo de fases (`docs/PROCEDURAL_GRAPH.json`, v3.1.0+): estructura válida y bloques de
+     `.claude/commands/*.md` sincronizados con él (delegado en `scripts/pg-guide.py`).
 
 Compatibilidad con proyectos anteriores a v3.0.0: si `SPECIFICATIONS.md` no usa IDs de
 requisito, la trazabilidad se omite sin avisos. Para no inundar de avisos una base de código
@@ -25,6 +27,7 @@ from __future__ import annotations
 
 import argparse
 import ast
+import importlib.util
 import os
 import re
 import subprocess
@@ -464,6 +467,55 @@ def check_traceability(framework_dir: Path, root: Path, code_files: Sequence[Pat
     return hallazgos
 
 
+# ------------------------------------------------- 4. grafo de fases (v3.1.0+)
+
+
+def load_pg_guide(script: Path) -> Result:
+    """Importa `pg-guide.py` (el guion del nombre impide un `import` normal)."""
+    try:
+        spec = importlib.util.spec_from_file_location("dbv_pg_guide", script)
+        modulo = importlib.util.module_from_spec(spec) if spec and spec.loader else None
+        if modulo is not None:
+            spec.loader.exec_module(modulo)
+        resultado: Result = Ok(modulo) if modulo is not None else Err(f"{script.name}: no se pudo cargar.")
+    except (ImportError, OSError, SyntaxError) as exc:
+        resultado = Err(f"{script.name}: no se pudo cargar ({exc}).")
+    return resultado
+
+
+def check_procedural_graph(framework_dir: Path, root: Path) -> List[Finding]:
+    """Grafo válido y comandos sincronizados. Sin grafo (framework < 3.1.0) no se comprueba nada.
+
+    Los comandos del framework se generan desde el grafo, así que un desajuste es un error. La copia de
+    `.claude/commands/` en la raíz de un proyecto consumidor solo avisa: puede llevar texto propio.
+    """
+    hallazgos: List[Finding] = []
+    grafo = framework_dir / "docs" / "PROCEDURAL_GRAPH.json"
+    if not grafo.is_file():
+        return hallazgos
+    cargado = load_pg_guide(framework_dir / "scripts" / "pg-guide.py")
+    if isinstance(cargado, Err):
+        hallazgos.append(Finding("warn", f"Grafo de fases no verificado: {cargado.message}"))
+        return hallazgos
+    pg = cargado.value
+    datos = pg.load_graph(grafo)
+    problemas = [datos.message] if isinstance(datos, pg.Err) else pg.validate_graph(datos.value)
+    hallazgos.extend(Finding("error", f"{shown(grafo, root)}: {p}") for p in problemas)
+    if not problemas:
+        modelo = pg.build_graph(datos.value)
+        script = f"python {shown(framework_dir / 'scripts' / 'pg-guide.py', root)} --write-commands"
+        destinos = [(framework_dir / ".claude" / "commands", "error", script)]
+        if root.resolve() != framework_dir.resolve():
+            raiz = root / ".claude" / "commands"
+            destinos.append((raiz, "warn", f"{script} --commands-dir {shown(raiz, root)}"))
+        for carpeta, nivel, arreglo in destinos:
+            desajustes = pg.sync_commands(modelo, carpeta, write=False, missing_ok=nivel == "warn") if carpeta.is_dir() else []
+            hallazgos.extend(
+                Finding(nivel, f"{shown(d.path, root)}: {d.reason}. Regenera con: {arreglo}") for d in desajustes
+            )
+    return hallazgos
+
+
 # ------------------------------------------------- selección de ficheros (git / rutas)
 
 
@@ -605,6 +657,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     if seleccion.project_scope:
         hallazgos.extend(check_plan_frontmatter(framework_dir, root))
         hallazgos.extend(check_traceability(framework_dir, root, proyecto))
+        hallazgos.extend(check_procedural_graph(framework_dir, root))
     return report(hallazgos, len(seleccion.files), args.strict)
 
 

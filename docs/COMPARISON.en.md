@@ -11,7 +11,7 @@
 
 The **Spec-Driven Development (SDD)** ecosystem aims to solve the main problem of *"vibe coding"*: an AI assistant that codes aimlessly, loses context between sessions, hallucinates dependencies or breaks existing functionality.
 
-[**GitHub Spec Kit**](https://github.com/github/spec-kit), [**BMAD Method**](https://github.com/bmad-code-org/BMAD-METHOD) and [**Kiro**](https://kiro.dev/) cover the specify → plan → implement flow well and, depending on the case, also review and verification. **`dbv-specs-ops` (v3.0.0)** shares that flow and adds the rest of the **software engineering lifecycle (6+1 phases)** around it: CLI-free initialization, traceability in the source code, agent/GEO readiness, cross-platform desktop apps, publication in official stores and post-deployment maintenance.
+[**GitHub Spec Kit**](https://github.com/github/spec-kit), [**BMAD Method**](https://github.com/bmad-code-org/BMAD-METHOD) and [**Kiro**](https://kiro.dev/) cover the specify → plan → implement flow well and, depending on the case, also review and verification. **`dbv-specs-ops` (v3.1.0)** shares that flow and adds the rest of the **software engineering lifecycle (6+1 phases)** around it: CLI-free initialization, traceability in the source code, agent/GEO readiness, cross-platform desktop apps, publication in official stores and post-deployment maintenance.
 
 > **Legend:** ✅ Yes · ⚠️ Partial or a different approach · ❌ Not stated in its official documentation · ➖ Out of scope (it does not aim to cover it)
 
@@ -19,7 +19,7 @@ The **Spec-Driven Development (SDD)** ecosystem aims to solve the main problem o
 
 ## 🔗 Official sources
 
-The cells for the other three frameworks were checked against their official documentation on **2026-10-15**. When a page does not detail something, the cell says so. These tools evolve quickly: if you spot something outdated, please open an issue.
+The cells for the other three frameworks were checked against their official documentation on **2026-10-15**; the *Phase gates* and *Memory of discarded approaches* rows on **2026-10-16**. When a page does not detail something, the cell says so. These tools evolve quickly: if you spot something outdated, please open an issue.
 
 | Framework | Official site | Pages consulted |
 | :--- | :--- | :--- |
@@ -46,7 +46,7 @@ Before the differences, what all four do well and in a similar way:
 
 ## 🏆 What sets them apart
 
-| Category / Feature | **dbv-specs-ops (v3.0.0)** | [**GitHub Spec Kit**](https://github.com/github/spec-kit) | [**BMAD Method**](https://github.com/bmad-code-org/BMAD-METHOD) (v6.12 / v7 alpha) | [**Kiro (AWS)**](https://kiro.dev/) |
+| Category / Feature | **dbv-specs-ops (v3.1.0)** | [**GitHub Spec Kit**](https://github.com/github/spec-kit) | [**BMAD Method**](https://github.com/bmad-code-org/BMAD-METHOD) (v6.12 / v7 alpha) | [**Kiro (AWS)**](https://kiro.dev/) |
 | :--- | :---: | :---: | :---: | :---: |
 | **Philosophy and Scope** | Complete lifecycle (6+1 phases): from idea to code, stores and maintenance | SDD flow driven by a CLI and by commands your agent runs, extensible with extensions, presets and workflows | Agents (Analyst, PM, Architect, Developer, UX Designer) and *skills* to plan, build and review; optional modules (Test Architect, Game Dev…) | AI agent with an IDE (Code OSS), CLI, web and mobile; specs flow with *hooks* and *steering* |
 | **Installation (Bootstrap)** | **1 natural-language sentence**, nothing to install (requires an assistant with shell and network access; in a web chat you paste `MASTER_PROMPT.md` by hand) | Requires Python 3.11+, `uv` and the `specify` CLI (`uv tool install specify-cli`) | An `npx` command (Node 20.12+, Python 3.10+ and `uv`); in v7 alpha, also as a Claude Code or Codex plugin | Installer for the IDE or the CLI; a web and a mobile version also exist |
@@ -62,6 +62,8 @@ Before the differences, what all four do well and in a similar way:
 | **Validation: Tests + AI Evals** | ✅ **Yes**: unit/integration tests + **probabilistic Evals** for AI functions (the AI designs and runs them; the framework ships no runner of its own for your project's Evals) | ⚠️ `/speckit.tasks` generates tests inside each story phase "when requested"; the bug extension requires verification ("Missing verification is not a successful fix") | ⚠️ `bmad-qa-generate-e2e-tests` and the optional Test Architect module (8 skills: Automate, Test Review, Test Design, Framework, NFR, Trace…) | ⚠️ Property-based tests (*Correctness*, IDE only and optional by default) and a testing strategy in the design |
 | **UI Design and Accessibility** | ✅ **Yes (optional)**: `design.md` (Google Labs), *Impeccable* heuristics and *SkillUI* reverse engineering | ❌ Not stated | ⚠️ `bmad-ux` and the UX Designer agent (`DESIGN.md`, `EXPERIENCE.md`); accessibility is not mentioned | ❌ Not stated |
 | **Decision Memory and Parallel Sessions** | ✅ **Yes**: dual persistence (`memory.md` + `task.md`), Hot/Warm/Cold compression and *Scope Contracts* for parallel agents | ⚠️ Project constitution; `/speckit.implement` respects parallel markers in `tasks.md` | ⚠️ `bmad-project-context` (*refresh*, *record*, *audit*); parallel epic streams need "a higher layer" | ⚠️ Persistent *steering* (global and workspace, 4 inclusion modes); tasks run in parallel by *waves* and parallel agents (local or cloud) |
+| **Phase gates (phase graph)** | ✅ **Yes (v3.1.0)**: `PROCEDURAL_GRAPH.json` describes every transition with `condition`, `guidance` and `pitfalls`, including the way back (Plan → Spec, Test → Build, Simplify → Build); each command receives only its phase context, generated from the graph and checked by the linter | ⚠️ "Run them in order, adding the clarify/checklist/analyze quality gates for anything with meaningful ambiguity": optional quality gates, no formal entry/exit conditions | ⚠️ Some skills have gated steps (e.g. `bmad-project-context` shows the block before writing); no general format for conditions between phases is documented | ⚠️ *Feature Specs* have approval gates between requirements, design and tasks (*Quick Spec* skips them) |
+| **Memory of discarded approaches** | ✅ **Yes (v3.1.0)**: *Rejection Memory* in `memory.md` (`REJECTED-NN`), checked before proposing in `/plan`, `/test`, `/code-simplify` and `/maintain`, as evidence rather than an order | ❌ Not stated | ⚠️ `bmad-project-context` records *observed pitfalls* ("A pitfall goes in only when someone has seen the mistake"): mistakes seen, not discarded approaches | ❌ Not stated (*Markdown Review* comments are not described as persistent) |
 | **Post-Delivery Maintenance (Loop)** | ✅ **Yes (Phase 7 `Maintain`, optional and off by default)**: CI/cron monitors that diagnose read-only and reopen specs | ⚠️ Optional bug-fixing extension (*assess*, *fix*, *validate*), triggered by the user | ⚠️ `bmad-build-auto`: unattended build and review loop; no post-delivery monitoring | ⚠️ *Bugfix* specs (`bugfix.md`) and a headless CLI for CI/CD |
 | **Non-Destructive Upgrades** | ✅ **Yes**: updates framework versions without touching your specifications or your code | ✅ `specify self upgrade` + `specify integration upgrade`: leaves `specs/` and the constitution untouched; if you edited managed files, it stops and asks you (or use `--force`) | ⚠️ `bmad setup` updates modules and migrates `_bmad/custom/`; v7 is alpha and "can break an existing setup" | ➖ No file-migration procedure is stated; it is updated as a product |
 | **Multi-Assistant Support and `AGENTS.md`** | ✅ **Yes**: open `AGENTS.md` standard, Claude Code, Gemini CLI, Copilot, Cursor and Windsurf | ✅ 38 integrations (Copilot, Gemini, Codex, Claude, Zed, Kiro…) plus a `generic` one | ⚠️ Any tool that supports *skills* (the documentation cites Claude Code, Codex and Cursor); uses `AGENTS.md` for project context | ⚠️ It is its own agent (IDE, CLI, web, mobile) with Anthropic, OpenAI and open-weight models; reads `AGENTS.md`, Skills and MCP |
@@ -83,13 +85,14 @@ An honest comparison also shows what is not done better.
 By stars, `dbv-specs-ops` is the last of the three open-source projects, and by a wide margin. And these are the framework's concrete limitations:
 
 1. **Advisory rules by default.** `MASTER_PROMPT.md` itself says so in `<boundaries>`: its rules are *advisory* and depend on the AI following them. The linter, pre-commit hooks and CI guardrails are optional and must be set up (`docs/GUARDRAILS.md`); if they are not enabled, compliance depends on the AI.
-2. **Context cost.** `MASTER_PROMPT.md` weighs about 35 KB (207 lines; on the order of 9-10 thousand tokens, an estimate) and is loaded together with the specs, `task.md` and `memory.md` in every session. On small projects or tiny changes this is overhead: Conductor Mode and Hot/Warm/Cold compression mitigate it, but do not remove it.
+2. **Context cost.** `MASTER_PROMPT.md` weighs about 38 KB (222 lines; on the order of 10 thousand tokens, an estimate) and is loaded together with the specs, `task.md` and `memory.md` in every session. On small projects or tiny changes this is overhead: Conductor Mode and Hot/Warm/Cold compression mitigate it, but do not remove it.
 3. **The linter checks presence, not correctness.** It verifies that every requirement has its `@spec` tag in code and tests, and that there are no duplicate IDs or tags pointing to nonexistent requirements. It does not verify that the implementation actually meets the requirement: the tests do that.
 4. **Python-centric linter.** The single-`return` rule is verified through the AST only in `.py` files; JS/TS get a bash heuristic and Rust relies on `clippy`. Only `@spec` traceability covers several languages.
 5. **Opinionated, mandatory standards.** A single `return`, the `Result` pattern, Pydantic/Zod validation and a specific header style are marked as mandatory. They may clash with a team's idiomatic style (for example, the use of *early returns*).
 6. **No tooling for your project's Evals.** The framework requires the AI to design and run Evals for AI components, but it ships no runner: the `evals/` folder only validates the framework's own configuration.
 7. **The one-sentence start needs an assistant with shell and network access.** In ChatGPT or Gemini web you have to paste `MASTER_PROMPT.md` by hand.
 8. **Language.** The master prompt and several guides are in Spanish only. The READMEs, this comparison and some templates have an English version, but the framework core does not.
+9. **The phase graph is a hand-written summary, not a learned one.** In the paper that inspired it ([*Procedural Graphs*](https://arxiv.org/abs/2609.09153), Table 2), a hand-crafted expert graph without the evolution loop made results worse in one of its benchmarks. Here this is mitigated by keeping the graph small, faithful to `<workflow>` and checked by the linter, but its effect on quality has not been measured: the `evals/` suite has a single eval today.
 
 ---
 
@@ -118,6 +121,10 @@ The framework governs Git from repository creation to the `/ship` closing comman
 
 ### 8. Cross-platform start and stop scripts (`start` / `stop`)
 If the project is a web server, an API or a resident service, `/ship` generates in the project root the pairs `start.cmd` / `stop.cmd` (Windows) and `start.sh` / `stop.sh` (macOS/Linux, with `chmod +x`). In Python projects they activate and deactivate the local virtual environment automatically, and the project's `README.md` documents how to use them. Native desktop apps (Tauri), libraries and CLIs with no resident process do not get artificial `stop` scripts: they document their native commands (`npm run tauri dev`, `cargo tauri build`...).
+
+
+### 9. Phase graph and memory of discarded approaches (v3.1.0)
+Adapted from [*Procedural Graphs*](https://arxiv.org/abs/2609.09153) (Google, 2026). Each phase command receives only its neighborhood of the graph: how to run the phase depending on where you came from, its exits with their conditions, and what the next step will review. That way it does not carry the rules of every phase at once. That context is **generated** from a single `PROCEDURAL_GRAPH.json`, and the linter fails if the graph has dead ends or if a command drifts from it. The *Rejection Memory* in `memory.md` records approaches that were tried and discarded, so another session does not repeat them. What was **not** adopted from the paper (the guidance LLM and automatic self-evolution), and why, is in [`PROCEDURAL_GRAPHS.md`](./PROCEDURAL_GRAPHS.md) *(in Spanish)*.
 
 ---
 

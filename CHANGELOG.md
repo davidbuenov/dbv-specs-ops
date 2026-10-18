@@ -9,8 +9,49 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Sin publicar] / [Unreleased]
 
+---
+
+## [3.1.0] — 2026-10-16
+
+Grafo de fases y Rejection Memory, adaptados de [*Procedural Graphs: Self-Evolving Execution Structures for LLM Agents*](https://arxiv.org/abs/2609.09153) (Lu et al., Google, arXiv:2609.09153). Se adopta lo que funciona sin la infraestructura del paper, se verifica de forma determinista y no se promete ninguna de sus cifras. **Retrocompatible:** la actualización no toca `memory.md` ni los ficheros del proyecto.
+
 ### Added
+- **`docs/PROCEDURAL_GRAPH.json` — grafo de fases.** El ciclo de `<workflow>` como 16 transiciones `(origen, relación, destino)` entre 10 nodos, con `condition` (la puerta), `guidance` (cómo ejecutar el paso destino) y `pitfalls` (qué evitar). Incluye las vueltas atrás: Plan → Spec, Test → Build, Simplify → Build y Ship → Simplify. Maintain parte del detector (`Start`), no de Ship.
+- **`scripts/pg-guide.py`.** Solo librería estándar (Python 3.8+, probado con 3.8.20, 3.11 y 3.13), salida UTF-8 segura en consolas de Windows y conforme a su propio linter.
+  - `--validate`: comprueba IDs y tipos de nodo, relaciones, los tres atributos y duplicados, que el nodo inicial no tenga entradas ni el final salidas, que todo nodo sea alcanzable desde `start_node` y que todo nodo llegue a `end_node`.
+  - `--node <fase>`: imprime el contexto de una fase (entradas, salidas y horizonte a 2 saltos).
+  - `--write-commands` / `--check-commands`: regeneran o verifican el bloque de cada comando.
+- **Contexto de fase en `.claude/commands/*.md`.** Cada comando lleva, entre `<!-- pg-guide:begin` y `<!-- pg-guide:end -->`, solo el vecindario de su fase, generado desde el grafo. El texto propio del comando no se toca.
+- **Rejection Memory.** Sección `## 🚫 Rejection Memory` en `memory.md` y `docs/templates/memory.template.md` con entradas `REJECTED-NN` (ámbito, intento, motivo y alternativa). Se consulta antes de proponer en `/plan`, `/test`, `/code-simplify` y Maintain, como evidencia y no como orden (`<trust_boundary>`). En proyectos existentes la IA la crea la primera vez que la necesita.
+- **`docs/PROCEDURAL_GRAPHS.md`.** Qué se tomó del paper, qué no y por qué, y cómo cambiar el grafo sin romper nada. **`docs/AGENTIC_ENGINEERING.md` §6:** memoria procedimental (taxonomía CoALA).
 - **`docs/COMPARISON.md` / `docs/COMPARISON.en.md`:** comparativa técnica bilingüe de `dbv-specs-ops` frente a GitHub Spec Kit, BMAD Method y Kiro, contrastada con sus webs oficiales (15/10/2026) e incluyendo una sección de limitaciones propias (documentación solo para GitHub, no la usa la IA). `README.md` y `README.en.md` incorporan la sección «¿En qué se diferencia de GitHub Spec Kit, BMAD o Kiro?» / «How Does It Differ…» (tabla resumida y enlace a la comparativa completa) y su entrada en el índice.
+- **Comparativa:** filas *Puertas entre fases* y *Memoria de enfoques descartados*, contrastadas con la documentación oficial de Spec Kit, BMAD y Kiro el 16/10/2026; §9 del análisis y una limitación nueva (el grafo es un resumen escrito a mano y su efecto en la calidad no está medido).
+
+### Changed
+- **`MASTER_PROMPT.md`:**
+  - Cabecera v3.1.0.
+  - Bloque `<procedural_graph>`: un puntero breve, no una copia de las transiciones, porque eso inyectaría el grafo completo en cada sesión.
+  - Disparadores de Rejection Memory en `/plan`, `/test` y `/code-simplify`.
+  - Maintain conserva el final de los logs largos.
+- **`scripts/dbv-lint.py`:**
+  - Valida el grafo y falla si un comando del framework no coincide con él.
+  - Solo avisa si la copia de `.claude/commands/` de la raíz de un proyecto está desactualizada, y no reclama los comandos que el usuario no copió.
+  - Sin grafo (framework < 3.1.0) no comprueba nada.
+- **`scripts/run-evals.sh`:** resumen `📊 Resultado: P/T pasan (F fallan, I inconclusos)`, comparable entre ejecuciones. Conserva la lista blanca de CLI, el control `INCONCLUSO`, el aviso de `jq` y el fichero temporal con `trap`.
+- **`evals/README.md`:** regla de no regresión, es decir, un cambio del prompt, el grafo o los comandos no debe bajar el número de evals que pasan.
+- **`docs/MAINTAIN.md`:** preparar el contexto del diagnóstico conservando la cola del log y consultando la Rejection Memory.
+- **`README.md` / `README.en.md`:** versión 3.1.0, dos características nuevas, dos filas en la tabla comparativa, pilar 8 en *Origen e Inspiración* y entrada en *Referencias* (enlazando el paper), y ficheros nuevos en la estructura.
+- **Índices y actualización:** `docs/README.md` y `docs/UPGRADE_PROMPT.md` (manifiesto v3.1.0 con la excepción de comandos con texto propio en una fila separada, URLs nuevas y `chmod +x` de `pg-guide.py`). `project.config.md` pasa a la versión 3.1.0.
+
+### No adoptado (y por qué)
+- **Auto-evolución automática del grafo con puerta `S_val`.**
+  - No hay un conjunto de validación: `evals/` tiene un solo eval.
+  - Cada ejecución es una llamada no determinista y de pago.
+  - `UPGRADE_PROMPT` sobrescribiría el grafo mutado.
+
+  Queda como regla de mantenimiento (no bajar el número de evals que pasan). Ver `REJECTED-05` en `memory.md`.
+- **LLM de guía que reescribe el subgrafo en cada paso**, y **las cifras del paper como promesa propia**. Todas sus mejoras usan ese LLM, y el «70,9 % menos de tokens» es solo ALFWorld frente a la guía generativa del grafo completo.
+- **Cambios en `docs/ARCHITECTURE.md`.** Es la plantilla del proyecto del usuario: documentar ahí el framework iría contra `<context_management>`.
 
 ---
 
@@ -519,7 +560,8 @@ Initial public release of the **dbv-specs-ops** SDD framework.
 
 ---
 
-[Sin publicar]: https://github.com/davidbuenov/dbv-specs-ops/compare/v3.0.0...HEAD
+[Sin publicar]: https://github.com/davidbuenov/dbv-specs-ops/compare/v3.1.0...HEAD
+[3.1.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.9.0...v3.0.0
 [2.9.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.8.0...v2.9.0
 [2.8.0]: https://github.com/davidbuenov/dbv-specs-ops/compare/v2.7.0...v2.8.0

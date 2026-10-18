@@ -40,10 +40,14 @@ echo "---"
 LOG_FILE="$(mktemp)"
 trap 'rm -f "$LOG_FILE"' EXIT
 
+TOTAL=0
+PASSED=0
+INCONCLUSIVE=0
 FAILED=0
 
 for eval_file in "$EVALS_DIR"/*.json; do
   [ -e "$eval_file" ] || continue
+  TOTAL=$((TOTAL+1))
   name=$(jq -r '.name' "$eval_file")
   prompt=$(jq -r '.prompt' "$eval_file")
   target=$(jq -r '.check_target' "$eval_file")
@@ -63,6 +67,7 @@ for eval_file in "$EVALS_DIR"/*.json; do
   if [ -z "${EVALS_ALLOW_STALE:-}" ] && [ -f "$TARGET_PATH" ] && grep -qE "$pattern" "$TARGET_PATH"; then
     echo "  ⚠️  INCONCLUSO — el patrón ya estaba en $target antes de ejecutar el CLI."
     echo "     Restaura el fichero (o usa una copia limpia) y vuelve a ejecutar; EVALS_ALLOW_STALE=1 lo ignora."
+    INCONCLUSIVE=$((INCONCLUSIVE+1))
     FAILED=$((FAILED+1))
     continue
   fi
@@ -72,6 +77,7 @@ for eval_file in "$EVALS_DIR"/*.json; do
 
   if [ -f "$TARGET_PATH" ] && grep -qE "$pattern" "$TARGET_PATH"; then
     echo "  ✅ PASA"
+    PASSED=$((PASSED+1))
   else
     echo "  ❌ FALLA — no se encontró el patrón esperado en $target"
     FAILED=$((FAILED+1))
@@ -79,6 +85,9 @@ for eval_file in "$EVALS_DIR"/*.json; do
 done
 
 echo "---"
+# Resumen comparable entre ejecuciones: un cambio en MASTER_PROMPT.md, el grafo o los comandos no debería
+# bajar el número de evals que pasan (ver evals/README.md). Los inconclusos no miden nada: se repiten.
+echo "📊 Resultado: $PASSED/$TOTAL pasan ($((FAILED-INCONCLUSIVE)) fallan, $INCONCLUSIVE inconclusos)"
 if [ "$FAILED" -gt 0 ]; then
   echo "❌ $FAILED eval(s) fallidos"
   exit 1

@@ -6,7 +6,7 @@
 
 ## Cuándo correr la suite
 
-- En cada cambio a `docs/MASTER_PROMPT.md` o a los ficheros de activación (`CLAUDE.md`, `GEMINI.md`, `.windsurfrules`, etc.).
+- En cada cambio a `docs/MASTER_PROMPT.md`, al grafo de fases (`docs/PROCEDURAL_GRAPH.json`), a los comandos de `.claude/commands/` o a los ficheros de activación (`CLAUDE.md`, `GEMINI.md`, `.windsurfrules`, etc.).
 - Opcionalmente, en un cron/schedule (semanal) para detectar deriva si cambias de modelo o de versión de la IA.
 
 ## Formato de un eval
@@ -45,6 +45,20 @@ bash dbv-specs-ops/scripts/run-evals.sh
 El CLI se toma de `AI_CLI` (variable de entorno) o de la línea `CLI no interactivo: claude -p` de `project.config.md` (bloque *Maintain*).
 
 > **Permisos de escritura:** en modo no interactivo (`-p`) el CLI no puede pedir confirmación, así que solo escribirá `SPECIFICATIONS.md` si el proyecto ya lo permite (p. ej. `permissions.allow` con `Write` y `Edit` en `.claude/settings.json` y el proyecto marcado como de confianza). Si no, ejecuta la suite con el permiso explícito: `AI_CLI="claude -p --permission-mode acceptEdits" bash dbv-specs-ops/scripts/run-evals.sh`. Sin escritura todos los evals fallarían, y por un motivo ajeno al framework. Solo se aceptan `claude`, `gemini`, `copilot` o `cursor…` seguidos del flag `-p`: cualquier otro valor, y los placeholders sin rellenar, se ignoran porque el valor se ejecuta con `eval`.
+
+## Regla de no regresión
+
+El script termina con un resumen comparable entre ejecuciones:
+
+```text
+📊 Resultado: 4/5 pasan (1 fallan, 0 inconclusos)
+```
+
+Un cambio en la configuración del agente se acepta si **no baja el número de evals que pasan** respecto a la versión anterior. Es el principio de la *validation gate* de *Procedural Graphs* ([arXiv:2609.09153](https://arxiv.org/abs/2609.09153)), aplicado a mano y no como bucle automático:
+
+- **Los inconclusos no cuentan.** No miden nada: restaura los ficheros y repite.
+- **Repite antes de concluir.** Los evals no son deterministas: si un resultado cambia en uno o dos evals, vuelve a ejecutar antes de decidir.
+- **Registra los cambios rechazados.** Si un cambio se descarta porque bajó el resultado, anótalo en la `🚫 Rejection Memory` de `memory.md` para que nadie lo vuelva a proponer.
 
 ## Qué NO es
 

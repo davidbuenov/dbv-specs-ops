@@ -4,7 +4,7 @@
 
 <p align="right">🇬🇧 English · <a href="./README.md">🇪🇸 Leer en español</a></p>
 
-![Version](https://img.shields.io/badge/version-3.0.0-blue)
+![Version](https://img.shields.io/badge/version-3.1.0-blue)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 
 ---
@@ -105,6 +105,8 @@ Prefer to do it yourself? See the [manual installation](#manual).
 *   **Hot/Warm/Cold Context Compression**: A protocol that keeps `memory.md` from degrading the AI's attention in long-lived projects (recent ADRs in full, older ones in one line, history in `memory.archive.md`).
 *   **Subagent Contracts (Scope Lock)**: Each parallel session declares which files it may touch and which requirement-ID range it reserves, to avoid collisions between branches (`docs/PARALLEL_WORK.md`).
 *   **Native Desktop (Tauri v2) & Hybrid AI**: Production guides for desktop apps and a three-tier AI engine (local models, cloud with the key in the OS-native keyring, subscription agents via ACP), with Rust-specific standards (`Result` in IPC commands, no `.unwrap()` at runtime) and bundler-less frontend standards (IIFE).
+*   **Phase Graph (`docs/PROCEDURAL_GRAPH.json`)**: The cycle is described as transitions with a `condition` (the gate to move on), `guidance` (how to run the phase) and `pitfalls` (what to avoid), including the way back (Plan → Spec, Test → Build, Simplify → Build). Each phase command receives only its 2-hop neighborhood, generated with `scripts/pg-guide.py`, and the linter fails if a command drifts from the graph. Inspired by *[Procedural Graphs](https://arxiv.org/abs/2609.09153)* (Google).
+*   **Rejection Memory**: A section of `memory.md` that records approaches that were tried and discarded (an architecture rejected in the Architect Review, a reverted fix or refactor). The AI checks it before proposing, so no session repeats a path that already failed.
 
 ---
 
@@ -113,7 +115,7 @@ Prefer to do it yourself? See the [manual installation](#manual).
 
 Other SDD frameworks such as [Spec Kit](https://github.com/github/spec-kit), [BMAD](https://github.com/bmad-code-org/BMAD-METHOD) or [Kiro](https://kiro.dev/) cover the specify → plan → implement flow very well. **dbv-specs-ops** shares that flow and adds the rest of the engineering and product delivery lifecycle, backed by deterministic checks:
 
-| Capability | **dbv-specs-ops (v3.0)** | [**GitHub Spec Kit**](https://github.com/github/spec-kit) | [**BMAD Method**](https://github.com/bmad-code-org/BMAD-METHOD) | [**Kiro (AWS)**](https://kiro.dev/) |
+| Capability | **dbv-specs-ops (v3.1)** | [**GitHub Spec Kit**](https://github.com/github/spec-kit) | [**BMAD Method**](https://github.com/bmad-code-org/BMAD-METHOD) | [**Kiro (AWS)**](https://kiro.dev/) |
 | :--- | :---: | :---: | :---: | :---: |
 | **Specify and plan before coding** | ✅ | ✅ | ✅ | ✅ |
 | **Specs as project files** | ✅ | ✅ | ✅ | ✅ |
@@ -128,11 +130,13 @@ Other SDD frameworks such as [Spec Kit](https://github.com/github/spec-kit), [BM
 | **Auto-generated cross-platform `start` / `stop` scripts** | ✅ | ➖ | ➖ | ➖ |
 | **Git, Changelog and `/ship` management** | ✅ | ⚠️ Partial | ⚠️ Partial | ⚠️ Partial |
 | **Adversarial review of plans and code** | ✅ | ⚠️ Quality gates | ⚠️ Adversarial lenses | ⚠️ Upfront analysis |
+| **Phase gates injected into each command (phase graph)** | ✅ | ⚠️ Optional quality gates | ⚠️ Gates inside some skills | ⚠️ Approval between phases |
+| **Memory of discarded approaches** | ✅ | ❌ | ⚠️ Observed pitfalls | ❌ |
 | **Community and maturity (GitHub ⭐, 2026-10-15)** | ❌ 29 ⭐ | ✅ 141 k ⭐ | ✅ 54 k ⭐ | ➖ AWS product |
 | **Ecosystem and extensibility** | ⚠️ | ✅ | ✅ | ✅ |
 | **Integrated IDE / visual interface** | ❌ | ❌ | ❌ | ✅ |
 
-✅ Yes · ⚠️ Partial or a different approach · ❌ Not stated in its official documentation · ➖ Out of scope. Checked against the official sites of [Spec Kit](https://github.com/github/spec-kit), [BMAD](https://github.com/bmad-code-org/BMAD-METHOD) and [Kiro](https://kiro.dev/) on 2026-10-15. And yes: by stars, **dbv-specs-ops is the last of the three open-source projects**. The full comparison also spells out its limitations.
+✅ Yes · ⚠️ Partial or a different approach · ❌ Not stated in its official documentation · ➖ Out of scope. Checked against the official sites of [Spec Kit](https://github.com/github/spec-kit), [BMAD](https://github.com/bmad-code-org/BMAD-METHOD) and [Kiro](https://kiro.dev/) on 2026-10-15 (the phase-graph and discarded-approaches rows, on 2026-10-16). And yes: by stars, **dbv-specs-ops is the last of the three open-source projects**. The full comparison also spells out its limitations.
 
 👉 **[See the full, detailed technical comparison in `docs/COMPARISON.en.md`](docs/COMPARISON.en.md)**
 
@@ -150,6 +154,7 @@ This workflow is a unified, simplified version of industry pillars, adapted to b
 5. **[The New SDLC With Vibe Coding (Google/Addy Osmani et al.)](https://www.kaggle.com/whitepaper-the-new-SDLC-with-vibe-coding):** The theoretical foundation for **Agentic Engineering** (transitioning from prompting to a controlled codebase factory model, Evals, and Harness engineering).
 6. **[Agent Plugins](https://agent-plugins.org/specification):** The **vendor-neutral standard** (by Google, Amazon, Microsoft, OpenAI, Vercel) for packaging Agent Skills and MCP servers into a portable unit, integrated under `docs/AGENT_PLUGINS.md`.
 7. **[The AI-Native SDLC Playbook (Anthropic)](https://claude.com/blog/the-ai-native-sdlc-playbook):** The blueprint for **closing the loop** — adapted, vendor-agnostically, as the optional Maintain phase (`docs/MAINTAIN.md`), layered code review with severities (`docs/REVIEW.md`), deterministic guardrails (`docs/GUARDRAILS.md`), and formalized parallel worktree sessions (`docs/PARALLEL_WORK.md`).
+8. **[Procedural Graphs: Self-Evolving Execution Structures for LLM Agents (Google, Lu et al., 2026)](https://arxiv.org/abs/2609.09153):** **Procedural memory** as a graph: the phase cycle as transitions with `condition`, `guidance` and `pitfalls` (`docs/PROCEDURAL_GRAPH.json`), a local 2-hop context per phase instead of every rule at once, and the **Rejection Memory** in `memory.md`. Adapted, not copied: what was taken and what was not, in [`docs/PROCEDURAL_GRAPHS.md`](./docs/PROCEDURAL_GRAPHS.md).
 
 ---
 
@@ -218,6 +223,8 @@ All control files of the framework reside inside the `dbv-specs-ops/` folder:
 | [`SOURCE_OF_TRUTH.md`](./docs/SOURCE_OF_TRUTH.md) | How to coexist with an external system (Jira, ServiceNow, etc.). *(Optional)* |
 | [`METRICS.md`](./docs/METRICS.md) | Leading/lagging indicators per phase, readable from git history alone. *(Optional)* |
 | [`MAINTAIN.md`](./docs/MAINTAIN.md) | Optional Phase 7 — autonomous loop closure. See callout above. |
+| [`PROCEDURAL_GRAPH.json`](./docs/PROCEDURAL_GRAPH.json) | The phase cycle as transitions with `condition` / `guidance` / `pitfalls`. Single source of the blocks in `.claude/commands/`. |
+| [`PROCEDURAL_GRAPHS.md`](./docs/PROCEDURAL_GRAPHS.md) | Guide to the phase graph and the Rejection Memory: what was taken from *Procedural Graphs* and what was not, and how to change the graph safely. *(In Spanish)* |
 
 #### `/dbv-specs-ops/` (Framework Root):
 | File | Purpose |
@@ -226,15 +233,16 @@ All control files of the framework reside inside the `dbv-specs-ops/` folder:
 | [`CHANGELOG.md`](./CHANGELOG.md) | Version history. The AI updates the `[Unreleased]` section during `/build` and `/test`, and publishes it on each `/ship`. |
 | [`task.md`](./task.md) | The logbook. Quantitative progress (checklist), backlog, and **Context Snapshots**. |
 | [`evals/`](./evals/) + [`scripts/run-evals.sh`](./scripts/run-evals.sh) | *(Optional)* Regression suite for the agent's own configuration (`MASTER_PROMPT.md` and activation files) — not for your project's code. See `evals/README.md`. |
-| [`scripts/dbv-lint.py`](./scripts/dbv-lint.py) | Deterministic linter (Python 3.8+, no dependencies): single-`return` rule through the AST, plan Frontmatter and `@spec` traceability. `python dbv-specs-ops/scripts/dbv-lint.py --help`. |
-| [`memory.md`](./memory.md) | **Context and Decisions.** Qualitative knowledge: active context, technical decisions (ADRs), lessons learned, and relations map. AI must consult it at session start. |
+| [`scripts/dbv-lint.py`](./scripts/dbv-lint.py) | Deterministic linter (Python 3.8+, no dependencies): single-`return` rule through the AST, plan Frontmatter, `@spec` traceability and the phase graph. `python dbv-specs-ops/scripts/dbv-lint.py --help`. |
+| [`scripts/pg-guide.py`](./scripts/pg-guide.py) | Phase graph (Python 3.8+, no dependencies): validates its structure, prints a phase's context (`--node build`) and regenerates the command blocks (`--write-commands`). |
+| [`memory.md`](./memory.md) | **Context and Decisions.** Qualitative knowledge: active context, technical decisions (ADRs), lessons learned, **Rejection Memory** (discarded approaches) and relations map. AI must consult it at session start. |
 | `implementation_plan.md` | Created at the `/plan` phase. Detailed technical plan for the AI to fill in and get approved before building. |
 | `walkthrough.md` | Created at the `/ship` phase. Summary of what was built, tested and delivered. |
 
 #### Framework root (this repo):
 | File | Purpose |
 |---|---|
-| [`.claude/commands/`](./.claude/commands/) | *(Optional, Claude Code only)* Native slash commands for each phase (`/spec` … `/maintain`) with autocomplete. |
+| [`.claude/commands/`](./.claude/commands/) | *(Optional, Claude Code only)* Native slash commands for each phase (`/spec` … `/maintain`) with autocomplete; each one carries its phase context, generated from the graph. |
 
 ---
 
@@ -344,7 +352,7 @@ That's it. The AI detects your current version, calculates what needs updating, 
 - ✅ Add new optional files if missing (e.g. `dbv-specs-ops/docs/DESIGN.md` for UI projects)
 - ✅ Show you a full summary of every change applied
 
-> **Upgrading to v3.0.0 breaks nothing you already have.** Your specifications, backlog and code are not touched; requirements without an ID keep working, and `REQ-NN` IDs are only required for what you write from now on.
+> **Upgrading to v3.1.0 breaks nothing you already have.** Your specifications, backlog, `memory.md` and code are not touched. Requirements without an ID keep working, and `REQ-NN` IDs are only required for what you write from now on. The AI adds the *Rejection Memory* section to your `memory.md` the first time it has something to record.
 
 #### What the AI will NEVER touch
 
@@ -419,7 +427,7 @@ Fork, create a descriptive branch, and open a Pull Request. See the Contributing
 <a name="status"></a>
 ## 🛠 Status
 
-* **Version:** 3.0.0
+* **Version:** 3.1.0
 * **Methodology:** Spec-Driven Development (SDD)
 * **Goal:** Universal AI-assisted development template for any platform and assistant.
 
@@ -470,3 +478,4 @@ Fork, create a descriptive branch, and open a Pull Request. See the Contributing
 * **[SkillUI](https://github.com/amaancoderx/npxskillui)** — Amaan Coder (Design System Reverse Engineering CLI)
 * **[Agent Plugins Specification](https://agent-plugins.org/specification)** — TSC of Core Maintainers (Google, Amazon, Microsoft, OpenAI, Vercel)
 * **[The AI-Native SDLC Playbook](https://claude.com/blog/the-ai-native-sdlc-playbook)** — Anthropic (loop closure, layered review, deterministic guardrails, parallel worktree sessions)
+* **[Procedural Graphs: Self-Evolving Execution Structures for LLM Agents](https://arxiv.org/abs/2609.09153)** — Yuxing Lu, Yicheng Chen, Shanchan Wu & Sercan Ö. Arık (Google, Georgia Tech, Peking University; arXiv:2609.09153, September 2026) (phase graph, local context, Rejection Memory)

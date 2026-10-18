@@ -14,7 +14,7 @@ Regla general: **una instrucción en `MASTER_PROMPT.md` es una skill (recomendac
 | **Branch protection / required checks** (GitHub, GitLab) | Impide el merge si el pipeline de CI no ha pasado `/test` | Bajo (config de plataforma) |
 | **CI job dedicado** | Ejecuta lint/test/build en cada push y falla el pipeline si algo no pasa | Medio |
 | **`.gitattributes` / CODEOWNERS** | Exige revisión humana en rutas protegidas (migraciones, infra) | Bajo |
-| **`scripts/dbv-lint.py`** (en pre-commit o CI) | Aplica por AST la regla de un solo `return` en Python; opcionalmente comprueba Frontmatter del plan y trazabilidad `@spec` | Bajo (solo Python 3.8+) |
+| **`scripts/dbv-lint.py`** (en pre-commit o CI) | Aplica por AST la regla de un solo `return` en Python; opcionalmente comprueba Frontmatter del plan, trazabilidad `@spec` y que el grafo de fases sea válido y esté sincronizado con `.claude/commands/` | Bajo (solo Python 3.8+) |
 
 ## Notas específicas por plataforma (opcional, no obligatorio)
 

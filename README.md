@@ -4,7 +4,7 @@
 
 <p align="right">🇪🇸 Español · <a href="./README.en.md">🇬🇧 Read in English</a></p>
 
-![Version](https://img.shields.io/badge/version-3.0.0-blue)
+![Version](https://img.shields.io/badge/version-3.1.0-blue)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 
 ---
@@ -105,6 +105,8 @@ La IA descarga el framework en la subcarpeta `dbv-specs-ops/`, prepara los fiche
 *   **Compresión de Contexto Hot/Warm/Cold**: Protocolo para que `memory.md` no degrade la atención de la IA en proyectos longevos (ADRs recientes completos, antiguos en una línea, histórico en `memory.archive.md`).
 *   **Contratos de Subagente (Scope Lock)**: Cada sesión paralela declara qué ficheros puede tocar y qué rango de IDs de requisito reserva, para evitar colisiones entre ramas (`docs/PARALLEL_WORK.md`).
 *   **Escritorio Nativo (Tauri v2) e IA Híbrida**: Guías de producción para apps de escritorio y un motor de IA de tres niveles (modelos locales, nube con clave en el llavero nativo del SO, agentes de suscripción vía ACP), con estándares específicos de Rust (`Result` en comandos IPC, sin `.unwrap()` en runtime) y de frontend sin bundler (IIFE).
+*   **Grafo de Fases (`docs/PROCEDURAL_GRAPH.json`)**: El ciclo se describe como transiciones con `condition` (la puerta para pasar), `guidance` (cómo ejecutar la fase) y `pitfalls` (qué evitar), incluidas las vueltas atrás (Plan → Spec, Test → Build, Simplify → Build). Cada comando de fase recibe solo su vecindario a 2 saltos, generado con `scripts/pg-guide.py`, y el linter falla si un comando se desincroniza del grafo. Inspirado en *[Procedural Graphs](https://arxiv.org/abs/2609.09153)* (Google).
+*   **Rejection Memory**: Una sección de `memory.md` donde se registran los enfoques probados y descartados (una arquitectura rechazada en el Architect Review, un arreglo o un refactor revertidos). La IA la consulta antes de proponer, para que ninguna sesión repita un camino que ya falló.
 
 ---
 
@@ -113,7 +115,7 @@ La IA descarga el framework en la subcarpeta `dbv-specs-ops/`, prepara los fiche
 
 Otros frameworks SDD como [Spec Kit](https://github.com/github/spec-kit), [BMAD](https://github.com/bmad-code-org/BMAD-METHOD) o [Kiro](https://kiro.dev/) cubren muy bien el flujo especificar → planificar → implementar. **dbv-specs-ops** comparte ese flujo y añade el resto del ciclo de ingeniería y entrega de producto, con comprobaciones deterministas:
 
-| Capacidad | **dbv-specs-ops (v3.0)** | [**GitHub Spec Kit**](https://github.com/github/spec-kit) | [**BMAD Method**](https://github.com/bmad-code-org/BMAD-METHOD) | [**Kiro (AWS)**](https://kiro.dev/) |
+| Capacidad | **dbv-specs-ops (v3.1)** | [**GitHub Spec Kit**](https://github.com/github/spec-kit) | [**BMAD Method**](https://github.com/bmad-code-org/BMAD-METHOD) | [**Kiro (AWS)**](https://kiro.dev/) |
 | :--- | :---: | :---: | :---: | :---: |
 | **Especificar y planificar antes de codificar** | ✅ | ✅ | ✅ | ✅ |
 | **Specs como ficheros del proyecto** | ✅ | ✅ | ✅ | ✅ |
@@ -128,11 +130,13 @@ Otros frameworks SDD como [Spec Kit](https://github.com/github/spec-kit), [BMAD]
 | **Scripts `start` / `stop` multiplataforma autogenerados** | ✅ | ➖ | ➖ | ➖ |
 | **Gestión de Git, Changelog y `/ship`** | ✅ | ⚠️ Parcial | ⚠️ Parcial | ⚠️ Parcial |
 | **Revisión adversarial de planes y código** | ✅ | ⚠️ Puertas de calidad | ⚠️ Lentes adversariales | ⚠️ Análisis previo |
+| **Puertas entre fases inyectadas en cada comando (grafo de fases)** | ✅ | ⚠️ Puertas de calidad opcionales | ⚠️ Puertas dentro de algunas skills | ⚠️ Aprobación entre fases |
+| **Memoria de enfoques descartados** | ✅ | ❌ | ⚠️ Errores observados | ❌ |
 | **Comunidad y madurez (⭐ en GitHub, 15/10/2026)** | ❌ 29 ⭐ | ✅ 141 k ⭐ | ✅ 54 k ⭐ | ➖ Producto de AWS |
 | **Ecosistema y extensibilidad** | ⚠️ | ✅ | ✅ | ✅ |
 | **IDE / interfaz visual integrada** | ❌ | ❌ | ❌ | ✅ |
 
-✅ Sí · ⚠️ Parcial o con otro enfoque · ❌ No consta en su documentación oficial · ➖ Fuera de su alcance. Contrastado con las webs oficiales de [Spec Kit](https://github.com/github/spec-kit), [BMAD](https://github.com/bmad-code-org/BMAD-METHOD) y [Kiro](https://kiro.dev/) el 15/10/2026. Y sí: en estrellas, **dbv-specs-ops es el último de los tres proyectos de código abierto**. La comparativa completa también explica sus limitaciones.
+✅ Sí · ⚠️ Parcial o con otro enfoque · ❌ No consta en su documentación oficial · ➖ Fuera de su alcance. Contrastado con las webs oficiales de [Spec Kit](https://github.com/github/spec-kit), [BMAD](https://github.com/bmad-code-org/BMAD-METHOD) y [Kiro](https://kiro.dev/) el 15/10/2026 (las dos filas del grafo de fases y de la memoria de descartes, el 16/10/2026). Y sí: en estrellas, **dbv-specs-ops es el último de los tres proyectos de código abierto**. La comparativa completa también explica sus limitaciones.
 
 👉 **[Ver la comparativa técnica completa y detallada en `docs/COMPARISON.md`](docs/COMPARISON.md)**
 
@@ -150,6 +154,7 @@ Este flujo de trabajo es una versión unificada y simplificada de varios pilares
 5. **[The New SDLC With Vibe Coding (Google/Addy Osmani et al.)](https://www.kaggle.com/whitepaper-the-new-SDLC-with-vibe-coding):** La base teórica para la **Ingeniería Agéntica** (transición desde el prompting casual hacia un modelo controlado de fábrica de código, Evals y diseño del arnés).
 6. **[Agent Plugins](https://agent-plugins.org/specification):** El **estándar neutral de la industria** (Google, Amazon, Microsoft, OpenAI, Vercel) para empaquetar Agent Skills y servidores MCP, integrado bajo `docs/AGENT_PLUGINS.md`.
 7. **[The AI-Native SDLC Playbook (Anthropic)](https://claude.com/blog/the-ai-native-sdlc-playbook):** El plano para **cerrar el loop** — adaptado de forma agnóstica de proveedor como la Fase Maintain opcional (`docs/MAINTAIN.md`), la revisión de código por pases con severidad (`docs/REVIEW.md`), los guardarraíles deterministas (`docs/GUARDRAILS.md`) y el trabajo paralelo formalizado con worktrees (`docs/PARALLEL_WORK.md`).
+8. **[Procedural Graphs: Self-Evolving Execution Structures for LLM Agents (Google, Lu et al., 2026)](https://arxiv.org/abs/2609.09153):** La **memoria procedimental** como grafo: el ciclo de fases como transiciones con `condition`, `guidance` y `pitfalls` (`docs/PROCEDURAL_GRAPH.json`), contexto local de 2 saltos por fase en vez de todas las reglas a la vez, y la **Rejection Memory** de `memory.md`. Adaptado, no copiado: qué se tomó y qué no, en [`docs/PROCEDURAL_GRAPHS.md`](./docs/PROCEDURAL_GRAPHS.md).
 
 ---
 
@@ -219,6 +224,8 @@ Todos los archivos de control del framework residen dentro de la subcarpeta `dbv
 | [`SOURCE_OF_TRUTH.md`](./docs/SOURCE_OF_TRUTH.md) | Cómo convivir con un sistema externo (Jira, ServiceNow, etc.). *(Opcional)* |
 | [`METRICS.md`](./docs/METRICS.md) | Indicadores leader/lagging por fase, legibles solo desde el historial de git. *(Opcional)* |
 | [`MAINTAIN.md`](./docs/MAINTAIN.md) | Fase 7 opcional — cierre autónomo del loop. Ver recuadro arriba. |
+| [`PROCEDURAL_GRAPH.json`](./docs/PROCEDURAL_GRAPH.json) | El ciclo de fases como transiciones con `condition` / `guidance` / `pitfalls`. Fuente única de los bloques de `.claude/commands/`. |
+| [`PROCEDURAL_GRAPHS.md`](./docs/PROCEDURAL_GRAPHS.md) | Guía del grafo de fases y de la Rejection Memory: qué se tomó de *Procedural Graphs* y qué no, y cómo cambiar el grafo sin romper nada. |
 
 #### Carpeta raíz `/dbv-specs-ops/`:
 | Archivo | Propósito |
@@ -227,15 +234,16 @@ Todos los archivos de control del framework residen dentro de la subcarpeta `dbv
 | [`CHANGELOG.md`](./CHANGELOG.md) | Historial de versiones. La IA actualiza la sección `[Sin publicar]` durante `/build` y `/test`, y la publica en cada `/ship`. |
 | [`task.md`](./task.md) | El diario de a bordo. Progreso cuantitativo (checklist), backlog, y **Snapshots de Contexto**. |
 | [`evals/`](./evals/) + [`scripts/run-evals.sh`](./scripts/run-evals.sh) | *(Opcional)* Suite de regresión para la propia configuración del agente (`MASTER_PROMPT.md` y ficheros de activación) — no para el código de tu proyecto. Ver `evals/README.md`. |
-| [`scripts/dbv-lint.py`](./scripts/dbv-lint.py) | Linter determinista (Python 3.8+, sin dependencias): regla de un solo `return` por AST, Frontmatter del plan y trazabilidad `@spec`. `python dbv-specs-ops/scripts/dbv-lint.py --help`. |
-| [`memory.md`](./memory.md) | **Contexto y Decisiones.** Base de conocimiento cualitativo: contexto activo, decisiones técnicas (ADR), lecciones aprendidas y mapa de relaciones. La IA debe consultarlo al iniciar la sesión. |
+| [`scripts/dbv-lint.py`](./scripts/dbv-lint.py) | Linter determinista (Python 3.8+, sin dependencias): regla de un solo `return` por AST, Frontmatter del plan, trazabilidad `@spec` y grafo de fases. `python dbv-specs-ops/scripts/dbv-lint.py --help`. |
+| [`scripts/pg-guide.py`](./scripts/pg-guide.py) | Grafo de fases (Python 3.8+, sin dependencias): valida su estructura, imprime el contexto de una fase (`--node build`) y regenera los bloques de los comandos (`--write-commands`). |
+| [`memory.md`](./memory.md) | **Contexto y Decisiones.** Base de conocimiento cualitativo: contexto activo, decisiones técnicas (ADR), lecciones aprendidas, **Rejection Memory** (enfoques descartados) y mapa de relaciones. La IA debe consultarlo al iniciar la sesión. |
 | `implementation_plan.md` | Se crea en la fase `/plan`. Plan técnico detallado que la IA rellena y el usuario aprueba antes de construir. |
 | `walkthrough.md` | Se crea en la fase `/ship`. Resumen de lo construido, probado y entregado. |
 
 #### Raíz del framework (este repo):
 | Archivo | Propósito |
 |---|---|
-| [`.claude/commands/`](./.claude/commands/) | *(Opcional, solo Claude Code)* Comandos nativos de cada fase (`/spec` … `/maintain`) con autocompletado. |
+| [`.claude/commands/`](./.claude/commands/) | *(Opcional, solo Claude Code)* Comandos nativos de cada fase (`/spec` … `/maintain`) con autocompletado; cada uno lleva el contexto de su fase generado desde el grafo. |
 
 ---
 
@@ -345,7 +353,7 @@ Listo. La IA detecta tu versión actual, calcula qué hay que actualizar y aplic
 - ✅ Añadir ficheros nuevos opcionales si faltan (ej: `dbv-specs-ops/docs/DESIGN.md` para proyectos con UI)
 - ✅ Mostrarte un resumen completo de todo lo que se aplicó
 
-> **Actualizar a la v3.0.0 no rompe nada de lo que ya tienes.** Tus especificaciones, tu backlog y tu código no se tocan; los requisitos sin ID siguen funcionando, y los IDs `REQ-NN` solo son obligatorios para lo que escribas a partir de ahora.
+> **Actualizar a la v3.1.0 no rompe nada de lo que ya tienes.** Tus especificaciones, tu backlog, tu `memory.md` y tu código no se tocan. Los requisitos sin ID siguen funcionando, y los IDs `REQ-NN` solo son obligatorios para lo que escribas a partir de ahora. La sección *Rejection Memory* la crea la IA en tu `memory.md` la primera vez que tenga algo que registrar.
 
 #### Qué NO tocará nunca
 
@@ -420,7 +428,7 @@ Realiza un Fork del repositorio, crea una rama descriptiva y abre una Pull Reque
 <a name="status"></a>
 ## 🛠 Estado
 
-* **Versión:** 3.0.0
+* **Versión:** 3.1.0
 * **Metodología:** Spec-Driven Development (SDD)
 * **Objetivo:** Plantilla universal de desarrollo asistido por IA para cualquier plataforma y asistente.
 
@@ -471,3 +479,4 @@ Realiza un Fork del repositorio, crea una rama descriptiva y abre una Pull Reque
 * **[SkillUI](https://github.com/amaancoderx/npxskillui)** — Amaan Coder (Design System Reverse Engineering CLI)
 * **[Agent Plugins Specification](https://agent-plugins.org/specification)** — TSC of Core Maintainers (Google, Amazon, Microsoft, OpenAI, Vercel)
 * **[The AI-Native SDLC Playbook](https://claude.com/blog/the-ai-native-sdlc-playbook)** — Anthropic (cierre de loop, revisión por capas, guardarraíles deterministas, sesiones paralelas con worktree)
+* **[Procedural Graphs: Self-Evolving Execution Structures for LLM Agents](https://arxiv.org/abs/2609.09153)** — Yuxing Lu, Yicheng Chen, Shanchan Wu & Sercan Ö. Arık (Google, Georgia Tech, Peking University; arXiv:2609.09153, septiembre de 2026) (grafo de fases, contexto local, Rejection Memory)

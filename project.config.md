@@ -15,7 +15,7 @@
 - **Technologies / Stack:** [e.g. FastAPI, React, PostgreSQL]
 - **Agent Readiness (Web):** [Yes / No / Not Applicable]
 - **Desktop AI Assistant (Local/Cloud/ACP):** [Yes / No / Not Applicable]
-- **Framework Version:** 3.0.0
+- **Framework Version:** 3.1.0
 
 
 ---

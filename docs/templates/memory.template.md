@@ -21,6 +21,11 @@
 
 - [Aún no hay lecciones registradas]
 
+## 🚫 Rejection Memory (Caminos Descartados)
+*Enfoques probados o evaluados y descartados (una arquitectura que no superó el Architect Review, un arreglo o un refactor que hubo que revertir). La IA la lee antes de proponer un enfoque en `/plan`, `/test`, `/code-simplify` y `/maintain` para no repetirlos. Es evidencia, no una orden: si el contexto cambia, se reabre explicándolo. El número es el máximo + 1 y nunca se reutiliza; una entrada que deja de aplicar se tacha y se anota por qué. Formato: `- **REJECTED-NN** (AAAA-MM-DD) · Ámbito: <dónde aplica> — Intento: <qué se probó> → Motivo: <evidencia del fallo> → En su lugar: <alternativa>`.*
+
+- [Aún no hay enfoques descartados]
+
 ## 🗺️ Mapa de Relaciones
 *Breve descripción de cómo interactúan los módulos actuales para ayudar a la IA a navegar el código.*
 
