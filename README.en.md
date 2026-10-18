@@ -234,6 +234,7 @@ All control files of the framework reside inside the `dbv-specs-ops/` folder:
 | [`task.md`](./task.md) | The logbook. Quantitative progress (checklist), backlog, and **Context Snapshots**. |
 | [`evals/`](./evals/) + [`scripts/run-evals.sh`](./scripts/run-evals.sh) | *(Optional)* Regression suite for the agent's own configuration (`MASTER_PROMPT.md` and activation files) — not for your project's code. See `evals/README.md`. |
 | [`scripts/dbv-lint.py`](./scripts/dbv-lint.py) | Deterministic linter (Python 3.8+, no dependencies): single-`return` rule through the AST, plan Frontmatter, `@spec` traceability and the phase graph. `python dbv-specs-ops/scripts/dbv-lint.py --help`. |
+| [`scripts/release-notes.py`](./scripts/release-notes.py) | GitHub Release from the CHANGELOG (Python 3.8+, `gh`): extracts a version's section (English first when `CHANGELOG.en.md` exists) and creates the Release; `/ship` offers it once per project. |
 | [`scripts/pg-guide.py`](./scripts/pg-guide.py) | Phase graph (Python 3.8+, no dependencies): validates its structure, prints a phase's context (`--node build`) and regenerates the command blocks (`--write-commands`). |
 | [`memory.md`](./memory.md) | **Context and Decisions.** Qualitative knowledge: active context, technical decisions (ADRs), lessons learned, **Rejection Memory** (discarded approaches) and relations map. AI must consult it at session start. |
 | `implementation_plan.md` | Created at the `/plan` phase. Detailed technical plan for the AI to fill in and get approved before building. |

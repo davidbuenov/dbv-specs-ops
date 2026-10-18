@@ -1,0 +1,21 @@
+# Release de GitHub automático al subir un tag vX.Y.Z (notas desde CHANGELOG.md).
+name: Release
+
+on:
+  push:
+    tags: ["v*.*.*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Crear el Release con las notas del CHANGELOG
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/release-notes.py "${GITHUB_REF_NAME}" --create

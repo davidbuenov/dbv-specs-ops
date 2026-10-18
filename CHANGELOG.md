@@ -25,6 +25,7 @@ Grafo de fases y Rejection Memory, adaptados de [*Procedural Graphs: Self-Evolvi
 - **Rejection Memory.** Sección `## 🚫 Rejection Memory` en `memory.md` y `docs/templates/memory.template.md` con entradas `REJECTED-NN` (ámbito, intento, motivo y alternativa). Se consulta antes de proponer en `/plan`, `/test`, `/code-simplify` y Maintain, como evidencia y no como orden (`<trust_boundary>`). En proyectos existentes la IA la crea la primera vez que la necesita.
 - **`docs/PROCEDURAL_GRAPHS.md`.** Qué se tomó del paper, qué no y por qué, y cómo cambiar el grafo sin romper nada. **`docs/AGENTIC_ENGINEERING.md` §6:** memoria procedimental (taxonomía CoALA).
 - **`docs/COMPARISON.md` / `docs/COMPARISON.en.md`:** comparativa técnica bilingüe de `dbv-specs-ops` frente a GitHub Spec Kit, BMAD Method y Kiro, contrastada con sus webs oficiales (15/10/2026) e incluyendo una sección de limitaciones propias (documentación solo para GitHub, no la usa la IA). `README.md` y `README.en.md` incorporan la sección «¿En qué se diferencia de GitHub Spec Kit, BMAD o Kiro?» / «How Does It Differ…» (tabla resumida y enlace a la comparativa completa) y su entrada en el índice.
+- **Releases de GitHub desde el CHANGELOG** (`scripts/release-notes.py`, `docs/templates/release.workflow.yml`, `CHANGELOG.en.md`, `.github/workflows/release.yml`): un tag de git no es un Release y `/ship` solo creaba el tag. Ahora `/ship` ofrece, una vez por proyecto, publicar cada versión como Release de GitHub con las notas en inglés primero y el español debajo, de forma automática (workflow al subir el tag) o a mano con `gh`. No instala nada sin el sí del usuario. Releases retroactivos de los tags antiguos con `release-notes.py --all --create`.
 - **Comparativa:** filas *Puertas entre fases* y *Memoria de enfoques descartados*, contrastadas con la documentación oficial de Spec Kit, BMAD y Kiro el 16/10/2026; §9 del análisis y una limitación nueva (el grafo es un resumen escrito a mano y su efecto en la calidad no está medido).
 
 ### Changed
@@ -33,6 +34,7 @@ Grafo de fases y Rejection Memory, adaptados de [*Procedural Graphs: Self-Evolvi
   - Bloque `<procedural_graph>`: un puntero breve, no una copia de las transiciones, porque eso inyectaría el grafo completo en cada sesión.
   - Disparadores de Rejection Memory en `/plan`, `/test` y `/code-simplify`.
   - Maintain conserva el final de los logs largos.
+  - `/ship` ofrece el paso de Release de GitHub.
 - **`scripts/dbv-lint.py`:**
   - Valida el grafo y falla si un comando del framework no coincide con él.
   - Solo avisa si la copia de `.claude/commands/` de la raíz de un proyecto está desactualizada, y no reclama los comandos que el usuario no copió.

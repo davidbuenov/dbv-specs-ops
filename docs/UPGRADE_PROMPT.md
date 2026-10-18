@@ -299,6 +299,10 @@ Usa esta tabla para calcular qué hay que actualizar según la versión actual d
 | MODIFICADO | `docs/templates/memory.template.md` | Sección `🚫 Rejection Memory`. Solo se usa al crear un `memory.md` nuevo. |
 | MODIFICADO | `.claude/commands/{spec,plan,build,test,code-simplify,ship,maintain}.md` | Cada comando lleva el contexto de su fase entre `<!-- pg-guide:begin` y `<!-- pg-guide:end -->`. Viven en `.claude/commands/` de la **raíz**. |
 | EXCEPCIÓN | `.claude/commands/*.md` de la raíz con texto propio del usuario | No los sobrescribas: conserva su texto y sustituye o añade solo el bloque entre los marcadores. Puedes hacerlo con `python dbv-specs-ops/scripts/pg-guide.py --write-commands --commands-dir .claude/commands`, que no toca lo que hay fuera de los marcadores. |
+| NUEVO | `scripts/release-notes.py` | Extrae las notas de un `## [X.Y.Z]` del CHANGELOG y crea el Release de GitHub con `gh` (Python 3.8+, sin dependencias). |
+| NUEVO | `docs/templates/release.workflow.yml` | Plantilla del workflow que crea el Release al subir un tag. **Es una plantilla: no la instales durante la actualización.** `/ship` la copia a `.github/workflows/release.yml` solo si el usuario acepta. |
+| MODIFICADO | `docs/MASTER_PROMPT.md`, `.claude/commands/ship.md` | `/ship` ofrece, una vez, el Release de GitHub (automático / manual / no) y guarda la respuesta en `project.config.md`. |
+| CAMPO AÑADIDO | `project.config.md` | ⚠️ No sobrescribir. Opcional: bloque `## Release de GitHub` (`GitHub Release: automático \| manual \| no`). Si falta, `/ship` pregunta la primera vez. |
 | SIN CAMBIOS (protegido) | `memory.md` | **No añadas la sección `🚫 Rejection Memory` durante la actualización.** La IA la crea en el trabajo normal la primera vez que tenga algo que registrar (`<procedural_graph>` de `MASTER_PROMPT.md`). |
 | MODIFICADO | `docs/UPGRADE_PROMPT.md` | Este archivo actualizado con la versión v3.1.0. |
 | CAMPO AÑADIDO | `project.config.md` | ⚠️ No sobrescribir. Ver Fase 4: solo `Framework Version`. |
@@ -313,7 +317,7 @@ Usa esta tabla para calcular qué hay que actualizar según la versión actual d
 > - Los ficheros del framework (`docs/…`, `scripts/…`, `evals/…`, `README.template.md`) se guardan **dentro de `dbv-specs-ops/`**: p. ej. `dbv-specs-ops/docs/MASTER_PROMPT.md`.
 > - Los **activadores** (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, `ANTIGRAVITY.md`, `.windsurfrules`, `.github/copilot-instructions.md`) y `.claude/commands/*.md` se actualizan en la **raíz** del proyecto. Si el usuario ha añadido contenido propio a un activador, **conserva ese contenido**: basta con que el activador apunte a `dbv-specs-ops/docs/MASTER_PROMPT.md` o incluya la «nota de rutas» de la versión nueva.
 > - Si el usuario copió el repositorio completo a `dbv-specs-ops/` (lo que indica el README), dentro de esa carpeta hay además **copias inertes** de los activadores (`CLAUDE.md`, `GEMINI.md`, `ANTIGRAVITY.md`, `.windsurfrules`, `.github/copilot-instructions.md`) y de `.claude/commands/`: ningún asistente las lee. No es una instalación rara: actualízalas como cualquier otro fichero del framework. Las que cuentan son las de la **raíz** (se actualizan conservando el contenido del usuario). Si el usuario usa Claude Code y no tiene `.claude/commands/` en la raíz, dilo en el resumen final.
-> - En macOS/Linux, tras descargar los scripts ejecuta `chmod +x dbv-specs-ops/scripts/dbv-lint.py dbv-specs-ops/scripts/pg-guide.py dbv-specs-ops/scripts/run-evals.sh`.
+> - En macOS/Linux, tras descargar los scripts ejecuta `chmod +x dbv-specs-ops/scripts/dbv-lint.py dbv-specs-ops/scripts/pg-guide.py dbv-specs-ops/scripts/release-notes.py dbv-specs-ops/scripts/run-evals.sh`.
 
 ### Opción A: Descarga automática (si tienes acceso a red)
 
@@ -366,6 +370,9 @@ Para cada fichero marcado como NUEVO o MODIFICADO, descarga el contenido desde e
 | `docs/PROCEDURAL_GRAPH.json` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/PROCEDURAL_GRAPH.json` *(NUEVO v3.1.0)* |
 | `docs/PROCEDURAL_GRAPHS.md` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/PROCEDURAL_GRAPHS.md` *(NUEVO v3.1.0)* |
 | `scripts/pg-guide.py` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/scripts/pg-guide.py` *(NUEVO v3.1.0)* |
+| `scripts/release-notes.py` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/scripts/release-notes.py` *(NUEVO v3.1.0)* |
+| `docs/templates/release.workflow.yml` | `https://raw.githubusercontent.com/davidbuenov/dbv-specs-ops/master/docs/templates/release.workflow.yml` *(NUEVO v3.1.0 · plantilla, no instalar)* |
+| `CHANGELOG.en.md` | *(solo framework: no lo descargues en proyectos de usuario)* |
 
 > **Nota:** Si alguna descarga falla, muestra el link al usuario para que lo descargue manualmente.
 
@@ -477,6 +484,7 @@ Próximos pasos:
   [Si quieres activar la Fase 7] → Lee docs/MAINTAIN.md y añade el bloque "Maintain (Fase 7)" a project.config.md. Sigue desactivada por defecto.
   [Si quieres guardarraíles deterministas] → Lee docs/GUARDRAILS.md (pre-commit hooks, branch protection).
   [Si se creó scripts/dbv-lint.py] → Puedes validar tu código con `python dbv-specs-ops/scripts/dbv-lint.py --changed` (solo lo que tocas; tu código anterior no se reprocha). Desde ahora los requisitos NUEVOS de SPECIFICATIONS.md llevan un ID (`REQ-01`…) que el código y los tests citan con `@spec REQ-01`; tus requisitos actuales siguen valiendo tal cual (si quieres asignarles IDs, pídemelo).
+  [Si se creó scripts/release-notes.py] → Si tu repositorio está en GitHub, la próxima vez que ejecutes `/ship` te preguntaré (una sola vez) si quieres que cada versión tenga su Release con las notas del CHANGELOG, de forma automática o manual. No he instalado ningún workflow.
   [Si se creó scripts/pg-guide.py] → Los comandos de fase llevan ahora el contexto de su fase (grafo de fases, docs/PROCEDURAL_GRAPHS.md). La IA registrará los enfoques descartados en una sección «🚫 Rejection Memory» de memory.md la primera vez que tenga algo que anotar; tu memory.md actual no se ha tocado.
   → Continúa con tu proyecto normalmente. El framework ya está al día.
 ```

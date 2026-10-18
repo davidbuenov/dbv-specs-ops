@@ -92,6 +92,10 @@ Use the fields above to generate it. Always include the framework credit line.
 - Linter dbv-lint.py (en /code-simplify): sí
 - Branch protection en CI: no
 
+## Release de GitHub
+<!-- Opcional — lo rellena /ship la primera vez; ver docs/MASTER_PROMPT.md (Fase 6) -->
+- GitHub Release: <automático | manual | no>
+
 ## Maintain (Fase 7)
 <!-- Opcional, desactivada por defecto — ver docs/MAINTAIN.md -->
 - Habilitado: no

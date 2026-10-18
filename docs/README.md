@@ -46,6 +46,7 @@ METRICS                →  defines Per-Phase Indicators (optional)
 MAINTAIN               →  defines Autonomous Loop Closure (optional Phase 7)
 PROCEDURAL_GRAPH.json  →  defines the Phase Gates (condition/guidance/pitfalls) injected into each phase command
 scripts/pg-guide.py    →  validates the phase graph, prints a phase's 2-hop context and regenerates the command blocks
+scripts/release-notes.py →  turns a CHANGELOG section into a GitHub Release (English first, Spanish below); used by /ship
 scripts/dbv-lint.py    →  checks the rules deterministically (single-return AST rule, plan frontmatter, @spec traceability, phase graph)
 memory.md (root)       →  includes the Rejection Memory: discarded approaches the AI checks before proposing
 task.md (root)         →  records state and ensures continuity between sessions

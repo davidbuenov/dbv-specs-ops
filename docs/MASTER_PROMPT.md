@@ -168,6 +168,13 @@ hasta completar la fase que se pidió.
       - Propone el commit con mensaje en formato Conventional Commits, por ejemplo: `feat: añadir sistema de login (v1.1.0)`.
       - Crea el tag de versión: `git tag vX.Y.Z`.
       - Sugiere el push pero **no lo ejecuta**: `git push origin main --tags`.
+    - **Release de GitHub (opcional):** un tag no es un Release; sin este paso GitHub solo muestra el tag. Si el remoto es GitHub y `project.config.md` no tiene aún la línea `GitHub Release`, pregunta **una sola vez**:
+      > *¿Quieres que cada versión tenga su Release en GitHub con las notas del CHANGELOG?*
+      > *[1] Automático ✅ — copio `dbv-specs-ops/docs/templates/release.workflow.yml` a `.github/workflows/release.yml`; al subir el tag, GitHub crea el Release*
+      > *[2] Manual — tras el push, `python dbv-specs-ops/scripts/release-notes.py vX.Y.Z --create --changelog dbv-specs-ops/CHANGELOG.md` (requiere `gh`)*
+      > *[3] No*
+
+      Guarda la respuesta en `project.config.md` (`- GitHub Release: automático | manual | no`) y no vuelvas a preguntar. No instales el workflow sin el sí del usuario ni si el proyecto ya tiene su propio CI de releases (p. ej. apps nativas: `NATIVE_APPS_RELEASE_CI.md`). Las notas salen del CHANGELOG (si existe `CHANGELOG.en.md` junto a él, en inglés primero y el español debajo). Sigue sin ejecutar el push: con «Manual», ofrece el comando para después de subir el tag.
 
 ### Fase 7 — Maintain (opcional)
 Ver `dbv-specs-ops/docs/MAINTAIN.md`. Se activa solo si `project.config.md` declara "Maintain (Fase 7) →
